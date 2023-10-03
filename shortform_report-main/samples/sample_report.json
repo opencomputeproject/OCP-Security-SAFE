@@ -1,0 +1,37 @@
+{
+    "review_framework_version": "0.2",
+    "device": {
+        "vendor": "ACME Inc",
+        "product": "Roadrunner Trap",
+        "category": "storage",
+        "fw_version": "1.2.3",
+        "repo_tag": "release_v1_2_3",
+        "fw_hash_sha2_384": "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
+        "fw_hash_sha2_512": "0x84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988"
+    },
+    "audit": {
+        "srp": "My Pentest Corporation",
+        "methodology": "whitebox",
+        "completion_date": "2023-06-25",
+        "report_version": "1.2",
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "Memory corruption when reading record from SPI flash",
+                "cvss_score": "7.9",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
+                "cwe": "CWE-111",
+                "description": "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
+                "cve": null
+            },
+            {
+                "title": "Debug commands enable arbitrary memory read/write",
+                "cvss_score": "8.7",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+                "cwe": "CWE-222",
+                "description": "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
+                "cve": "CVE-2023-22222"
+            }
+        ]
+    }
+}
