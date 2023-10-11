@@ -18,6 +18,7 @@
                 "fw_hash_sha2_384": "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
                 "fw_hash_sha2_512": "0x84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988"
             },
+        ]
     },
     "audit": {
         "srp": "My Pentest Corporation",
