@@ -9,8 +9,7 @@ from OcpReportLib import ShortFormReport
 import traceback
 import sys
 
-
-# Hardcoding these is crude, but whatever, this is just an example script to
+# Hardcoding this is crude but this is just an example script to
 # show how it might work in field. 
 #
 # To quickly get up and running, you can use these openssl commands to generate the keypair:
@@ -19,9 +18,9 @@ import sys
 #   $ openssl ecparam -name secp521r1 -genkey -noout -out testkey_p521.pem
 #   $ openssl ec -in testkey_p521.pem -pubout -out testkey_ecdsa_p521.pub
 
-MY_PRIV_KEY  = "testkey_p521.pem"
-MY_PUB_KEY   = "testkey_ecdsa_p521.pub"
-#MY_SIGN_ALGO = "PS512"
+MY_PRIV_KEY = "testkey_p521.pem"
+MY_PUB_KEY = "testkey_ecdsa_p521.pub"
+# MY_SIGN_ALGO = "PS512"
 MY_SIGN_ALGO = "ES512"
 
 # XXX: Note to SRPs: You must include a 'kid' header to uniquely identify your 
@@ -39,25 +38,41 @@ rep = ShortFormReport()
 # XXX: Note to SRP: This is where you must calculate the hash of the firmware 
 # image that you tested.
 rep.add_device(
-    "ACME Inc",         # vendor name
+    "ACME Inc",  # vendor name
     "Roadrunner Trap",  # product name
-    "storage",          # device category
-    "release_v1_2_3",   # repo tag
-    "1.2.3",            # firmware version
-    # fw_hash_sha384
-    "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
-    # fw_hash_sha512
-    "0x84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988"
+    "storage",  # device category
+    "1.2.3",  # firmware package version
 )
+# Add the firmware binary information
+# as a scope 1 audit, this is primarily concerned with code safety
+rep.add_fw_binary("release_v1_2_3",  # repo tag
+                  "1.2.3",  # firmware version
+                  # fw_hash_sha384
+                  "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
+                  # fw_hash_sha512
+                  "0x84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988",
+                  1
+                  )
+
+# add another firmware binary to the report
+# this firmware had the scope 3 audit performed on it, meaning it was analyzed
+# for glitch and side-channel resilience
+rep.add_fw_binary("release_v1_2_5",  # repo tag
+                  "1.2.5",  # firmware version
+                  # fw_hash_sha384
+                  "0xfd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
+                  # fw_hash_sha512
+                  "0x94635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988",
+                  3
+                  )
 
 # Add audit information from Security Review Provider information
 rep.add_audit(
     "My Pentest Corporation",  # SRP name
-    "whitebox",   # Test methodology
-    "2023-06-25", # Test completion date
-    "1.2",         # Report version
-    1,            # The OCP SAFE scope level
-    )
+    "whitebox",  # Test methodology
+    "2023-06-25",  # Test completion date
+    "1.2",  # Report version
+)
 
 # Add issue details.
 rep.add_issue("Memory corruption when reading record from SPI flash",
@@ -67,7 +82,7 @@ rep.add_issue("Memory corruption when reading record from SPI flash",
               "Due to insufficient input validation in the firmware, a local"
               " attacker who tampers with a configuration structure in"
               " SPI flash, can cause stack-based memory corruption."
-)
+              )
 
 # Example of issue that has an associated CVE
 rep.add_issue("Debug commands enable arbitrary memory read/write",
@@ -78,25 +93,25 @@ rep.add_issue("Debug commands enable arbitrary memory read/write",
               " drivers to read and write arbitrary regions of the device's"
               " SRAM.",
               cve="CVE-2014-10000"
-)
+              )
 
 # Print the short form report to console
-print( "The short-form report:" )
-print( rep.get_report_as_str() ) 
+print("The short-form report:")
+print(rep.get_report_as_str())
 
 # Sign the short-form report (as a JWS) and print the signed report to the console
 print("\n\n")
 with open(MY_PRIV_KEY, "rb") as f:
     privkey = f.read()
 
-success = rep.sign_report( privkey, MY_SIGN_ALGO, MY_KID )
+success = rep.sign_report(privkey, MY_SIGN_ALGO, MY_KID)
 if not success:
-    print( "Error encountered while signing short-form report" )
+    print("Error encountered while signing short-form report")
     sys.exit(1)
 
 print("The corresponding signed JWS:")
 signed_report = rep.get_signed_report()
-print( signed_report )
+print(signed_report)
 
 ###############################################################################
 # Verify the signature
@@ -105,18 +120,18 @@ print( signed_report )
 # Step 1. Read the JWS header and ensure we have the correct key for the kid.
 print("\n\n")
 print("Checking the signed header:")
-kid = rep.get_signed_report_kid( signed_report )
+kid = rep.get_signed_report_kid(signed_report)
 if kid is None:
-    print( "kid is not present in JWS header." )
+    print("kid is not present in JWS header.")
     sys.exit(1)
 
 # XXX: Note for consumers of the short-form report: This is where you must 
-# lookup the correct key that corresponds to the kid.
+# look up the correct key that corresponds to the kid.
 if kid != MY_KID:
-    print( "Unknown kid in JWS header." )
+    print("Unknown kid in JWS header.")
     sys.exit(1)
 else:
-    print( f"Found the correct kid='{kid}'" )
+    print(f"Found the correct kid='{kid}'")
 
 # Step 2. Read the public key
 print("\n\n")
@@ -125,12 +140,11 @@ with open(MY_PUB_KEY, "rb") as f:
     pubkey = f.read()
 
 try:
-    decoded = rep.verify_signed_report( signed_report, pubkey )
-    print( "Success!" )
-    print( "\n\n" )
-    print( "Decoded report:" )
-    print( decoded )
+    decoded = rep.verify_signed_report(signed_report, pubkey)
+    print("Success!")
+    print("\n\n")
+    print("Decoded report:")
+    print(decoded)
 except Exception:
-    print( "Error during JWS decoding:" )
+    print("Error during JWS decoding:")
     traceback.print_exc()
-

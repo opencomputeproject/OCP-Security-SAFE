@@ -99,7 +99,7 @@ This field is intended to match the version of the OCP [Vendor Security Review f
 
 ### `device` fields
 
-A collection of fields that describe the vendor, device, and firmware version that was audited by a SRP.
+A collection of fields that describe the vendor, device, and firmware version that was audited by an SRP.
 
 * `vendor`: The name of the vendor that manufactured the device or firmware being tested.
 * `product`: The name of the device. Usually a model name of number.

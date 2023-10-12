@@ -47,50 +47,60 @@ ALLOWED_RSA_KEY_SIZES = (
 
 
 class ShortFormReport(object):
-    def __init__(self, framework_ver: str = "0.3"):
+    def __init__(self, framework_ver: str = "0.4"):
         self.report = {}
         self.report["review_framework_version"] = f"{framework_ver}".strip()
         self.signed_report = None
+        self.report["fw_binaries"] = []
 
-    def add_device(self, vendor: str, product: str, category: str, repo_tag: str, fw_ver: str, fw_hash_sha384: str,
-                   fw_hash_sha512: str) -> None:
+    def add_device(self, vendor: str, product: str, category: str, fw_package_version: str) -> None:
         """Add metadata that describes the vendor's device that was tested.
 
         vendor:    The name of the vendor that manufactured the device.
         product:   The name of the device. Usually a model name or number.
         category:  The type of device that was audited. Usually a short string 
                      such as: 'storage', 'network', 'gpu', 'cpu', 'apu', or 'bmc'.
+        fw_package_version: The version of the firmware package that was tested.
+        """
+        self.report["device"] = {}
+        self.report["device"]["vendor"] = f"{vendor}".strip()
+        self.report["device"]["product"] = f"{product}".strip()
+        self.report["device"]["category"] = f"{category}".strip()
+        self.report["device"]["fw_package_version"] = f"{fw_package_version}".strip()
+
+    def add_fw_binary(self, fw_ver: str, repo_tag: str, fw_hash_sha384: str, fw_hash_sha512: str,
+                      scope_number: int) -> None:
+        """
         repo_tag:  The Git repository tag associated with the audit. Useful when
-                     evaluating ROMs for which we cannot easily calculate or 
+                     evaluating ROMs for which we cannot easily calculate or
                      verify the hash.
         fw_ver:    The version of the firmware image that is attested by this
                      report. In most cases this will be the firmware version
                      produced by the vendor after the security audit completes,
                      which contains fixes for all vulnerabilities found during
                      the audit.
-        fw_hash_sha384: A hex-encoded string containing the SHA2-384 hash of 
+        fw_hash_sha384: A hex-encoded string containing the SHA2-384 hash of
                         the firmware image. Prefixed with "0x".
         fw_hash_sha512: ... ditto but using SHA2-512 ...
+        scope:       The OCP scope number of the audit, 1, 2, or 3.
         """
-        self.report["device"] = {}
-        self.report["device"]["vendor"] = f"{vendor}".strip()
-        self.report["device"]["product"] = f"{product}".strip()
-        self.report["device"]["category"] = f"{category}".strip()
-        self.report["device"]["repo_tag"] = f"{repo_tag}".strip()
-        self.report["device"]["fw_version"] = f"{fw_ver}".strip()
-        self.report["device"]["fw_hash_sha2_384"] = f"{fw_hash_sha384}".strip()
-        self.report["device"]["fw_hash_sha2_512"] = f"{fw_hash_sha512}".strip()
+        self.report["fw_binaries"].append({
+            "repo_tag": f"{repo_tag}".strip(),
+            "fw_version": f"{fw_ver}".strip(),
+            "fw_hash_sha2_384": f"{fw_hash_sha384}".strip(),
+            "fw_hash_sha2_512": f"{fw_hash_sha512}".strip(),
+            "scope_number": scope_number
+        })
 
-    def add_audit(self, srp: str, methodology: str, date: str, report_ver: str, scope_number: int, cvss_ver: str = "3.1") -> None:
+    def add_audit(self, srp: str, methodology: str, date: str, report_ver: str, cvss_ver: str = "3.1") -> None:
         """Add metadata that describes the scope of the security review.
 
         srp:         The name of the Security Review Provider.
-        methodology: The test methodology. Currently a free-form text field.
+        methodology: The test methodology. Currently, a free-form text field.
                        Usually a value like 'whitebox' or 'blackbox'.
         date:        The date when the security audit completed. In the 
                        YYYY-MM-DD format.
         report_ver:  Version of the report created by the SRP.
-        scope:       The OCP scope number of the audit, 1, 2, or 3.
         cvss_ver:    Version of CVSS used to calculate scores for each issue.
                        Defaults to "3.1".
         """
@@ -99,7 +109,6 @@ class ShortFormReport(object):
         self.report["audit"]["methodology"] = f"{methodology}".strip()
         self.report["audit"]["completion_date"] = f"{date}".strip()
         self.report["audit"]["report_version"] = f"{report_ver}".strip()
-        self.report["audit"]["scope_number"] = scope_number
         self.report["audit"]["cvss_version"] = f"{cvss_ver}".strip()
         self.report["audit"]["issues"] = []
 
@@ -193,7 +202,7 @@ class ShortFormReport(object):
                 return False
 
         # Because the JWA algorithm (e.g., 'PS384') specifies the hash-size, and
-        # not the key-size, we must double check the key-size here. We don't want
+        # not the key-size, we must double-check the key-size here. We don't want
         # RSA keys smaller than 3072 bytes.
         if algo in ALLOWED_JWA_RSA_ALGOS:
             if pem.key_size not in ALLOWED_RSA_KEY_SIZES:

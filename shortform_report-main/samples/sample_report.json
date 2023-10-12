@@ -1,13 +1,26 @@
 {
-    "review_framework_version": "0.2",
+    "review_framework_version": "0.4",
+    "fw_binaries": [
+        {
+            "repo_tag": "1.2.3",
+            "fw_version": "release_v1_2_3",
+            "fw_hash_sha2_384": "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
+            "fw_hash_sha2_512": "0x84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988",
+            "scope_number": 1
+        },
+        {
+            "repo_tag": "1.2.5",
+            "fw_version": "release_v1_2_5",
+            "fw_hash_sha2_384": "0xfd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
+            "fw_hash_sha2_512": "0x94635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988",
+            "scope_number": 3
+        }
+    ],
     "device": {
         "vendor": "ACME Inc",
         "product": "Roadrunner Trap",
         "category": "storage",
-        "fw_version": "1.2.3",
-        "repo_tag": "release_v1_2_3",
-        "fw_hash_sha2_384": "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
-        "fw_hash_sha2_512": "0x84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988"
+        "fw_package_version": "1.2.3"
     },
     "audit": {
         "srp": "My Pentest Corporation",
@@ -30,7 +43,7 @@
                 "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
                 "cwe": "CWE-222",
                 "description": "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
-                "cve": "CVE-2023-22222"
+                "cve": "CVE-2014-10000"
             }
         ]
     }
