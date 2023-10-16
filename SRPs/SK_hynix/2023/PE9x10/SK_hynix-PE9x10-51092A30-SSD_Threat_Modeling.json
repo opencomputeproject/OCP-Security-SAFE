@@ -1,0 +1,59 @@
+The short-form report:
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "SK hynix",
+        "product": "PE9x10",
+        "category": "storage",
+        "repo_tag": "",
+        "fw_version": "51092A30",
+        "fw_hash_sha2_384": "ce354ad441f89606764a90d67ce84c91a1b9ac429f3aac59ca1c807e8fbb29db0c47243e400ddae3ff0ca17b848d0154",
+        "fw_hash_sha2_512": "44f23197ae2cb1bcf5e7f3b604d0bfde54c04368b7558d55c34aa9bee45b0a07388796f4beaf06b57e0e0f91ffaafdeb53fc20ce330374a3c4d21d74f39e4d5b"
+    },
+    "audit": {
+        "srp": "IOActive, Incorporated",
+        "methodology": "Whitebox Threat Model",
+        "completion_date": "2023-07-14",
+        "report_version": "1.0",
+        "scope_number": "3.1",
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "R1 - No Minimum Password Length",
+                "cvss_score": "6.4",
+                "cvss_vector": "AV:L/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H",
+                "cwe": "CWE-521: Weak Password Requirements",
+                "description": "The drive currently does not enforce a minimum length or complexity requirements for passwords or PINs. Although the drive does enforce a maximum of five password attempts before requiring a power cycle; assuming 1 msecs per guess and 100 msecs for a power cycle a four-digit password or PIN could be brute forced on average in approximately 105 secs. An attacker with logical access to the drive may be able to brute-force weak passwords.",
+                "cve": "none"
+            },
+            {
+                "title": "R2 - NVMe and NVMe-MI Commands Return Metadata When Drive is Locked",
+                "cvss_score": "2.3",
+                "cvss_vector": "AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N",
+                "cwe": "none",
+                "description": "An attacker with logical access to the metadata may provide details that can be used to discover or exploit other vulnerabilities. The drive supports several NVMe commands via the PCIe interface that return metadata when the drive is locked including: Get Features - Returns details of which NVMe features are supported, Get Log Page - Returns various details about the current state of the drive including errors, Identify - Returns information about the NVM subsystem. The drive also supports NVMe-MI commands via the SMBus, which also return metadata when the drive is locked.",
+                "cve": "none"
+            }
+        ]
+    }
+}
+
+
+
+The corresponding signed JWS:
+eyJhbGciOiJFUzUxMiIsImtpZCI6IklPQWN0aXZlIC0gc2VjcDUyMXIxIiwidHlwIjoiSldUIn0.eyJyZXZpZXdfZnJhbWV3b3JrX3ZlcnNpb24iOiIwLjMiLCJkZXZpY2UiOnsidmVuZG9yIjoiU0sgaHluaXgiLCJwcm9kdWN0IjoiUEU5eDEwIiwiY2F0ZWdvcnkiOiJzdG9yYWdlIiwicmVwb190YWciOiIiLCJmd192ZXJzaW9uIjoiNTEwOTJBMzAiLCJmd19oYXNoX3NoYTJfMzg0IjoiY2UzNTRhZDQ0MWY4OTYwNjc2NGE5MGQ2N2NlODRjOTFhMWI5YWM0MjlmM2FhYzU5Y2ExYzgwN2U4ZmJiMjlkYjBjNDcyNDNlNDAwZGRhZTNmZjBjYTE3Yjg0OGQwMTU0IiwiZndfaGFzaF9zaGEyXzUxMiI6IjQ0ZjIzMTk3YWUyY2IxYmNmNWU3ZjNiNjA0ZDBiZmRlNTRjMDQzNjhiNzU1OGQ1NWMzNGFhOWJlZTQ1YjBhMDczODg3OTZmNGJlYWYwNmI1N2UwZTBmOTFmZmFhZmRlYjUzZmMyMGNlMzMwMzc0YTNjNGQyMWQ3NGYzOWU0ZDViIn0sImF1ZGl0Ijp7InNycCI6IklPQWN0aXZlLCBJbmNvcnBvcmF0ZWQiLCJtZXRob2RvbG9neSI6IldoaXRlYm94IFRocmVhdCBNb2RlbCIsImNvbXBsZXRpb25fZGF0ZSI6IjIwMjMtMDctMTQiLCJyZXBvcnRfdmVyc2lvbiI6IjEuMCIsInNjb3BlX251bWJlciI6IjMuMSIsImN2c3NfdmVyc2lvbiI6IjMuMSIsImlzc3VlcyI6W3sidGl0bGUiOiJSMSAtIE5vIE1pbmltdW0gUGFzc3dvcmQgTGVuZ3RoIiwiY3Zzc19zY29yZSI6IjYuNCIsImN2c3NfdmVjdG9yIjoiQVY6TC9BQzpIL1BSOkgvVUk6Ti9TOlUvQzpIL0k6SC9BOkgiLCJjd2UiOiJDV0UtNTIxOiBXZWFrIFBhc3N3b3JkIFJlcXVpcmVtZW50cyIsImRlc2NyaXB0aW9uIjoiVGhlIGRyaXZlIGN1cnJlbnRseSBkb2VzIG5vdCBlbmZvcmNlIGEgbWluaW11bSBsZW5ndGggb3IgY29tcGxleGl0eSByZXF1aXJlbWVudHMgZm9yIHBhc3N3b3JkcyBvciBQSU5zLiBBbHRob3VnaCB0aGUgZHJpdmUgZG9lcyBlbmZvcmNlIGEgbWF4aW11bSBvZiBmaXZlIHBhc3N3b3JkIGF0dGVtcHRzIGJlZm9yZSByZXF1aXJpbmcgYSBwb3dlciBjeWNsZTsgYXNzdW1pbmcgMSBtc2VjcyBwZXIgZ3Vlc3MgYW5kIDEwMCBtc2VjcyBmb3IgYSBwb3dlciBjeWNsZSBhIGZvdXItZGlnaXQgcGFzc3dvcmQgb3IgUElOIGNvdWxkIGJlIGJydXRlIGZvcmNlZCBvbiBhdmVyYWdlIGluIGFwcHJveGltYXRlbHkgMTA1IHNlY3MuIEFuIGF0dGFja2VyIHdpdGggbG9naWNhbCBhY2Nlc3MgdG8gdGhlIGRyaXZlIG1heSBiZSBhYmxlIHRvIGJydXRlLWZvcmNlIHdlYWsgcGFzc3dvcmRzLiIsImN2ZSI6Im5vbmUifSx7InRpdGxlIjoiUjIgLSBOVk1lIGFuZCBOVk1lLU1JIENvbW1hbmRzIFJldHVybiBNZXRhZGF0YSBXaGVuIERyaXZlIGlzIExvY2tlZCIsImN2c3Nfc2NvcmUiOiIyLjMiLCJjdnNzX3ZlY3RvciI6IkFWOkwvQUM6TC9QUjpIL1VJOk4vUzpVL0M6TC9JOk4vQTpOIiwiY3dlIjoibm9uZSIsImRlc2NyaXB0aW9uIjoiQW4gYXR0YWNrZXIgd2l0aCBsb2dpY2FsIGFjY2VzcyB0byB0aGUgbWV0YWRhdGEgbWF5IHByb3ZpZGUgZGV0YWlscyB0aGF0IGNhbiBiZSB1c2VkIHRvIGRpc2NvdmVyIG9yIGV4cGxvaXQgb3RoZXIgdnVsbmVyYWJpbGl0aWVzLiBUaGUgZHJpdmUgc3VwcG9ydHMgc2V2ZXJhbCBOVk1lIGNvbW1hbmRzIHZpYSB0aGUgUENJZSBpbnRlcmZhY2UgdGhhdCByZXR1cm4gbWV0YWRhdGEgd2hlbiB0aGUgZHJpdmUgaXMgbG9ja2VkIGluY2x1ZGluZzogR2V0IEZlYXR1cmVzIC0gUmV0dXJucyBkZXRhaWxzIG9mIHdoaWNoIE5WTWUgZmVhdHVyZXMgYXJlIHN1cHBvcnRlZCwgR2V0IExvZyBQYWdlIC0gUmV0dXJucyB2YXJpb3VzIGRldGFpbHMgYWJvdXQgdGhlIGN1cnJlbnQgc3RhdGUgb2YgdGhlIGRyaXZlIGluY2x1ZGluZyBlcnJvcnMsIElkZW50aWZ5IC0gUmV0dXJucyBpbmZvcm1hdGlvbiBhYm91dCB0aGUgTlZNIHN1YnN5c3RlbS4gVGhlIGRyaXZlIGFsc28gc3VwcG9ydHMgTlZNZS1NSSBjb21tYW5kcyB2aWEgdGhlIFNNQnVzLCB3aGljaCBhbHNvIHJldHVybiBtZXRhZGF0YSB3aGVuIHRoZSBkcml2ZSBpcyBsb2NrZWQuIiwiY3ZlIjoibm9uZSJ9XX19.AZH6aGpXe6JFlBJJSoVT2Hv4F7-UXOcUjJvWqjG7sqxil9buKgw9YCOOU3hg-vrrRm8AeSzRI_ERBV1Y3u9pjtvuAEkVVUZdYVdruCV2xiBqAsd1WtS9t9mjzWNnGRg3mDfHq9t-vPy6KzbLFstdJe0BrZAWRYXyQOlIIpEKL0Up_zxE
+
+
+
+Checking the signed header:
+Found the correct kid='IOActive - secp521r1'
+
+
+
+Verifying signature...
+Success!
+
+
+
+Decoded report:
+{'review_framework_version': '0.3', 'device': {'vendor': 'SK hynix', 'product': 'PE9x10', 'category': 'storage', 'repo_tag': '', 'fw_version': '51092A30', 'fw_hash_sha2_384': 'ce354ad441f89606764a90d67ce84c91a1b9ac429f3aac59ca1c807e8fbb29db0c47243e400ddae3ff0ca17b848d0154', 'fw_hash_sha2_512': '44f23197ae2cb1bcf5e7f3b604d0bfde54c04368b7558d55c34aa9bee45b0a07388796f4beaf06b57e0e0f91ffaafdeb53fc20ce330374a3c4d21d74f39e4d5b'}, 'audit': {'srp': 'IOActive, Incorporated', 'methodology': 'Whitebox Threat Model', 'completion_date': '2023-07-14', 'report_version': '1.0', 'scope_number': '3.1', 'cvss_version': '3.1', 'issues': [{'title': 'R1 - No Minimum Password Length', 'cvss_score': '6.4', 'cvss_vector': 'AV:L/AC:H/PR:H/UI:N/S:U/C:H/I:H/A:H', 'cwe': 'CWE-521: Weak Password Requirements', 'description': 'The drive currently does not enforce a minimum length or complexity requirements for passwords or PINs. Although the drive does enforce a maximum of five password attempts before requiring a power cycle; assuming 1 msecs per guess and 100 msecs for a power cycle a four-digit password or PIN could be brute forced on average in approximately 105 secs. An attacker with logical access to the drive may be able to brute-force weak passwords.', 'cve': 'none'}, {'title': 'R2 - NVMe and NVMe-MI Commands Return Metadata When Drive is Locked', 'cvss_score': '2.3', 'cvss_vector': 'AV:L/AC:L/PR:H/UI:N/S:U/C:L/I:N/A:N', 'cwe': 'none', 'description': 'An attacker with logical access to the metadata may provide details that can be used to discover or exploit other vulnerabilities. The drive supports several NVMe commands via the PCIe interface that return metadata when the drive is locked including: Get Features - Returns details of which NVMe features are supported, Get Log Page - Returns various details about the current state of the drive including errors, Identify - Returns information about the NVM subsystem. The drive also supports NVMe-MI commands via the SMBus, which also return metadata when the drive is locked.', 'cve': 'none'}]}}
