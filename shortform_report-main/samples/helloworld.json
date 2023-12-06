@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "ACME Inc",
+        "product": "Roadrunner Trap",
+        "category": "storage",
+        "repo_tag": "release_v1_2_3",
+        "fw_version": "1.2.3",
+        "fw_hash_sha2_384": "0xcb258fc154582e02952eea4ab59bc79078a9e35cce4c691343ba9810242b3cabc0c9e1c2e311c12966da17835f8e2cdc",
+        "fw_hash_sha2_512": "0x37b306d6ff2b535adcce184b1886d9d33bc8b6a312eb756b57388a59695abebbca9fe0907b70df2bca6b89bf65384ecf4b01fc0cd24da7793150ab0629e8eaf1"
+    },
+    "audit": {
+        "srp": "My Pentest Corporation",
+        "methodology": "whitebox",
+        "completion_date": "None",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
