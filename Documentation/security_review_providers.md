@@ -6,6 +6,7 @@ The list of approved Security Review Providers is shown below:
 <tr><td>NCC Group</td><td>https://www.nccgroup.com/</td><td>October 2023</td></tr>
 <tr><td>Tetrel Security</td><td>https://www.tetrelsec.com/</td><td>March 2024</td></tr>
 <tr><td>Trail of Bits</td><td>https://www.trailofbits.com</td><td>April 2024</td></tr>
+<tr><td>Riscure</td><td>https://www.riscure.com</td><td>April 2024</td></tr>
 </table>
 
 
