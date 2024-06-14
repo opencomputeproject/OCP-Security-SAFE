@@ -268,6 +268,18 @@ and any embargo periods end) has concluded:
   found in [Appendix B](#appendix-b-machine-readable-short-form-report-format). To claim OCP SAFE endorsement for a
   product-firmware combination this report must
   be published to the OCP GitHub repository.
+* **GitHub Pull Request Submission**\
+  The Pull Request for the submission to GitHub could from the SRP or the Device Vendor.  If there are issues in the SFR
+  it is *suggested* that the DV submit the PR.  This *suggestion* helps to ensure that the DV is in control of messaging
+  around any potential vulnerability disclosures.  
+* **Signed Git Commits**\
+ The OCP GitHub repository is configured to require all commits to be signed. Please remember this when preparing the submission.
+
+* **Pull Request Path**\
+  The location of the signed SFRs and signing public key should be in Reports/$Vendor/$Year/$Product. As a convience, 
+  the submission may choose to additionally include the human-readable JSON documents.
+
+  
 
 In addition to the short-form report, the SRP should deliver to the DV a detailed report. This report will likely be
 protected by NDA and will not be published. The DV should address the findings in the report. The DV is encouraged to
