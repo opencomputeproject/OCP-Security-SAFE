@@ -264,7 +264,7 @@ and any embargo periods end) has concluded:
 * **Short-Form Report** \
   The SRP must produce a cryptographically signed machine-readable short-form report. This document will summarize the
   audit scope, and uniquely identify the vendor, device and firmware version by means of a firmware hash. This report
-  will enumerate all vulnerabilities with a CVE score and a brief summary. The short-form report specification can be
+  will enumerate all vulnerabilities with a CVSS score and a brief summary. The short-form report specification can be
   found in [Appendix B](#appendix-b-machine-readable-short-form-report-format). To claim OCP SAFE endorsement for a
   product-firmware combination this report must
   be published to the OCP GitHub repository.
