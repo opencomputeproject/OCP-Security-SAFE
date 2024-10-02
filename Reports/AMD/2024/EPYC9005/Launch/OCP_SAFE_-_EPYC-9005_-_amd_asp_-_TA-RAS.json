@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TA-RAS (ta_ras_tee3_prod_amdTEE.sbin)",
+        "repo_tag": "amd-staging-server_brh_RASTA-v00.3D.00.30",
+        "fw_version": "00.3D.00.30",
+        "fw_hash_sha2_384": "8d5ccd1aaa5524e204927a333904540bd2140c03aadc2ba90863cef2b6576e5d8d8dc04ba9bc85d5e4d3a4dc969677c3",
+        "fw_hash_sha2_512": "b5a7b497ab4628309b819c074d69826a441cf073ba1c3771c43dfe0f0db069b1e9ec6e3ec867eff4ccb5b97be01ce8974abad3930b543c1bc05b6ac4215bc166"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

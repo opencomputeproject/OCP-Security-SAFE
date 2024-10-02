@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - SPDM Driver (TypeId0x68_drv_spdm_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "ed1b67bfb59a7c1b072d9c14557bb60bd537c739845f1eda3728c98e553c0d96c1a7b07dd5fb20fda70020676fc5e3fa",
+        "fw_hash_sha2_512": "156c57c1ab183f086cb6cdb49f681208a55671d7740eb3b2f9b527848d5320be2c35a7692a278fdd65cae672ee829e069daa50816f720f8715c2516005659651"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

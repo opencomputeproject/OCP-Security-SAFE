@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TEE OS Kernel (TypeId0x02_psp_os_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "017af33130b3872ae949bffab20c41e8c8981736041e8c5cb4fefe6499bbb6a0c88be57070704a89b3bdbc26be732c0d",
+        "fw_hash_sha2_512": "21b8c2493dfbae667988d459b39b22604e4854c4dfcddfb4d4004b1f20734e534f1137908df1560f62560db515d6c2008eb5863b7ca800f7f106cb583e3078f9"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

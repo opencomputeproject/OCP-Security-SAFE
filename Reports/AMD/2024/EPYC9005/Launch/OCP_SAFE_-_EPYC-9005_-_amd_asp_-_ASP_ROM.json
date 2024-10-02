@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - ASP ROM (MPASP_ROM32768X64M32_verilog_pkey.hex)",
+        "repo_tag": "CL 6590626 _1677",
+        "fw_version": "14.17.4.0",
+        "fw_hash_sha2_384": "97c6ec56ca970efe60b12f91e275a067ad95caaf4c73c53585d218968293ed9e128db6589a179b4e138e0f728519f1f0",
+        "fw_hash_sha2_512": "a5be9baca2c1c699e03f0397d54fa03aafe3365fb46028619898367b42b217f8d4e0c47ed9bcf25e331d643bb34eb9702741555d4080b3b49089b9311719e008"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

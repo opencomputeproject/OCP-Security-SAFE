@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - SEV Driver (TypeId0x1A_drv_sev_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "c3f361986733011300ec91276585753894aa94c96de59f3f2c124ac7d81324b6720282fd0b094f76e4a3e00e7b6ac826",
+        "fw_hash_sha2_512": "1ea09e064203b6193c4af27b82759eae4161bac9d749b6603a5ed880aec69fe96eeea0787f88c9e441f0f696bbd19a8f892feb2fcc9330a2c6612bbba1de357e"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

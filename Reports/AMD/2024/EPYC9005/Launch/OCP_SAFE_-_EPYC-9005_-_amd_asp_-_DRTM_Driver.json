@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - DRTM Driver (TypeId0x47_drv_drtm_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "1445c09ef6c61c4e98700404b59f3983a8ca536a918ef8949063a2dd1b9907f5874228e1d66326337d61f993a5f59293",
+        "fw_hash_sha2_512": "577fe9580b5f79c106c803a1307a5400f5b1a723a2f642572453382e77c6c56a587df38aaf326c852ddce8d5bdb1d8dafc7a0b476c2715b3915681a821bfabfe"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
