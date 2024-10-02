@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - CPU-PSP-FW (PspBootLoader_brh.sbin)",
+        "repo_tag": "RELEASE_BRH_PSPFW-00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "1aa70a4f7867c36399e7dce91f00aaa8f20961009b86eb680acd0f269af05b9974abcaada6da4d78bc2295f62473bcf0",
+        "fw_hash_sha2_512": "a202dbaf552c49a631790665933884f00081fa5b59166e81ed8105f4f06f27ff9dd3d6e50e446f2a83ed4a44238f86f62d77ddf6d80f46e1ca76dcc563e5faff"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

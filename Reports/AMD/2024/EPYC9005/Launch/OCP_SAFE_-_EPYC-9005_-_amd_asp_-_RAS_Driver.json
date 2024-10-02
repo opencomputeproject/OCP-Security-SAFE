@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - RAS Driver (TypeId0x64_drv_ras_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "9a9c03475615ca439306b129884bbfe1b11100171209c2be4d28ced84a47fa7e1cea46b5fe8fdd08618080ea8266d473",
+        "fw_hash_sha2_512": "c3afbc5a36191ce9de4c2d7a06292a804577105c9ac877335adbb08a3f4e18efa02ac1f80ca5320b0a64ca7ba591d56e546d0a5c708af7537a78a659916a64db"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

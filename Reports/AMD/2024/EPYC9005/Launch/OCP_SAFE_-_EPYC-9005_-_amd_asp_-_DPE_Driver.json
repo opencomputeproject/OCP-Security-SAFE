@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - DPE Driver (TypeId0x69_drv_dpe_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "45ff68c75fb1c818afd3c09560e39116cdb705af04a0934ec566d5c5906c0c643e248e7223482805fdc0ab23fc11cdf2",
+        "fw_hash_sha2_512": "8e483352282ad0a9665805ff5a34e4cdf925ccfb673760972ea3394abacf7a6d7817254b5ec14aeeba17cb9e87acb99ab88c559561b1eb796ab1d152f6267ae3"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

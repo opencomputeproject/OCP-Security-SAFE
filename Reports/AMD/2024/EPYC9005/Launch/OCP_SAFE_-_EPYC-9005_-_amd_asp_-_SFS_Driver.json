@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - SFS Driver (drv_sfs_BRH.bin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "7d36f2564e13356343c781c569955ecee78c614be40b438801d9234bc5965cf42894c254cf32a85e9b1bac7ce44283b9",
+        "fw_hash_sha2_512": "1f9aca531aeaa536588eb001701c6ff9153f455d0e14eb22b3896679a9bb16833c7f9d6345e406added8bfaa9ed07107bc002ca7399be8891c738061739c1f0f"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

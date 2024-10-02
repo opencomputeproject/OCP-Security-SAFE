@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - FMC (TypeId0x01_FMC_brh.sbin)",
+        "repo_tag": "amd-staging_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "5253e384021ef079cc316988292c03d6f92269f54b5c9ee57fb9ae4f84bd7bde81ab95bead63182e266ab090a4719476",
+        "fw_hash_sha2_512": "4aea24ee6883de1c27e6c1bd855558971699b45b4ea8e49c2e8e558ce74404aca87b21f1e27eef9af763841ce30a0ba3b990a4a74dd6b8bec7d39b91056b512e"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

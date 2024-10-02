@@ -1,0 +1,38 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - LIBROM (librom_soc_prod.bin)",
+        "repo_tag": "turin_libROM_00.3D.00.0A",
+        "fw_version": "00.3D.00.0A",
+        "fw_hash_sha2_384": "610C868060CDE96819AFD3F4C737FF40C166BD9560FBDA41D790BA5F0F6912DE2500C5F37B92F8310164D35A8636E8A6",
+        "fw_hash_sha2_512": "0D90FDE9E0BA0CAA0ADA822DA7E9A5C2411E5403FDCD1650CC9360A7AD7309EBB140E786A2DE221287B0410AC8402C20DA5E4AAE233A5F102CB49123CB412B32"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "[INFO] Integer Overflow in `ARCL_LoadCryptoOverlayAndSig`",
+                "cvss_score": "2.0",
+                "cvss_vector": "AV:L/AC:L/AT:P/PR:L/UI:N/VC:L/VI:L/VA:L",
+                "cwe": "CWE-190",
+                "description": "A firmware image size check can be bypassed; however,  there is no immediate consequence.",
+                "cve": null
+            },
+            {
+                "title": "[INFO] Integer Overflow in `RL_ARCL_InitFw_impl`",
+                "cvss_score": "2.0",
+                "cvss_vector": "AV:L/AC:L/AT:P/PR:L/UI:N/VC:L/VI:L/VA:L",
+                "cwe": "CWE-190",
+                "description": "A firmware image size check can be bypassed; however,  there is no immediate consequence.",
+                "cve": null
+            }
+        ]
+    }
+}

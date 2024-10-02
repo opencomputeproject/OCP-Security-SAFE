@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - HAD Driver (TypeId0x1D_drv_had_BRH.sbin)",
+        "repo_tag": "turin-mainline_brh_PSPFW-v00.3D.00.63",
+        "fw_version": "00.3D.00.63",
+        "fw_hash_sha2_384": "1a6562256940b9e82c122cd42dd9b4ca8e855f591e82c5f829ca591969ad614b15dc485fbfbc61aca32b4056f78f5df9",
+        "fw_hash_sha2_512": "3ec15daeea4204ee1be3916f7cf9b05970af3112f9171cf452247dd6bac6527140518b6aba09fb12767ff0ffe35638684e277b63178e141e141176fa7a109e8a"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-09-13",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
