@@ -21,6 +21,7 @@ Date  : June 5th, 2023
 
 import json
 import jwt
+import hashlib
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
@@ -47,13 +48,13 @@ ALLOWED_RSA_KEY_SIZES = (
 
 
 class ShortFormReport(object):
-    def __init__(self, framework_ver: str = "0.3"):
+    def __init__(self, framework_ver: str = "1.1"):
         self.report = {}
         self.report["review_framework_version"] = f"{framework_ver}".strip()
         self.signed_report = None
 
     def add_device(self, vendor: str, product: str, category: str, repo_tag: str, fw_ver: str, fw_hash_sha384: str,
-                   fw_hash_sha512: str) -> None:
+                   fw_hash_sha512: str, manifest: str = None) -> None:
         """Add metadata that describes the vendor's device that was tested.
 
         vendor:    The name of the vendor that manufactured the device.
@@ -80,6 +81,8 @@ class ShortFormReport(object):
         self.report["device"]["fw_version"] = f"{fw_ver}".strip()
         self.report["device"]["fw_hash_sha2_384"] = f"{fw_hash_sha384}".strip()
         self.report["device"]["fw_hash_sha2_512"] = f"{fw_hash_sha512}".strip()
+        if manifest is not None:
+            self.report["device"]["manifest"] = manifest
 
     def add_audit(self, srp: str, methodology: str, date: str, report_ver: str, scope_number: int, cvss_ver: str = "3.1") -> None:
         """Add metadata that describes the scope of the security review.
@@ -256,4 +259,33 @@ class ShortFormReport(object):
         decoded = jwt.decode(signed_report,
                              pub_key,
                              algorithms=ALLOWED_JWA_ALGOS)
+
+        # At least one of the hashes must be present for this JSON to be valid.
+        if "fw_hash_sha2_384" not in decoded["device"] and "fw_hash_sha2_512" not in decoded["device"]:
+            # Suppress this error for the one report that has no hash:
+            # https://github.com/opencomputeproject/OCP-Security-SAFE/blob/main/Reports/CHIPS_Alliance/2023/Caliptra/OCP_SAFE_-_caliptra_-_ROM.json
+            if decoded["device"]["repo_tag"] != "release_v20231014_0":
+                raise Exception ("Neither fw_hash_sha2 is present!")
+
+        # Validate hash lengths are correct
+        if "fw_hash_sha2_384" in decoded["device"] and len(decoded["device"]["fw_hash_sha2_384"]) != hashlib.sha384().digest_size*2:
+            l=len(decoded['device']['fw_hash_sha2_384'])
+            raise Exception (f"fw_hash_sha2_384 hash digest length must be {hashlib.sha384().digest_size*2} (found {l})!")
+        if "fw_hash_sha2_512" in decoded["device"] and len(decoded["device"]["fw_hash_sha2_512"]) != hashlib.sha512().digest_size*2:
+            l=len(decoded['device']['fw_hash_sha2_512'])
+            raise Exception (f"fw_hash_sha2_512 hash digest length must be {hashlib.sha512().digest_size*2} (found {l})!")
+
+        # if there is a manifest list, then validate its hash(es)
+        if "manifest" in decoded["device"]:
+            # be as explicit about the JSON formatting as possible
+            m_str = json.dumps( decoded["device"]["manifest"], sort_keys=False, separators=(',',':')).encode('utf-8')
+            fw_hash_sha384 = hashlib.sha384( m_str, usedforsecurity=True ).hexdigest()
+            fw_hash_sha512 = hashlib.sha512( m_str, usedforsecurity=True ).hexdigest()
+
+            if "fw_hash_sha2_384" in decoded["device"] and decoded["device"]["fw_hash_sha2_384"] != fw_hash_sha384:
+                raise Exception ("fw_hash_sha2_384 does not match manifest's hash!")
+
+            if "fw_hash_sha2_512" in decoded["device"] and decoded["device"]["fw_hash_sha2_512"] != fw_hash_sha512:
+                raise Exception ("fw_hash_sha2_512 does not match manifest's hash!")
+
         return decoded

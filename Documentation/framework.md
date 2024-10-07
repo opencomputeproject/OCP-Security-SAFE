@@ -58,6 +58,16 @@ OCP Security Workgroup
    <td>
    </td>
   </tr>
+  <tr>
+   <td>1.1
+   </td>
+   <td>October, 2024
+   </td>
+   <td>Rob Wood
+   </td>
+   <td>Add manifest support
+   </td>
+  </tr>
 </table>
 
 # Glossary
