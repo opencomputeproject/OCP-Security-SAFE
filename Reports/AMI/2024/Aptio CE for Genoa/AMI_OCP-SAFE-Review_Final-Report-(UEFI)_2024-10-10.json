@@ -1,0 +1,568 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "AMI",
+        "product": "Aptio CE for Genoa",
+        "category": "Boot Firmware",
+        "repo_tag": "CE-AMI202410",
+        "fw_version": "1.0",
+        "fw_hash_sha2_384": "57bc2dffb998e4b48cd9077c2c829521957f8d3906b62da6df4ea0c8a3a0bc79200dcad0a90d8ee08940a7b7f789d761",
+        "fw_hash_sha2_512": "20424103d5f4186ee27a1f803ffed7a0079ed98fbfcd70bee80cf364082514a1a94e43b0aad2a6c799f02c0001109b6d0d44c26c5c58060ad907c06c458870dc",
+        "manifest": [
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/HEAD",
+                "file_hash": "28d25bf82af4c0e2b72f50959b2beb859e3e60b9630a5e8c603dad4ddb2b6e80"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/config",
+                "file_hash": "e27c3c7a74505163b7c64f0566ca62463b7af1d58c49e4ed09d50ec8f6aad14d"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/description",
+                "file_hash": "85ab6c163d43a17ea9cf7788308bca1466f1b0a8d1cc92e26e9bf63da4062aee"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/applypatch-msg.sample",
+                "file_hash": "0223497a0b8b033aa58a3a521b8629869386cf7ab0e2f101963d328aa62193f7"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/commit-msg.sample",
+                "file_hash": "1f74d5e9292979b573ebd59741d46cb93ff391acdd083d340b94370753d92437"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/fsmonitor-watchman.sample",
+                "file_hash": "f3c0228d8e827f1c5260ac59fdd92c3d425c46e54711ef713c5a54ae0a4db2b4"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/post-update.sample",
+                "file_hash": "81765af2daef323061dcbc5e61fc16481cb74b3bac9ad8a174b186523586f6c5"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/pre-applypatch.sample",
+                "file_hash": "e15c5b469ea3e0a695bea6f2c82bcf8e62821074939ddd85b77e0007ff165475"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/pre-commit.sample",
+                "file_hash": "f9af7d95eb1231ecf2eba9770fedfa8d4797a12b02d7240e98d568201251244a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/pre-merge-commit.sample",
+                "file_hash": "d3825a70337940ebbd0a5c072984e13245920cdf8898bd225c8d27a6dfc9cb53"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/pre-push.sample",
+                "file_hash": "ecce9c7e04d3f5dd9d8ada81753dd1d549a9634b26770042b58dda00217d086a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/pre-rebase.sample",
+                "file_hash": "4febce867790052338076f4e66cc47efb14879d18097d1d61c8261859eaaa7b3"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/pre-receive.sample",
+                "file_hash": "a4c3d2b9c7bb3fd8d1441c31bd4ee71a595d66b44fcf49ddb310252320169989"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/prepare-commit-msg.sample",
+                "file_hash": "e9ddcaa4189fddd25ed97fc8c789eca7b6ca16390b2392ae3276f0c8e1aa4619"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/push-to-checkout.sample",
+                "file_hash": "a53d0741798b287c6dd7afa64aee473f305e65d3f49463bb9d7408ec3b12bf5f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/hooks/update.sample",
+                "file_hash": "8d5f2fa83e103cf08b57eaa67521df9194f45cbdbcb37da52ad586097a14d106"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/index",
+                "file_hash": "953b2406f4ad323da28c73b243bf03bc54cb95dde8f72467082b445dc8baabb6"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/info/exclude",
+                "file_hash": "6671fe83b7a07c8932ee89164d1f2793b2318058eb8b98dc5c06ee0a5a3b0ec1"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/logs/HEAD",
+                "file_hash": "060ddb0075c57d96b6068ad7324a6bb13d397c57bd2fb24fb56174d566d321ab"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/logs/refs/heads/main",
+                "file_hash": "060ddb0075c57d96b6068ad7324a6bb13d397c57bd2fb24fb56174d566d321ab"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/logs/refs/remotes/origin/HEAD",
+                "file_hash": "060ddb0075c57d96b6068ad7324a6bb13d397c57bd2fb24fb56174d566d321ab"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/objects/pack/pack-99e3902cb1ac7ba67f3e73fa35a6d529dd762356.idx",
+                "file_hash": "1a7c3871600fc941a78f16b04a578350a36df50be02c2230ccf257c02011fea6"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/objects/pack/pack-99e3902cb1ac7ba67f3e73fa35a6d529dd762356.pack",
+                "file_hash": "c9389532269c362f5a21fd369dd38cf1ef0abc5eb0da0e3539bec92dcb43eb25"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/packed-refs",
+                "file_hash": "080c65bfb3b3e2284e03faad5cc677018c191abd7415901bb0b4b3c92916941c"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/refs/heads/main",
+                "file_hash": "82721cee599a6110433c19bc5ce0b7bbd24966245064173e29856482b8146de5"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.git/refs/remotes/origin/HEAD",
+                "file_hash": "2bb6a24aa0fc6c484100f5d51a29bbad841cd2c755f5d93faa204e5dbb4eb2b4"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.gitignore",
+                "file_hash": "4d07bb667d10029aafcc61eef9539d31b3b147eb0af6db7980979cae6eb9c17a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/.gitmodules",
+                "file_hash": "e5fbe81644fb1c38f9a85809ff085f45ab08fbee77aeb7b30a5c820c676795cf"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/GenoaSiliconPkg.dec",
+                "file_hash": "611637a89c0b038be7f7a294cfdbb26a28f92278df7db20b9152803a27925444"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/Library/BaseResetSystemLib/BaseResetSystemLib.c",
+                "file_hash": "6753c5649045be6528f147728362b68ba040b049c8f9ed0269e44c8dcd61c7bf"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/Library/BaseResetSystemLib/BaseResetSystemLib.inf",
+                "file_hash": "3b001ed56de4b40b00c268f86d40346bc4b00eac867c68e90af09361d4c60977"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/Library/BaseResetSystemLib/Cf9Reset.h",
+                "file_hash": "436d77c6d4902266a08b257ad2b82361a217898ddb4ba41745544595edb9aa79"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/Library/IpmiPlatformLib/IpmiPlatformLib.c",
+                "file_hash": "d23234c61ed567708f7667fd80b2b396bec7488844b4dd9f01ab70a1d7cf1956"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/Library/IpmiPlatformLib/IpmiPlatformLib.inf",
+                "file_hash": "91fac7f6b51b55423c8042b4b6182b8f88719c5e4fd708a9f22462e618bc49ff"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/PlatformSiliconPkg.dsc.inc",
+                "file_hash": "ef6f5a9967b4e2adc487df338e48e377ec156d8c7a462d01ab0f8e67f6d8d2cf"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/GenoaSiliconPkg/README.md",
+                "file_hash": "665786a7c0ffe5cb49f5f334ca3fd46df7b58199307517a711b84c0e5fd1afd2"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/OutOfBandManagement/SpcrFeaturePkg/Include/Library/SpcrDeviceLib.h",
+                "file_hash": "0ca78608ab3cd12bbef7b82873c23b8d812b9b55459845de72f5148bfbd2c83e"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/OutOfBandManagement/SpcrFeaturePkg/SpcrFeaturePkg.dec",
+                "file_hash": "3f5371356780ef4705476b3a44bbcb17b079a6c16c8c2a05aea3c9aa00aa8321"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AcpiCommon.c",
+                "file_hash": "104e3c3ca52b33a10ca9e94fc9b12a93d8d2c255ee559c2d7b72bb295ffd4785"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AcpiCommon.h",
+                "file_hash": "58c4d254d31a2ea11330cb311a51c616b114b1e662f7d8b645642d0a3fcfa9a7"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AcpiCommon.inf",
+                "file_hash": "918ae0f923410b8e637cc782c4030328d1d7354e8c7114a12a30f4d6716b8958"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AcpiPlatform.c",
+                "file_hash": "87eae14e2cd0ed4c8b194e5feac8e2dd048e40fced758fccbc93edc2b020b6a9"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AgesaPublicModulePkg.dec",
+                "file_hash": "1eead854830e6ac37775a5b77b4288c9dbda2a7c8440c0e1c2b7b088ff555d65"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AmdDirectoryBaseLib.inf",
+                "file_hash": "75511c777b3ae3cc5fff78c21b8a1c4ae3b8f0b8d7764229aeb789d76fd0763b"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AmdMemoryHobInfoPeimGenoa.c",
+                "file_hash": "3a69e00f9394192f04a87d06f4071eb0b6e0be5376da8ad9ddbbbeb8912b70b9"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AmdPlatformPei.c",
+                "file_hash": "dc0367417a56bc68fd62e556b9f22ffe207c1e45d93dd197f0f542aa41ac0860"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AmdPspDirectory.h",
+                "file_hash": "215238e8f5ad46bb9cdc5f843816b8cf5ac00d020bd2953123ecedf7189fc6f8"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AmdSmramSaveStateConfig.c",
+                "file_hash": "9e5b46534807289c89cc1d84f7ab473923cd253ac72df64c9d1beaf43d2576a6"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/AmdSpiHcSmm.c",
+                "file_hash": "00beda351b9604540c6f4a7e7daf4bff3c51b88891c5a45d08d0f0d71d860c3a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/BaseXApicX2ApicLib.c",
+                "file_hash": "8eeb05512a0e50d1954ff13366553721e6d6c142ecb5de389ed365f0cfdc74c4"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/BaseXApicX2ApicLib.inf",
+                "file_hash": "831ec4b6924dd7bb62734ef80c7df28f2160a309851425272f6d39aeebfcfb14"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/BoardSpiBusDxe.c",
+                "file_hash": "a6408a9fb77780845592bcafb053158c4cb4850464c5cd3d67862c58e3b0b75f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/BoardSpiBusSmm.c",
+                "file_hash": "1665ee70c9479277a305da379259354deeb8c652f0cf2d9b95f02308cfb1a8da"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/FchDataInit.c",
+                "file_hash": "6ee5150264658ee4bc4397d1b2117e93f4080609ec60911ed9e3a26686661737"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/FchDataInitDxe.c",
+                "file_hash": "b5ec068c0e1d6ca46dd9683337a34ae29ead27f9365c4408587b295600c06e19"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/FchSmmDispatcher.c",
+                "file_hash": "08bd4c4d45726d529799529d9bc6d91c457b538b2446aac58f3adcd90b8bc583"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/FchSmmSwDispatcher.c",
+                "file_hash": "1d06c815a91e73008cbb3ef64ec41684d220ec35150c7d4b5bceb8f7ef1002ec"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/Ivrs.c",
+                "file_hash": "7771c7d5ebbff922109e9b4ffeef3b302fede11b196cbda7470b2f44618abf50"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/Ivrs.h",
+                "file_hash": "106e49cf5325090b4d42ab8d58096eee4bfd67fd37939ae8f660fa19bd07adc9"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/MemoryAllocationLib.c",
+                "file_hash": "e6d15d32ef4ba0af75e8e3c76b3cb193f8d2c795024bb6c7a8eaf681fe18af5f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/MemoryInitPei.c",
+                "file_hash": "e1e2c42606eb85cdac14356cbe831ff20f39c5afed2ae05d570af52bba57d1fd"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/MpioDataInitOnyx.c",
+                "file_hash": "159a49315a4a18eaf46b9cd36d724873a7246880f8d851a247c04a35b20162f6"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/NbioDataInit.c",
+                "file_hash": "f21a9d70b81b5da9bbaec7ff181efbfc2a5587977f3b2e2dba428e5eac036275"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PciExpressPciCfg2.inf",
+                "file_hash": "fd8bcf754690b4a070e625a72dbb431ba1315c0ac8064a8207cb364251b3a4ac"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PciSegmentInfoLibSimple.c",
+                "file_hash": "f658c987c740eea9b14584c4de0fc018a9dde25735436be9f9d817db4f9118fa"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PciSsdt.c",
+                "file_hash": "0458d345b32f40c6c9c275188f7efb205c2564150622ba4381a68a6d5b9dccb2"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PeiBoardInitPreMemLib.c",
+                "file_hash": "c6af9bbc125b1100c4b6046b14aa58dd3d903caf6c6939478a475f5eacdbbe51"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PeiBoardInitPreMemLib.inf",
+                "file_hash": "62ced6cc09e7804ca04b4c1ffdcbd5081c9a77767afa1e94d41b911065e34bb8"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PlatformInitPreMem.c",
+                "file_hash": "310cdb4821b87d78b6d523079fd250f23e03d38ef4141a6a9c682fb5ebad1c92"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/PlatformInitPreMem.inf",
+                "file_hash": "fda8bf41e8db552e1299f40553f93ace3df5d6d08a6cb7d847ba5d84f25174b4"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/Pstates.c",
+                "file_hash": "597699a6dcfed003ba8b13112310e38389881e2e9a513599744a41005e737f69"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SecBoardInitLibNull.inf",
+                "file_hash": "f63f93fb4929d8776c9a7489a438e24d6b0c48b4f9044b697cf4478f31de8a34"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SecureBootDefaultKeysInit.c",
+                "file_hash": "aee57803350369cfa1b4957f1e812c8886513414d583eb7cf030d8bba400fc7f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SecureBootVariableProvisionLib.c",
+                "file_hash": "428956c9fb82c942e491963270483e9a10f903d74c20da171e4b4d4dd69c8a97"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SecureBootVariableProvisionLib.inf",
+                "file_hash": "3e292aa43d380cb2cf2ec54d4af5e187c0ad038068743d34dfc63cbd86a2dad3"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SilDataInit.c",
+                "file_hash": "175dec3a6675248d8c3086175318a53f8211e00169525794d20906a6251a41a4"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SilOnyxDxe.inf",
+                "file_hash": "66c12d9c24dffc4a207cd0e1b5d85db1632eab570daa139b615e52bd1e90822f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SilOnyxPei.inf",
+                "file_hash": "5def8ff5a900b7a2d31eb81fff4c14306c5997d20cbb391f9140f33d67ec4e74"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SilSocLogicalId.h",
+                "file_hash": "c7415c6a1592417de1e2307351d17bd88af0eb09a04c8b83ff16d3185a744f98"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SmiEntry.nasm",
+                "file_hash": "f3d91ec5f90f39acddd7d6a13fcaa5098764200e750d70c0b2c39d42e14cbaa0"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SmmRelocationLib.c",
+                "file_hash": "f89a70aad78b2b9bf41ca9ddc7457e25d7bd78e068a56f3540da21bd8a79cbdf"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SpiHcAdditional.h",
+                "file_hash": "82ec5988f17607370671f921c4fb47122b336d698fa769cccd9c5be8d964690a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/SpiIoAdditional.h",
+                "file_hash": "3376f2e90d55a8e3b46f76011fa74ba1a7e2baaba42c0b5bfbe9df147a9427b9"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/pspdirectory.py",
+                "file_hash": "6e40d1061e5e8f8ca6834d6a9032e8025277ac2ce0269ed7506df289de514e6a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/xPrfCcx.c",
+                "file_hash": "31f3f695cf12b203469716e1e9bc035c034903b524ee24ca8ae5ac3c9b0936c2"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/Override/xPrfRas.c",
+                "file_hash": "702a9f2f7a3e1842f977a6cdd32998a02d8871ca6ce026ab0948f25a3b734891"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/CfgData/XML/PlatformConfigData.xml",
+                "file_hash": "78a2da6cfecfa21bb5c77d8d531c8c1a0e6995af396d915cc57620c4f88c38ac"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/CfgData/image_validation.cfg",
+                "file_hash": "a81c2d2c49a5379276283d22b53824229b6edc22bdcebd6bcfff037db0ce5935"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/AmdPcieResource/AmdPcieResource.c",
+                "file_hash": "6691640c45cfa4197591acaed88e9ad0ed5ac1959e6096f8dfea317d8ef8ac32"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/AmdPcieResource/AmdPcieResource.inf",
+                "file_hash": "de3c74d52538241c95cd87b21545184f3ad1c8f281ce5ffe60cc6c2f7aa43ff8"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/BmcGopDxe/BmcGopDxe.inf",
+                "file_hash": "4bdff8be95a300965373447fa073835431abb91a1c86b71388f02f3aa3c48fe3"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/BmcGopDxe/X64/uefi_2600.efi",
+                "file_hash": "b261e49d85681f41bd8292d00e950c3d85996b1667a2033d2ada1d8c27a663b2"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/Psp/AmdPspDxe.c",
+                "file_hash": "60c34cb7277ed49fdba2c2da4da05de4cdff5d0f24330c699cf807a2ab240557"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/Psp/PspInitDxe.inf",
+                "file_hash": "fd11a56c74fc1778f59df6d1a0f9b21a291019881bddf27318ad4f978db98445"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/Psp/RdSeed.nasm",
+                "file_hash": "69edf55665103fd92714fc42aef01cffc95e9917587ac33b292a72c9597cc3da"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/SmbiosBasic.h",
+                "file_hash": "54d1b95294f07d6ff8a09dbbbd8398d3f243da531b5b699160a491d40ecf8992"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/SmbiosBasicDxe.inf",
+                "file_hash": "f2e27bac32639bcc0ff320bc5cbc873f0442f7a3c13d1f837d7aca0eae6394a1"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/SmbiosBasicEntryPoint.c",
+                "file_hash": "b17ec2c7d27ed0d3a0ba284e2012e3b83e2262a3f1f95d1606a1856009fe2147"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/SmbiosFeaturePkg.dec",
+                "file_hash": "b469444934c28163e19b8d525307be5e9c4f77f5ee9281de34c5c9c5e1933654"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/SmbiosFeaturePkg.dsc",
+                "file_hash": "8f2634b20c41cd5f8ea7e9db143c9ef7ccc941f419b5ee34c8feeea0f94ad604"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/Type0BiosVendorFunction.c",
+                "file_hash": "a26eeeff83ecf25483cfdff9623fbd7771d419e8ae35361744fad1f0dfa613d8"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/Type1SystemManufacturerFunction.c",
+                "file_hash": "204c14a1712cc4e43d458335458d345c231d1fa55ffc7f3c4a6581461953582e"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/Type2BaseBoardManufacturerFunction.c",
+                "file_hash": "90eab372938ffc6504a9f6db83072e271fdc8964550f2cf919c21d4de4aaaf46"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/Type32BootInformationFunction.c",
+                "file_hash": "238aec9467be4acc765e2648467087f5f99763b136d32793f9505a3af13be91f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Dxe/SmbiosBasicDxe/Type3ChassisManufacturerFunction.c",
+                "file_hash": "4c2ff615dcc223e50dafd65c35e0e9a8afcc4d86bacd02f864bce94edd7edd4b"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Library/DeviceBootManagerLib/DeviceBootManagerLib.c",
+                "file_hash": "f84baf86d724b7ed28b78bc45f5f25bcd6b01bcdd483acee1a151d12f01820fe"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Library/DeviceBootManagerLib/DeviceBootManagerLib.inf",
+                "file_hash": "da433ff38196c19d6738da1b9f1538640aa137b5ecd62d712605018f4e5119d7"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Library/MsPlatformDevicesLib/MsPlatformDevicesLib.c",
+                "file_hash": "ef345486f42da636f90c2472f3ba11b3a48cc682302195cbe42e80be4e6aa077"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Library/MsPlatformDevicesLib/MsPlatformDevicesLib.inf",
+                "file_hash": "2f705a34332f979bb874af92afc5412a2d58f56699b2ecb991d4ec716840903a"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Library/PlatformConfigDataLib/PlatformConfigDataLib.c",
+                "file_hash": "8109f856a30faa873a7841b6aacdd87da8ca56a6eda3ac2466dbd27089a44845"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Library/PlatformConfigDataLib/PlatformConfigDataLib.inf",
+                "file_hash": "5ec02f11b53defda5e64b1c9c696bc5ca4ea1433069fbd1cdc7a82275137f2ae"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/MuPkgModulesLib.dsc.inc",
+                "file_hash": "fe422c3c7355c1bd5ee67304e06a9deaf2adb4fb17d94d3d00e3290acbd07adc"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/MuPostMemoryModules.fdf.inc",
+                "file_hash": "7e4e3daca790cfbced28217796869c911f6ddf3466547ac664073493a52b3fed"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/MuPreMemoryModules.fdf.inc",
+                "file_hash": "9fbec56f1ce07c66b36cfca400a91faeba26ddf9f29f2b76c296ad480ae917fe"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/MuUefiBootModules.fdf.inc",
+                "file_hash": "808a3a9ddb23b666198fa03de063f1c3a08f238427a13434233244f592eecba8"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Pei/PlatformPolicyPei/PlatformPolicyPei.c",
+                "file_hash": "caa0c05717dd862b8cefdbaf0cb4636be86776238b60446f6b9c9406a44534a3"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Pei/PlatformPolicyPei/PlatformPolicyPei.inf",
+                "file_hash": "923a013f634fdd11773ca14644d3a6291794d8e501c78265bf04c27b67830fc2"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Pei/SmmRebasePei/SmmRebasePei.c",
+                "file_hash": "10ef9375f17aa04eb7615fb177362a0d4b7c6ddc50f2ef5ded05b0795e691762"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Pei/SmmRebasePei/SmmRebasePei.inf",
+                "file_hash": "4d433413b022b3c9eff263049f3ee474bf5415c185594d52af3c951ff05fd628"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/PlatformBuild.py",
+                "file_hash": "ae43d5d465dd9ba566588d360459cb3e36aaba511f8466c07922beff391755cc"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/PlatformPkg.dec",
+                "file_hash": "49444b91671d2b3fe15f2f285e95b5c5af0bb65b5d81e03bc8cd43b1b9b6234b"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/PlatformPkg.dsc",
+                "file_hash": "98d4f04e682c8a05601b6f7d8b7aa72eaf0a12281f0505281c168b2298b37aff"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/PlatformPkg.fdf",
+                "file_hash": "426d1306a57fc37bca178691ba7c5b94b29f404626293c45443d0abae3808f25"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/BoardAcpiLib/SmmBoardAcpiEnableLib.c",
+                "file_hash": "2a17573828c5051e81e92a900e5b9bab7c5fc29efd02f5c81e171bd254dd948e"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/BoardAcpiLib/SmmBoardAcpiEnableLib.inf",
+                "file_hash": "5a0e406bdd3bc200b29168daf1a501d2ef13e238267300ae6acdd4e72b309f7e"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/SmmAccess2Dxe/SmmAccess2Dxe.c",
+                "file_hash": "bfdd714d4abf0fe5e992d92a499b33841e595f9cab5e61df791de8c4a5a2e59f"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/SmmAccess2Dxe/SmmAccess2Dxe.h",
+                "file_hash": "ee4a782cbe0a2add95c7a1d166e94e8202df7259147720b24c627639a4cec879"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/SmmAccess2Dxe/SmmAccess2Dxe.inf",
+                "file_hash": "19f1626833f4fc440cb7b69008f1e12a977001ae1c85c73e669364af97940143"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/SmmControlDxe/SmmControl.c",
+                "file_hash": "8d67a31a8e3cc8c9cb79789c8375f25e36aafdc1443780d1506d8315d50e37de"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/SmmControlDxe/SmmControl.h",
+                "file_hash": "26d113572cafdacb5cfa1e7d6a95a93cff54fed9aab7720588150be73d181881"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Platform/PlatformPkg/Smm/SmmControlDxe/SmmControl.inf",
+                "file_hash": "163d4721ade28887c7007100dba283ca73e7a4e8936c6fd56b5f30ffdb424549"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/Readme.md",
+                "file_hash": "1c78b19d45097495dd8a813f9d12a9fcf70960d3f189bb70693df8c0bf16941c"
+            },
+            {
+                "file_name": "./Aptio_CE_MU_Genoa_openSIL/pip-requirements.txt",
+                "file_hash": "f50e5f49105cb44cc6b6825d67b97b4ac29df53b61f931dc82242428f4537fa0"
+            },
+            {
+                "file_name": "./file_hashes.txt",
+                "file_hash": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "Tetrel Security, Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2024-09-27",
+        "report_version": "1.0",
+        "scope_number": 1.0,
+        "cvss_version": "4.0",
+        "issues": [
+            {
+                "title": "Secure Boot Default Key Initialization is Incomplete",
+                "cvss_score": "2.0",
+                "cvss_vector": "CVSS:4.0/AV:A/AC:H/AT:P/PR:H/UI:N/VC:L/VI:L/VA:L/SC:N/SI:L/SA:N",
+                "cwe": "CWE-390: Detection of Error Condition Without Action",
+                "description": "The Secure Boot default keys may fail to install silently or only be partially initialized.",
+                "cve": null
+            }
+        ]
+    }
+}
