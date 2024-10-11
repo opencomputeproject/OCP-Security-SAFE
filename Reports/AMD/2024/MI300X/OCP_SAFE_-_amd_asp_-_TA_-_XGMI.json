@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TA - XGMI (ta_xgmiTEE3_tee3_prod_amdTEE.sbin)",
+        "repo_tag": "",
+        "fw_version": "",
+        "fw_hash_sha2_384": "7d4123e76467767cc8d9b43c727c8045fabbc597040455544b935e96d76dd7b12b210b0620b727ca8b20b741b58ac83d",
+        "fw_hash_sha2_512": "47a1656de5f845aa3435605a7d34d32d7e4ef03a85ade644186ca44a135f26d8146f45577aac85fc002a4ad969c3b2148123faaaaa58aefe36d8a943d878fbcc"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
