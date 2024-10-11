@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - MCA Bank Table (TypeId0x134_pspbl_ras_mca_bank_table_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v1.A1.2.1F",
+        "fw_hash_sha2_384": "9543f341b4c78b413c85184c45a50b9dae546a8c21780bc463af2f3401646eac00842813d84901ac0ed13df298b6b2b6",
+        "fw_hash_sha2_512": "dcb77c44c97e5abaab9e7355a82d6672f49f75049c1072fcb203e4b7c368ec89b2327793c8b966b46113f4ead7ab90abb2774bc0380c3ff484bf903055a5328a"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
