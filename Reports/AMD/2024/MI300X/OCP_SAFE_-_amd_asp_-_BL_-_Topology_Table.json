@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - Topology Table (TypeId0x5a_pspbl_topology_table_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v1.A1.2.1F",
+        "fw_hash_sha2_384": "cba5d3736aabf32da59ed07c743a8f0fb88c2f68029eb06a6415ec2db2c7be230ab8730390fe7dbcd4ad26ab83ad02c2",
+        "fw_hash_sha2_512": "cc648f253a8085ea86e5e80f42cff9bf47e69a056f498232523306422c7cb1ac1b4262c3aafc3f30ec0362e0f4bf6b5924db0437907ded4ceccf3892f297b67d"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

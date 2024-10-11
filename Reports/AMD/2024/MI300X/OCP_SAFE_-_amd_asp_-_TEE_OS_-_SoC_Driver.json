@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TEE OS - SoC Driver (TypeId0x14A_drv_soc_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "",
+        "fw_hash_sha2_384": "a12cb50bb81db05b0c9bc8427774cbbc7d83e1eb74fe6143f8dffd8659675b9ddbe413d73f82d225ea6e6ddda1fc4515",
+        "fw_hash_sha2_512": "6e783e95c1d1ea89911d0d27b43f5ea52fa7dc04626c832065f440e152fe7ce9ed9e6a33de3cf3e62da284853b2529ed0b0ae218184c9a5b85d10fe9e20c5630"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - SVN Table (TypeId0x55_pspbl_antirollback_table_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v1.A1.2.1F",
+        "fw_hash_sha2_384": "709306a175d2b3370818c22383006c9e553a26d407e933c8c2c39b565837beac247504da41ab7d5929841656084d711a",
+        "fw_hash_sha2_512": "b593b580728d86a04d92abcd2f2b3e43ffb704e1ae23e59d030befc19a939b29790de4337e43a10db1487690c025a8b121c1ecafd6829e0a7486ef86b5321084"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
