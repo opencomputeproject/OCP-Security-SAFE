@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TEE OS - RAS Driver (TypeId0x152_drv_ras_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "",
+        "fw_hash_sha2_384": "f5510d71979048225a5397e1d396679ffbdc8b6449a86900ceee4394662d2c28fedec4f3ae22359043265e97289325f1",
+        "fw_hash_sha2_512": "22065fc5690cde6068293b2a2b371eb52e23c20aa1fcc9a7b3f0098acb6c73152e1a1b3c89afb1fbf037532e15df32409454ee41e797ad95f2876456ff02ad89"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

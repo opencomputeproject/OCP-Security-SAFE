@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - Boot Access Module (TypeId0x5e_pspbl_bam_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v1.A1.2.1F",
+        "fw_hash_sha2_384": "17b25bacab2bf3439410317c73e162af952a4d6197dbfcc7daff32615a7840326ae7eba20ec2d12b0290e71897b73832",
+        "fw_hash_sha2_512": "1be36b98d33048a457d09c59c748109ffadc2504826474d2503c2797b7d817d2fc74b7ff79f6a184c5aa5fdf42f4caba89c2614c2b9f45473edbcb7bb2fa706a"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

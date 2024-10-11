@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TA - RAS (ta_ras_prod_amdTEE.esbin)",
+        "repo_tag": "",
+        "fw_version": "",
+        "fw_hash_sha2_384": "d03aeb474091b48f83526f5811167487e67d44267d892222d4d41fc5e0ea1a989e03b00cc6de4f95f020173205d75745",
+        "fw_hash_sha2_512": "1b851a9428629261f4a85a8f33705c47de1b423dc982ac2e7f86ccf994f0b5db155fc88a1d5fd901f400f66e5d8a8a9f6532c1ee9e50a8a0860b4b382998b9c6"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

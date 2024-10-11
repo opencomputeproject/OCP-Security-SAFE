@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - RAS Module (TypeId0x59_pspbl_ras_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v1.A1.2.1F",
+        "fw_hash_sha2_384": "b60d20b21e6ef0dbc27aff28773dcfdf7f901e9c211050843303b3fec4f124f43fb909278a80d6e8d95edb858d439453",
+        "fw_hash_sha2_512": "65dec190b453b42724a3e918de3d15201db642eed6ac30648123816c69039ee8fce1e415164a795ad71cb25cf028eea3983ee1ce5a5fabdf6132574cfc0be7d0"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - RAS - Register Whitelist (TypeId0x9F_psp_tos_wl_bin_mi300.sbin)",
+        "repo_tag": "",
+        "fw_version": "",
+        "fw_hash_sha2_384": "b924327de3789c5d9625f39015cc194fc003867ae1cf4af478a73e5d6bdcced8a7b8ab213ec795c97b216c36f4d830b4",
+        "fw_hash_sha2_512": "59b6406582445dbef5cc03c45c464183ab7b118d40dd25e216147de4cefc190671c0c67072c9960d90cace4e9b9f06e02d55e75271dabf3b39c71a886408eed0"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
