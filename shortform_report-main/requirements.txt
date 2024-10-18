@@ -1,2 +1,5 @@
 ecdsa
 pyjwt[crypto]
+azure-core
+azure-keyvault
+azure-identity
