@@ -1,0 +1,56 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "ACME Inc",
+        "product": "Roadrunner Trap",
+        "category": "storage",
+        "repo_tag": "release_v1_2_3",
+        "fw_version": "1.2.3",
+        "fw_hash_sha2_384": "848aff556097fc1eaf08253abd00af0aad0c317c3490e88bef09348658ce6e14829815fca075d9e03fcf236a47ff91dc",
+        "fw_hash_sha2_512": "89142682f6d42edd356e4c3bdac3ae7d735ace1c2e058b04a2ac848a6b30238d52c9055f864c5306b12e784769e571de7fd1956437e10990cdbd928f17117662",
+        "manifest": [
+            {
+                "file_name": "myapp/bin/myapp.elf",
+                "file_hash": "b17acd5e84fb017ec305608a0a7d3998be6e464b9cbc1694a69aa9dbd2ccccc085562efdce9f5d36d28b4b4cd4dd7a958d9791a6a6b4e6ec87893781a4444643"
+            },
+            {
+                "file_name": "myapp/inc/myapp.h",
+                "file_hash": "b64cdd2a28a947a34db58d7317774c2caf2ec231ab3625a2aca3459f20a49fff856a12e977b5306677d35b2dbe3e1a793e508701df063e07e5de02a6890843cb"
+            },
+            {
+                "file_name": "myapp/make.sh",
+                "file_hash": "6d3311e93acd44690336aad7d4ff2947d5c6c6b4cfde728a3fa0770613e8a845c4e049337ee2614e6344809d2e36ec15544e44cfcaca2fafb85ae58cad2dd60e"
+            },
+            {
+                "file_name": "myapp/src/myapp.c",
+                "file_hash": "47385f4b7e2257896cf0d84ad0e84bf0a7150ee35667eb0f7ec0f2fc954cf10b0b963a90c67ba7d450d40a38190432079e9dd439ae75d987b56f67185c8ab5cb"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "My Pentest Corporation",
+        "methodology": "whitebox",
+        "completion_date": "2023-06-25",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "Memory corruption when reading record from SPI flash",
+                "cvss_score": "7.9",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
+                "cwe": "CWE-111",
+                "description": "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
+                "cve": null
+            },
+            {
+                "title": "Debug commands enable arbitrary memory read/write",
+                "cvss_score": "8.7",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+                "cwe": "CWE-222",
+                "description": "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
+                "cve": "CVE-2014-10000"
+            }
+        ]
+    }
+}
