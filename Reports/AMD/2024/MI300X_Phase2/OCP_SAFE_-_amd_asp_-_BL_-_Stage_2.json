@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - Stage 2 (TypeId0x2_pspbl_stage2_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v00.A1.2.21",
+        "fw_hash_sha2_384": "6ab554f6955afebc2d17e15c8d128895a4de8ecc05c1c1384c3b9387de6554d2bb3d753965f1089d06f8b8db078050fc",
+        "fw_hash_sha2_512": "d61fb48925613b7fa8a544abd148c726d4a0995648d5de3e19d43b86b247dcc68db0ec58ac5cd91e63976583bd85b7657db0742799a43d25abed12a6a6a2046f"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-11-07",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
