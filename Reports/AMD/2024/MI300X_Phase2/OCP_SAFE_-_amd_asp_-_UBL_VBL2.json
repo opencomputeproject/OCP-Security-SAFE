@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - UBL_VBL2 (TypeId0x154_MemInitUBL2_mi300.sbin)",
+        "repo_tag": "",
+        "fw_version": "22.40.06.16",
+        "fw_hash_sha2_384": "14b08f314f4e77b9a8bdca93fe1a4fb16146a7cb435656b7dd69a5a0fcb7aac8f79131e58e5d9f5ba88c2c7dbe0d1f67",
+        "fw_hash_sha2_512": "2de8e2452634efc07bc9508056546f60d5de7729290eb9e81e77824bb04f85a19d89d001d9b2b3bc0cd1588972dfbd16c71a16b2193900111133147965b31de3"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-11-07",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
