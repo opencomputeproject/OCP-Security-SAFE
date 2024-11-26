@@ -23,6 +23,7 @@ The `example_gen_sign_verify.py` script demonstrates how to use the API exported
 The Security Review Provider (SRP) should use `OcpReportLib.py` to generate the short-form report, by integrating it with their internal report generation apparatus. The `OcpReportLib.py` API is designed to be simple and flexible so as to not restrict how the SRP may choose to generate the report. It is designed to allow data to be easily imported from a variety of sources such as CSV files or REST APIs.
 
 Use of the API is straight forward:
+
 1. Call `add_device()` to add vendor and device-specific metadata to the report.
 2. Call `add_audit()` to add audit details to the report.
 3. Call `add_issue()` any number of times to add vulnerability details to the report.
@@ -45,11 +46,11 @@ OCP members, such as cloud service providers, will be the primary consumers of t
 
 # Format of the Short-Form Report
 
-What follows is an example JSON payload for a hypothetical review:
+What follows is an example JSON payload for a hypothetical review of a typical binary firmware artifact:
 
 ```
 {
-    "review_framework_version": "0.2",
+    "review_framework_version": "1.0",
     "device": {
         "vendor": "ACME Inc",
         "product": "Roadrunner Trap",
@@ -87,7 +88,68 @@ What follows is an example JSON payload for a hypothetical review:
 }
 ```
 
-A sample JSON report and signed JWS can be found in this `samples/` folder in this repository.
+This second example is an example JSON payload for a small SDK source code package and includes a manifest of file hashes:
+
+```
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "ACME Inc",
+        "product": "Roadrunner Trap",
+        "category": "storage",
+        "repo_tag": "release_v1_2_3",
+        "fw_version": "1.2.3",
+        "fw_hash_sha2_384": "848aff556097fc1eaf08253abd00af0aad0c317c3490e88bef09348658ce6e14829815fca075d9e03fcf236a47ff91dc",
+        "fw_hash_sha2_512": "89142682f6d42edd356e4c3bdac3ae7d735ace1c2e058b04a2ac848a6b30238d52c9055f864c5306b12e784769e571de7fd1956437e10990cdbd928f17117662",
+        "manifest": [
+            {
+                "file_name": "myapp/bin/myapp.elf",
+                "file_hash": "b17acd5e84fb017ec305608a0a7d3998be6e464b9cbc1694a69aa9dbd2ccccc085562efdce9f5d36d28b4b4cd4dd7a958d9791a6a6b4e6ec87893781a4444643"
+            },
+            {
+                "file_name": "myapp/inc/myapp.h",
+                "file_hash": "b64cdd2a28a947a34db58d7317774c2caf2ec231ab3625a2aca3459f20a49fff856a12e977b5306677d35b2dbe3e1a793e508701df063e07e5de02a6890843cb"
+            },
+            {
+                "file_name": "myapp/make.sh",
+                "file_hash": "6d3311e93acd44690336aad7d4ff2947d5c6c6b4cfde728a3fa0770613e8a845c4e049337ee2614e6344809d2e36ec15544e44cfcaca2fafb85ae58cad2dd60e"
+            },
+            {
+                "file_name": "myapp/src/myapp.c",
+                "file_hash": "47385f4b7e2257896cf0d84ad0e84bf0a7150ee35667eb0f7ec0f2fc954cf10b0b963a90c67ba7d450d40a38190432079e9dd439ae75d987b56f67185c8ab5cb"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "My Pentest Corporation",
+        "methodology": "whitebox",
+        "completion_date": "2023-06-25",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "Memory corruption when reading record from SPI flash",
+                "cvss_score": "7.9",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
+                "cwe": "CWE-111",
+                "description": "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
+                "cve": null
+            },
+            {
+                "title": "Debug commands enable arbitrary memory read/write",
+                "cvss_score": "8.7",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+                "cwe": "CWE-222",
+                "description": "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
+                "cve": "CVE-2014-10000"
+            }
+        ]
+    }
+}
+```
+
+These sample JSON reports and signed JWS can be found in this `samples/` folder in this repository.
 
 ## Payload Fields
 
@@ -95,7 +157,7 @@ The purpose of the various fields is explained below.
 
 ### `review_framework_version` field
 
-This field is intended to match the version of the OCP [Vendor Security Review framework](https://drive.google.com/file/d/177hRzP05xE5OlvW7nuBH35SxaBSo1TRI/view). Currently this is version "`0.2`".
+This field is intended to match the version of the OCP [Vendor Security Review framework](https://drive.google.com/file/d/177hRzP05xE5OlvW7nuBH35SxaBSo1TRI/view). Currently this is version "`1.1`".
 
 ### `device` fields
 
@@ -106,8 +168,9 @@ A collection of fields that describe the vendor, device, and firmware version th
 * `category`: The type of device that was audited. Usually a short string such as: `storage`, `network`, `gpu`, `cpu`, `apu`, or `bmc`.
 * `repo_tag`: If applicable, the report can include the repository tag for the code that was audited. This may also be useful for ROM audits where the OCP Member is unable to verify the firmware hash.
 * `fw_version`: The version of the firmware image that is attested by the signed short-form report. In most cases this will be the firmware version compiled by the vendor after the security audit completes, which contains fixes for all vulnerabilities that were found during the audit.
-* `fw_hash_sha2_384`: A hex-encoded string containing the SHA2-384 hash of the firmware image. Should be prefixed with "`0x`".
+* `fw_hash_sha2_384`: A hex-encoded string containing the SHA2-384 hash of the firmware image. If the `manifest` field is present, it is a hash of that field instead.
 * `fw_hash_sha2_512`: ... ditto, but using SHA2-512.
+* `manifest`: A JSON list of filename and file hash pairs. This field is optional.
 
 ### `audit` fields
 
@@ -121,7 +184,7 @@ Several fields that describe the audit itself: Who delivered the audit, when the
 
 ### `issues` list
 
-This list of vulnerabilities that were **not fixed** by the device vendor before the firmware image was shipped. This list may be empty if the SRP found no vulnerabilities during the course of the security review.                       
+This list of vulnerabilities that were **not fixed** by the device vendor before the firmware image was shipped. This list may be empty if the SRP found no vulnerabilities during the course of the security review.
 
 * `title`: A brief summary of the issue. Usually taken directly from the SRP's audit report.
 * `cvss_score`: The CVSS base score, represented as a string, such as "`7.1`".

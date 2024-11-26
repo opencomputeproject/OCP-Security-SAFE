@@ -42,7 +42,7 @@ rep = ShortFormReport()
 # XXX: Note to SRP: if this is a certification for a source code deliverable rather
 #      than a binary deliverable, then uncomment this section and provide the file
 #      input file generated as:
-#            "find . -type f -exec sha256sum {} \; > file_hashes.txt"
+#            "find . -type f -exec sha512sum {} \; > file_hashes.txt"
 # manifest = []
 # with open("file_hashes.txt") as hashfile:
 #     for line in hashfile:

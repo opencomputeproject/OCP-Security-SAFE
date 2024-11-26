@@ -89,8 +89,10 @@ class ShortFormReport(object):
                      which contains fixes for all vulnerabilities found during
                      the audit.
         fw_hash_sha384: A hex-encoded string containing the SHA2-384 hash of
-                        the firmware image. Prefixed with "0x".
+                        the firmware image. If the `manifest` field is present,
+                        this is a hash of that field instead.
         fw_hash_sha512: ... ditto but using SHA2-512 ...
+        manifest:  A JSON list of filename and file hash pairs. This field is optional.
         """
         self.report["device"] = {}
         self.report["device"]["vendor"] = f"{vendor}".strip()
