@@ -421,6 +421,9 @@ class ShortFormReport(object):
             != hashlib.sha384().digest_size * 2
         ):
             l3 = len(decoded["device"]["fw_hash_sha2_384"])
+            print(
+                f"fw_hash_sha2_384 hash digest length must be {hashlib.sha384().digest_size*2} (found {l3})!"
+            )
             return False
         if (
             "fw_hash_sha2_512" in decoded["device"]
