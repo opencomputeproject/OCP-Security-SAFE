@@ -19,13 +19,23 @@ Author: Jeremy Boone, NCC Group
 Date  : June 5th, 2023
 """
 
+import time
 import json
 import jwt
+import base64
 import hashlib
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
-from cryptography.hazmat.primitives.asymmetric.ec import EllipticCurvePrivateKey
+from cryptography.hazmat.primitives.asymmetric.ec import (
+    EllipticCurvePrivateKey,
+    EllipticCurvePublicNumbers,
+    SECP521R1,
+)
+
+from azure.identity import DefaultAzureCredential
+from azure.keyvault.keys import KeyClient
+from azure.keyvault.keys.crypto import CryptographyClient, SignatureAlgorithm
 
 # Only the following JSON Web Algorithms (JWA) will be accepted by this script
 # for signing the short-form report. Refer to RFC7518 for more details.
@@ -256,6 +266,54 @@ class ShortFormReport(object):
         """
         return self.signed_report
 
+    def sign_report_azure(self, vault: str, kid: str) -> bool:
+        """Sign the JSON object to make a JSON Web Signature. Refer to RFC7515
+        for additional details of the JWS specification.
+
+        This uses an Azure Key Vault key for signing. Login must be performed
+        using the Azure CLI (i.e., `az login`) before running this function.
+
+        Only P-521 keys are supported currently. Any other key type will fail.
+
+        vault:    The Azure Key Vault URL to use.
+        kid:      The Key ID to be included in the JWS header. This field will
+                    be used to uniquely identify the unique SRP key that was used
+                    to sign the report. It also is used as the key name in Azure.
+
+        Returns True on success, and False on failure.
+        """
+
+        credential = DefaultAzureCredential()
+        key_client = KeyClient(vault_url=vault, credential=credential)
+        key = key_client.get_key(kid)
+        crypto_client = CryptographyClient(key, credential=credential)
+
+        if key.key.crv != "P-521":
+            print(f"Key must be a P-521 key, but is actually a {key.key.crv}.")
+            return False
+
+        jwt_payload = self.get_report_as_dict()
+        jwt_payload["iat"] = round(time.time())
+        jwt_headers = {"kid": f"{kid}", "alg": "ES512", "typ": "jwt"}
+
+        token_components = {
+            "header": base64.urlsafe_b64encode(json.dumps(jwt_headers).encode())
+            .decode()
+            .rstrip("="),
+            "payload": base64.urlsafe_b64encode(json.dumps(jwt_payload).encode())
+            .decode()
+            .rstrip("="),
+        }
+        to_sign = f'{token_components.get("header")}.{token_components.get("payload")}'
+        digest = hashlib.sha512(to_sign.encode()).digest()
+        result = crypto_client.sign(SignatureAlgorithm.es512, digest)
+        token_components["signature"] = (
+            base64.urlsafe_b64encode(result.signature).decode().rstrip("=")
+        )
+        self.signed_report = f'{token_components.get("header")}.{token_components.get("payload")}.{token_components["signature"]}'
+
+        return True
+
     ###########################################################################
     # APIs for verifying a signed report
     ###########################################################################
@@ -287,15 +345,72 @@ class ShortFormReport(object):
         """
         decoded = jwt.decode(signed_report, pub_key, algorithms=ALLOWED_JWA_ALGOS)
 
+        # verify additional contents of the report
+        if self.verify_report_contents(decoded) is not True:
+            raise Exception("Report contents failed to validate!")
+
+        return decoded
+
+    def get_public_key_azure(self, vault, kid):
+        """Get the public key of an Azure KeyVault key.
+
+        vault:    The Azure Key Vault URL to use.
+        kid:      The Azure key name to use.
+
+        Returns the public key in PEM format.
+        """
+        credential = DefaultAzureCredential()
+        key_client = KeyClient(vault_url=vault, credential=credential)
+        key = key_client.get_key(kid)
+        pub = EllipticCurvePublicNumbers(
+            int.from_bytes(key.key.x, byteorder="big"),
+            int.from_bytes(key.key.y, byteorder="big"),
+            SECP521R1(),
+        ).public_key()
+        return pub.public_bytes(
+            serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
+        ).decode()
+
+    def verify_signed_report_azure(
+        self, vault: str, kid: str, signed_report: bytes
+    ) -> dict:
+        """Verify the signed report using an Azure KeyVault key.
+
+        vault:    The Azure Key Vault URL to use.
+        kid:      The Azure key name to use.
+        signed_report: A bytes object containing the signed report as a JWS
+                         object.
+
+        Returns a dictionary containing the decoded JSON short-form report
+        payload.
+        """
+        pubkey = self.get_public_key_azure(vault, kid)
+        decoded = jwt.decode(signed_report, pubkey, algorithms=ALLOWED_JWA_ALGOS)
+
+        # verify additional contents of the report
+        if self.verify_report_contents(decoded) is not True:
+            raise Exception("Report contents failed to validate!")
+
+        return decoded
+
+    def verify_report_contents(self, decoded: dict) -> bool:
+        """Verify the contents of the report wherever possible.
+
+        decoded:  A SFR report, decoded, with its signature assumed to have already been validated.
+
+        Returns True on success
+        """
+
         # At least one of the hashes must be present for this JSON to be valid.
         if (
             "fw_hash_sha2_384" not in decoded["device"]
             and "fw_hash_sha2_512" not in decoded["device"]
         ):
             # Suppress this error for the one report that has no hash:
-            # https://github.com/opencomputeproject/OCP-Security-SAFE/blob/main/Reports/CHIPS_Alliance/2023/Caliptra/OCP_SAFE_-_caliptra_-_ROM.json
+            # https://github.com/opencomputeproject/OCP-Security-SAFE/blob/main/Reports/CHIPS_Alliance/2023/Caliptra
             if decoded["device"]["repo_tag"] != "release_v20231014_0":
-                raise Exception("Neither fw_hash_sha2 is present!")
+                print("Neither fw_hash_sha2 is present!")
+                return False
 
         # Validate hash lengths are correct
         if (
@@ -304,18 +419,17 @@ class ShortFormReport(object):
             != hashlib.sha384().digest_size * 2
         ):
             l3 = len(decoded["device"]["fw_hash_sha2_384"])
-            raise Exception(
-                f"fw_hash_sha2_384 hash digest length must be {hashlib.sha384().digest_size*2} (found {l3})!"
-            )
+            return False
         if (
             "fw_hash_sha2_512" in decoded["device"]
             and len(decoded["device"]["fw_hash_sha2_512"])
             != hashlib.sha512().digest_size * 2
         ):
             l5 = len(decoded["device"]["fw_hash_sha2_512"])
-            raise Exception(
+            print(
                 f"fw_hash_sha2_512 hash digest length must be {hashlib.sha512().digest_size*2} (found {l5})!"
             )
+            return False
 
         # if there is a manifest list, then validate its hash(es)
         if "manifest" in decoded["device"]:
@@ -330,12 +444,14 @@ class ShortFormReport(object):
                 "fw_hash_sha2_384" in decoded["device"]
                 and decoded["device"]["fw_hash_sha2_384"] != fw_hash_sha384
             ):
-                raise Exception("fw_hash_sha2_384 does not match manifest's hash!")
+                print("fw_hash_sha2_384 does not match manifest's hash!")
+                return False
 
             if (
                 "fw_hash_sha2_512" in decoded["device"]
                 and decoded["device"]["fw_hash_sha2_512"] != fw_hash_sha512
             ):
-                raise Exception("fw_hash_sha2_512 does not match manifest's hash!")
+                print("fw_hash_sha2_512 does not match manifest's hash!")
+                return False
 
-        return decoded
+        return True

@@ -22,6 +22,7 @@ import hashlib
 #   $ openssl ec -in testkey_p521.pem -pubout -out testkey_ecdsa_p521.pub
 
 MY_PRIV_KEY  = "testkey_p521.pem"
+MY_KEYVAULT_URL = "https://MYVAULT.vault.azure.net/"
 MY_PUB_KEY   = "testkey_ecdsa_p521.pub"
 #MY_SIGN_ALGO = "PS512"
 MY_SIGN_ALGO = "ES512"
@@ -120,6 +121,9 @@ with open(MY_PRIV_KEY, "rb") as f:
     privkey = f.read()
 
 success = rep.sign_report( privkey, MY_SIGN_ALGO, MY_KID )
+# XXX: note that sign_report_azure() could be used here instead if using the
+#      Azure Key Vault for key management. In that case use the following:
+#        rep.sign_report_azure( MY_KEYVAULT_URL, MY_KID )
 if not success:
     print( "Error encountered while signing short-form report" )
     sys.exit(1)
@@ -156,6 +160,12 @@ with open(MY_PUB_KEY, "rb") as f:
 
 try:
     decoded = rep.verify_signed_report( signed_report, pubkey )
+    # XXX: note that verify_signed_report_azure() could be used here for online
+    #      validation by the SRP, but the above is more appropriate for the OCP
+    #      member once the public key is published. Azure-based public keys are
+    #      retreived using get_public_key_azure()).
+    #      If testing online validation replace the above with the following:
+    #        rep.verify_signed_report_azure( MY_KEYVAULT_URL, MY_KID, signed_report )
     print( "Success!" )
     print( "\n\n" )
     print( "Decoded report:" )

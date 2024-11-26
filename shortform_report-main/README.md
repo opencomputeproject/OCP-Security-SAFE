@@ -26,9 +26,9 @@ Use of the API is straight forward:
 1. Call `add_device()` to add vendor and device-specific metadata to the report.
 2. Call `add_audit()` to add audit details to the report.
 3. Call `add_issue()` any number of times to add vulnerability details to the report.
-4. Call `sign_report()` to sign the JSON report.
+4. Call `sign_report()` (or `sign_report_azure()`) to sign the JSON report.
 
-When signing the report, the SRP must use an asymmetric signing key per those specified in the [Allowed Algorithms](#Allowed-Algorithms) section. This Python package does not attempt to solve the key management problem, and we encourage SRPs to protect the private key as appropriate.
+When signing the report, the SRP must use an asymmetric signing key per those specified in the [Allowed Algorithms](#Allowed-Algorithms) section. [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault) support is included as an example of more sophisticated key management, however this Python package does not attempt to solve the key management problem in all possible ways, and we encourage SRPs to protect the private key as appropriate.
 
 The SRP's public key and [Key ID](#Header-Fields), as well as the signed short-form report, will be shared with the OCP so that they can be published on the OCP website.
 
