@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TEE SRIOV (TypeId0x14A_drv_soc_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "00.36.02.51",
+        "fw_hash_sha2_384": "6240376ab0e98c3c4387d3a1e562859cf8cdb42819037a97bafe60b3041846b9062c6e9d44748ade1b227e5882123f74",
+        "fw_hash_sha2_512": "af52f34bb0a66b6501e909bfa671d79e8788283074c98ad6b984b70c003375c3b67585be3b2dfe05dfb4322e26048815248625f432ce576424fe21719b009f85"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-11-07",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
