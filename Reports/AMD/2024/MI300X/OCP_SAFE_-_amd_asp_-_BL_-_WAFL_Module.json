@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - WAFL Module (TypeId0x57_pspbl_wafl_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v1.A1.2.1F",
+        "fw_hash_sha2_384": "b0758ab407116c41e113bb167ec8c603fe7c7f0efaad276bbc853a8bab966d29262cc96fad78f8743b93211b9814cea8",
+        "fw_hash_sha2_512": "e6a9770e8ffb629bbda6007cbe81a95be8e98a2b665668c59ae28f5fb9c626f066ad4096d5cac98f1546c998933f4ef985b229b6360cda1d3a7c38a6378831e4"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

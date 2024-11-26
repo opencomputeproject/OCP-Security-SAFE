@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TEE OS - Kernel (TypeId0x09_psp_os_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "",
+        "fw_hash_sha2_384": "c13b04759224234993325250d9fed611d50d182a1cb3fd5ffc6c07374e21146bc2d8d5e2bdee9e84c682f19a6c25e837",
+        "fw_hash_sha2_512": "29d1030e4c671d80acb25be9e904cbe89247b4cbb68856d9aba19453d64bfe6a24f9c2fe61147a7a80256f943a2ad6aefb7af69c35eea118786bb81949744cdc"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-10-10",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
