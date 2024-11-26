@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - TEE OS - HAD Driver (TypeId0x14B_drv_had_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "00.36.02.51",
+        "fw_hash_sha2_384": "426fcf814cc640b350876c7cf3e93f30b25f2f0b54ddf409f74514f550e16e596fbc9cac8b017ce2efa81ee1ca1c9fa3",
+        "fw_hash_sha2_512": "0f6e6613c1292ca0c3c8dd9b9dc24bd8260fd13551cc03b834022b671e5e063e471bd051c677c5ea1d699178568cf616acc47344935956645e76bd911b1e244e"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-11-07",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

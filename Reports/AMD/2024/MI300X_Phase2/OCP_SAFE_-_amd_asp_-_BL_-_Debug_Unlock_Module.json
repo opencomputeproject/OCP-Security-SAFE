@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "AMD Security Processor (ASP)",
+        "category": "GPU - BL - Debug Unlock Module (TypeId0xb_pspbl_debug_unlock_MI300.sbin)",
+        "repo_tag": "",
+        "fw_version": "v00.A1.2.21",
+        "fw_hash_sha2_384": "bd6eb00257eb5dcd346e8f73757979d7dd50fa13ab91754d616481c03314d6cfb82c72b25950faaa667b9611da89c856",
+        "fw_hash_sha2_512": "9ec99850eb4081dfb476f99cdecf0af5cda2c79f248bbbf478502ef9d1ad689ad90d507edc1e363589b1811539db73eeb4f602173a4f591ccb9948c2b19856e3"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "scope": "1",
+        "completion_date": "2024-11-07",
+        "report_version": "2.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
