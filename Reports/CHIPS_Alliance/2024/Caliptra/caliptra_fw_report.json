@@ -1,0 +1,30 @@
+{
+  "review_framework_version": "1.1",
+  "device": {
+    "vendor": "Microsoft Corporation",
+    "product": "Caliptra",
+    "category": "root_of_trust",
+    "repo_tag": "https://github.com/chipsalliance/caliptra-sw/tree/dc906435dad6d17cae817465dc1d38c47e467b56, https://github.com/chipsalliance/caliptra-sw/pull/1447, https://github.com/chipsalliance/caliptra-sw/pull/1432, https://github.com/chipsalliance/caliptra-sw/pull/1297, https://github.com/chipsalliance/caliptra-sw/pull/1022, https://github.com/chipsalliance/caliptra-sw/pull/1028, https://github.com/chipsalliance/caliptra-sw/pull/1314",
+    "fw_version": "",
+    "fw_hash_sha2_384": "",
+    "fw_hash_sha2_512": ""
+  },
+  "audit": {
+    "srp": "IOActive, Incorporated",
+    "methodology": "whitebox",
+    "completion_date": "2024-04-26",
+    "report_version": "1.1",
+    "scope_number": "1",
+    "cvss_version": "3.1",
+    "issues": [
+      {
+        "title": "Mailbox component has multiple high-level implementations",
+        "cvss_score": "0.0",
+        "cvss_vector": "CVSS:3.1/AV:N/AC:L/PR:N/UI:N/S:U/C:N/I:N/A:N",
+        "cwe": "CWE-1041",
+        "description": "The Caliptra mailbox component has multiple high-level implementations over the MboxCsr low-level implementation, each of which implements similar functionality at a different level of abstraction. This complexity can lead to an increased likelihood of introducing bugs and vulnerabilities during development and maintenance phases.",
+        "cve": ""
+      }
+    ]
+  }
+}
