@@ -188,5 +188,5 @@ review.
 3. Encryption keys must not be stored/cache in associated volatile or non-volatile storage
 4. Wrapped keys, typically used for storage or transport, must have a mechanism to detect modification or replay
 5. Encryption mechanisms are resistant to side channel attacks
-
+6. The separate [storage sanitization requirements](storage_sanitization.md) must be met.
  
