@@ -325,10 +325,10 @@ Several SRP sample reports can be found in [Appendix A](#appendix-a-example-repo
 
 * Atredis Partners - [Sample Deliverables](https://www.atredis.com/sample-deliverables)
 * NCC
-  Group - [Zephyr RTOS Security Assessment](https://research.nccgroup.com/wp-content/uploads/2020/05/NCC_Group_Zephyr_MCUboot_Research_Report_2020-05-26_v1.0.pdf)
-  and other [public reports](https://research.nccgroup.com/category/public-reports/)
+  Group - [Zephyr RTOS Security Assessment](https://www.nccgroup.com/media/n0ahjxum/_ncc_group_zephyr_mcuboot_research_report_2020-05-26_v10.pdf)
+  and other [public reports](https://www.nccgroup.com/us/research-blog/?category=18157#hub)
 * NCC's first review of [Caliptra](https://chipsalliance.github.io/Caliptra/) can be
-  found [here](https://github.com/chipsalliance/Caliptra/blob/main/doc/NCC_Group_Microsoft_MSFT283_Report_2023-10-04_v1.1.pdf)
+  found [here](https://github.com/chipsalliance/Caliptra/blob/main/doc/NCC_Group_Microsoft_MSFT283_Report_2023-10-13_v1.2.pdf)
 
 # Appendix B: Machine Readable Short-Form Report Format
 
