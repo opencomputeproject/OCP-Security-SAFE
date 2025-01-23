@@ -192,7 +192,7 @@ description of the scopes is provided in the [review areas](./review_areas.md) d
   covered by the observed hardware and firmware implementation. If the DV cannot provide a threat model, then the SRP
   should create one as part of the assessment scope. The threat model document should include the following details, and
   be aligned with the in-scope and out-of-scope threats described by
-  the [Common Security Threats](https://docs.google.com/document/d/13I-meE6BxiLB_c-Mjr3cLLK9S0SjuPuRjPfS9yTG6P8/edit#heading=h.ou65h8wmxru)
+  the [Common Security Threats](https://www.opencompute.org/documents/common-security-threats-notes-1-pdf)
   document:
     * **Security Objectives**: The high-level security objectives or key
       risks exposed by the firmware. Examples of such objectives may include the strict requirement that the secure boot
@@ -221,7 +221,7 @@ may use a scope 2 review for the application cores.
         * Analysis of the firmware loading and verification procedures to ensure that a secure boot implementation is
           present and cannot be circumvented. All critical assets that impact the device’s security must be
           cryptographically signed. The
-          OCP [Secure Boot](https://docs.google.com/document/d/1Se1Dd-raIZhl_xV3MnECeuu_I0nF-keg4kqXyK4k4Wc/edit#)
+          OCP [Secure Boot](https://www.opencompute.org/documents/secure-boot-2-pdf)
           document should be used for guidance.
         * Discovery of hard-coded credentials, seeds, private keys, or symmetric secrets.
         * Identifying temporal and spatial memory safety issues that arise due to improper input validation or race
@@ -325,10 +325,10 @@ Several SRP sample reports can be found in [Appendix A](#appendix-a-example-repo
 
 * Atredis Partners - [Sample Deliverables](https://www.atredis.com/sample-deliverables)
 * NCC
-  Group - [Zephyr RTOS Security Assessment](https://research.nccgroup.com/wp-content/uploads/2020/05/NCC_Group_Zephyr_MCUboot_Research_Report_2020-05-26_v1.0.pdf)
-  and other [public reports](https://research.nccgroup.com/category/public-reports/)
+  Group - [Zephyr RTOS Security Assessment](https://www.nccgroup.com/media/n0ahjxum/_ncc_group_zephyr_mcuboot_research_report_2020-05-26_v10.pdf)
+  and other [public reports](https://www.nccgroup.com/us/research-blog/?category=18157#hub)
 * NCC's first review of [Caliptra](https://chipsalliance.github.io/Caliptra/) can be
-  found [here](https://github.com/chipsalliance/Caliptra/blob/main/doc/NCC_Group_Microsoft_MSFT283_Report_2023-10-04_v1.1.pdf)
+  found [here](https://github.com/chipsalliance/Caliptra/blob/main/doc/NCC_Group_Microsoft_MSFT283_Report_2023-10-13_v1.2.pdf)
 
 # Appendix B: Machine Readable Short-Form Report Format
 
