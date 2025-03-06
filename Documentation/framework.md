@@ -316,10 +316,10 @@ use the findings in the report to improve design, engineering, build, and test p
 Several SRP sample reports can be found in [Appendix A](#appendix-a-example-reports).
 
 * **Embargos** \
-  If the SRP identifies vulnerabilities that might need a significant amount of time to fix or mitigate, the DV may opt
-  to embargo these findings until such a time (up to industry standard coordinated disclosure limits, typically 90 days)
-  and omit them from the report, or even hold back the entire report until such a time as the issues have been
-  resolved.
+  If the SRP identifies vulnerabilities that might need a significant amount of time to fix or mitigate, the DV may opt 
+  to embargo the report (up to industry standard coordinated disclosure limits, typically 90 days) until such a time as 
+  the issues have been resolved. Note that the DV may, at their discretion, share the findings from an embargoed report 
+  directly with their CSP customers under NDA. 
 
 # Appendix A: Example Reports
 
