@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Broadcom",
+        "product": "Thor3 OCPR Agent",
+        "category": "Network Interface Controller (NIC)",
+        "repo_tag": "15789e945e371131e657f3dd8f62085af1257171",
+        "fw_version": "0",
+        "fw_hash_sha2_384": "f42aad5cecf15d6d444d0362709c6193fff50b8bdac3ee4520b90780a6adef8949a7a55e7a07518c0c39eb59536fe99c",
+        "fw_hash_sha2_512": "6bbcf15c493d27dab00fad94577a15c31a01acf73a259597355266c1f290c01d45d300a6f4a3354bead5723334a1f05e557637a729e9398336c0468a78150c41"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-04-04",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
