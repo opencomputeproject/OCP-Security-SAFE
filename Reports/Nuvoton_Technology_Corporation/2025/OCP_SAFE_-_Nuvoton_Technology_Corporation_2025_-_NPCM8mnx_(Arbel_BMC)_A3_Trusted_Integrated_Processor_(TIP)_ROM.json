@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Nuvoton Technology Corporation",
+        "product": "NPCM8mnx (Arbel BMC) A3 Trusted Integrated Processor (TIP) ROM",
+        "category": "Baseboard Management Controller (BMC)",
+        "repo_tag": "",
+        "fw_version": "5.1.4",
+        "fw_hash_sha2_384": "84e8b8095c040fe95187daeb8375294b189d1ef75cd0b25d3e82bbc000e064a86143c7d6cc48f74794e2c81478fef4e5",
+        "fw_hash_sha2_512": "a54eed0932cb4717c5b86bfe78470e6df1a8b6291a36f136a1cdbe68b5b0a646aae63c52101d7ba8825a7db684ef3c118f10adcc2e26f6f7668d782232af6700"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-04-24",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
