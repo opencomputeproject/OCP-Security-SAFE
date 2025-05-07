@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Broadcom",
+        "product": "Thor3 SBL ROM",
+        "category": "Network Interface Controller (NIC)",
+        "repo_tag": "b3a2d731d48cb0523d6271be17b89f3e48c0982f",
+        "fw_version": "1.80",
+        "fw_hash_sha2_384": "57beeb4de3172e33026739a6ff6f2c7a625ccbbfc89b2d177397133ba309296213090c27b213ebaa71340837b09a4330",
+        "fw_hash_sha2_512": "dd498a0e84a1c298415a6ff5710697f04355180d6b035f8f6973c4be4f0f7ce5b4b08d6886a05f49049149fa42dfcc39832cc78ab2175f3961fb42be0b62993b"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-04-04",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
