@@ -13,7 +13,7 @@ The MEK is the key used to ultimately encrypt and decrypt all data on the drive.
 ### Internal Key
 
 The Internal Key is one of the two keys required to derive or access the MEK. It is generated within the device and never leaves it. It is not a fixed key, but can be erased and regenerated to effectively clear the drive. The following requirements apply:
-* If the Internal Key is a key used to encrypt the MEK, it must be generated with a cryptographically-strong amount of entropy, at least 128 bits.
+* If the Internal Key is a key used to encrypt the MEK, it must be generated with a cryptographically-strong amount of entropy, at least 256 bits.
 * The Internal Key must never be disclosed outside the drive.
   * Debug and manufacturing-related interfaces must be unable to access the Internal Key.
   * Debug dumps must not contain the Internal Key.
