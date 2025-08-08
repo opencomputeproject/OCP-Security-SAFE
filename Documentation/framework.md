@@ -55,7 +55,7 @@ OCP Security Workgroup
    </td>
    <td>Eric Eilertson
    </td>
-   <td>
+   <td>Publish release framework
    </td>
   </tr>
   <tr>
@@ -66,6 +66,16 @@ OCP Security Workgroup
    <td>Rob Wood
    </td>
    <td>Add manifest support
+   </td>
+  </tr>
+  <tr>
+   <td>1.2
+   </td>
+   <td>August, 2025
+   </td>
+   <td>Rob Wood
+   </td>
+   <td>Clarify publication process
    </td>
   </tr>
 </table>
@@ -79,7 +89,7 @@ OCP Security Workgroup
 
 # Executive Summary         
 
-Today’s modern data centers are comprised of a wide variety of processing devices (CPU, GPU, FPGA, etc.)and peripheral
+Today’s modern data centers are comprised of a wide variety of processing devices (CPU, GPU, FPGA, etc.) and peripheral
 components (network controllers, accelerators, storage devices, etc.). These devices typically run updatable software,
 firmware, or microcode which can reside internally or externally to the device. The provenance, code quality, and
 software supply chain for firmware releases and patches that run on these devices requires a strong degree of security
@@ -121,19 +131,19 @@ The conditions under which these reviews take place, are of two main types:
 
 At a high level, the process flows through the following sequence of steps:
 
-1. DV selects an SRP.
-2. DV and SRP prepare a scope for the security review.
+1. DV selects an SRP from the list of [approved providers](./security_review_providers.md).
+2. DV and SRP prepare a scope for the security review according to the [Security Review Scope](#security-review-scope) information provided below and in the supplementary [review areas](./review_areas.md).
 3. SRP performs the security review.
 4. DV addresses any findings from the SRP.
 5. SRP reviews the changes and issues the final reports.
 6. DV and SRP prepare the necessary deliverables.
-7. The DV provides them to the [OCP Security WG](https://www.opencompute.org/wiki/Security) for publication.
+7. The DV provides them to the [OCP Security WG](https://www.opencompute.org/wiki/Security) for publication in the form of a GitHub Pull Request (see [OCP Report Deliverables](#ocp-report-deliverables) below).
 
 Device Vendors are encouraged to engage an SRP early in the architectural definition process and continue with reviews
 at major architectural or implementation milestones, e.g. 0.8 of architectural and implementation specifications, and
 when ROM or firmware codes are nearing completion. This will help the device vendor avoid costly code rewrites or chip
-respins to address critical vulnerabilities. The results of these engagements during product development need not be
-published.
+re-spins to address critical vulnerabilities. The results of these engagements during product development need not be
+published, only assessments of released products is within scope of the OCP S.A.F.E. program.
 
 ## Objectives
 
@@ -151,7 +161,7 @@ The key objectives of this framework are:
 
 The reputation and integrity of the Security Review Providers are as important as their technical expertise. If there is
 a belief that the SRP delivers work of variable quality this brings into question all the reports they produce.
-Similarly, a conflict of interest degrades the value of the reports and in turns decreases the value of the SAFE
+Similarly, a conflict of interest degrades the value of the reports and in turn decreases the value of the SAFE
 program.
 
 The [SRP requirements document](./srp_requirements.md) contains requirements for the SRPs business, management, and
@@ -175,7 +185,7 @@ an SRP must be nominated and approved by the TAC.
 
 SRPs may have their endorsement suspended or revoked at any time for issues that cause SAFE to question the SRPs
 security practices, commitment to quality, or allegiances. Examples of such issues include losing control of a private
-signing key, endorsing firmware with hard coded credentials. Beyond egregious technical mistakes, an SRP must not be
+signing key or overlooking hard-coded credentials in firmware. Beyond egregious technical mistakes, an SRP must not be
 controlled by a company it is auditing or affiliated with a firm that sells vulnerabilities or exploits.
 
 ## Security Review Scope
@@ -206,7 +216,7 @@ description of the scopes is provided in the [review areas](./review_areas.md) d
       non-volatile storage media.
     * **Critical Assets**: A listing of all security-impacting assets within
       the firmware, and the corresponding Confidentiality, Integrity and Availability requirements for each. Examples of
-      critical assets may include secret keys, the fuse config, or configuration data residing in external flash.
+      critical assets may include secret keys, the fuse configuration, or any configuration data residing in external flash.
 
 The SAFE program defines 3 security review scopes. These scopes increase the complexity of attacks in the threat model.
 It is expected that devices will have reviews done with different review scopes. For example, a CPU may have a scope 3
@@ -226,7 +236,7 @@ may use a scope 2 review for the application cores.
         * Discovery of hard-coded credentials, seeds, private keys, or symmetric secrets.
         * Identifying temporal and spatial memory safety issues that arise due to improper input validation or race
           conditions that may occur along the attack surfaces that were identified in the threat model.
-        * Discovery of remnant debug handles on production builds
+        * Discovery of remnant debug handlers on production builds
         * Analysis of the cryptographic constructions employed by the firmware when protecting the confidentiality or
           integrity of any critical assets.
         * Improper handling of cryptographic material, e.g. keys, counters, nonces, seeds.
@@ -259,37 +269,38 @@ may use a scope 2 review for the application cores.
 ## OCP Report Deliverables
 
 This framework stipulates that the following be delivered to the OCP SAFE program for publication in the appropriate
-public [GitHub](https://github.com/opencomputeproject/OCP-Security-SAFE) repositories after the review (and re-testing,
-and any embargo periods end) has concluded:
+public [GitHub](https://github.com/opencomputeproject/OCP-Security-SAFE) repositories after the review (and remediation and re-testing)
+has concluded:
 
 * **Scope Document** \
   DV and SRP should jointly negotiate the scope of the review, based on the
   [review areas](#security-review-scope). As alluded to above, the areas are neither exhaustive nor complete, therefore
   the DV is encouraged to socialize the Scope with the OCP Security WG, either through its regular calls, or on its
-  mailing list.
-
-* The scope itself can be any number of documents, as long as the concatenation of them is provided to the OCP Security
+  mailing list. The scope itself can be any number of documents, as long as the concatenation of them is provided to the OCP Security
   WG. Aside from level of effort estimates, no part of the DV/SRP statement of work, NDAs, etc. needs to be published.
-  
 * **Short-Form Report** \
-  The SRP must produce a cryptographically signed machine-readable short-form report. This document will summarize the
-  audit scope, and uniquely identify the vendor, device and firmware version by means of a firmware hash. This report
-  will enumerate all vulnerabilities with a CVSS score and a brief summary. The short-form report specification can be
-  found in [Appendix B](#appendix-b-machine-readable-short-form-report-format). To claim OCP SAFE endorsement for a
-  product-firmware combination this report must
-  be published to the OCP GitHub repository.
+  The SRP must produce a cryptographically signed machine-readable short-form report. Only the final results are to be
+  in the signed SFR (after remediation and retesting). This document will summarize the audit scope, and uniquely identify
+  the vendor, device and firmware version by means of a firmware hash. This report will enumerate all vulnerabilities
+  with a CVSS score and a brief summary. The short-form report specification can be found in
+  [Appendix B](#appendix-b-machine-readable-short-form-report-format). To claim OCP SAFE endorsement for a
+  product-firmware combination this report must be published to the OCP GitHub repository. This signed SFR is delivered
+  to the DV for publication.
 * **GitHub Pull Request Submission**\
-  The Pull Request for the submission to GitHub could from the SRP or the Device Vendor.  If there are issues in the SFR
-  it is *suggested* that the DV submit the PR.  This *suggestion* helps to ensure that the DV is in control of messaging
-  around any potential vulnerability disclosures.  
+  The Pull Request (PR) for the submission to GitHub *must* be from the Device Vendor. This ensures that the DV is in
+  control of timing and messaging around any potential unfixed vulnerability disclosures. Previous versions of this document allowed
+  for the SRP to publish the PR on behalf of the DV, however this created ambiguity and allowed the possibility that an
+  SRP might publish an SFR without the DV's blessing. The DV, at their discretion, may elect to delay the publication, or not to publish at all and
+  forgo OCP SAFE endorsement.
 * **Signed Git Commits**\
- The OCP GitHub repository is configured to require all commits to be signed. Please remember this when preparing the submission.
+  The OCP GitHub repository is configured to require all commits to be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits). Please remember this when preparing the submission (use [--amend --signoff](https://stackoverflow.com/a/15667644) if you forget).
+* **SRF Pull Request Path**\
+  The location of the signed SFRs should be in Reports/$Vendor/$Year/$Product. As a convenience,
+  the submission may choose to additionally include the human-readable SFR documents.
+* **SRP Public Key Pull Request Path**\
+  The location of the signing public key should be in SRP_certificates/$SRP. These are to be published and maintained by
+  the SRP, and may be revoked by the TAC (see [Disqualification](#Disqualification) above).
 
-* **Pull Request Path**\
-  The location of the signed SFRs and signing public key should be in Reports/$Vendor/$Year/$Product. As a convience, 
-  the submission may choose to additionally include the human-readable JSON documents.
-
-  
 
 In addition to the short-form report, the SRP should deliver to the DV a detailed report. This report will likely be
 protected by NDA and will not be published. The DV should address the findings in the report. The DV is encouraged to
@@ -314,11 +325,6 @@ use the findings in the report to improve design, engineering, build, and test p
     * Analysis and critique section for the relevant review areas, and of the threat model and scope
 
 Several SRP sample reports can be found in [Appendix A](#appendix-a-example-reports).
-
-* **Embargos** \
-  If the SRP identifies vulnerabilities that might need a significant amount of time to fix or mitigate, the DV may opt 
-  to embargo the report until such a time as the issues have been resolved. Note that the DV may, at their discretion,
-  share the findings from an embargoed report  directly with their CSP customers under NDA. 
 
 # Appendix A: Example Reports
 
