@@ -1,0 +1,39 @@
+name: Validate CDDL and Example
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Documentation/corim_profile/*.cddl'
+      - 'Documentation/corim_profile/examples/*.diag'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Install Ruby cddl and cbor-diag gems
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby
+          sudo gem install cddl
+          sudo gem install cddlc
+          sudo gem install cbor-diag
+
+      - name: Convert DIAG to CBOR
+        run: |
+          diag2cbor.rb Documentation/corim_profile/examples/ocp-safe-sfr-fw-example.diag > example.cbor
+
+      - name: Fetch latest upstream CoRIM CDDL
+        run: |
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+
+      - name: Concatenate the CDDLs
+        run: |
+          cddlc -t cddl corim-base-upstream.cddl Documentation/corim_profile/ocp-safe-sfr-profile.cddl > combined.cddl
+
+      - name: Validate CBOR against CDDL
+        run: |
+          cddl combined.cddl validate example.cbor

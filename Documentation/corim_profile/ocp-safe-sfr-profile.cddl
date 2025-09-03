@@ -1,0 +1,57 @@
+; Auditor CoRIM – Corim which embeds the SFR fields
+; TODO: Register this extension with IANA
+
+$$measurement-values-map-extension //= (
+  &(ocp-safe-sfr: 1029) => ocp-safe-sfr-map
+)
+
+ocp-safe-sfr-map = {
+   &(review-framework-version: 0) => tstr
+   &(methodology: 1) => $methodology
+   &(completion-date: 2) => time
+   &(scope-number: 3) => integer
+  ? &(device-category: 4) => $device-category
+  ? &(repo-tag: 5) => tstr
+  ? &(fw-version: 6) => version-map
+  ? &(fw-file-digests: 7) => digests-type
+  ? &(manifest-digest: 8) => digest
+  ? &(manifest: 9) => [ + manifest-entry ]
+  ? &(report-version: 10) => tstr
+  ? &(cvss-version: 11) => tstr
+  ? &(issues: 12) => [ + issue-entry ]
+  * $$ocp-safe-sfr-ext
+}
+
+$methodology /= whitebox
+$methodology /= blackbox
+
+whitebox = 0
+blackbox = 1
+
+$device-category /= storage
+$device-category /= network
+$device-category /= gpu
+$device-category /= cpu
+$device-category /= apu
+$device-category /= bmc
+
+storage = 0
+network = 1
+gpu = 2
+cpu = 3
+apu = 4
+bmc = 5 
+ 
+issue-entry = {
+  &(title: 0) => tstr
+  &(cvss-score: 1) => tstr
+  &(cvss-vector: 2) => tstr
+  &(cwe: 3) => tstr
+  &(description: 4) => tstr
+  ? &(cve: 5) => tstr
+}
+
+manifest-entry = {
+  &(filename: 0) => tstr,
+  &(file-hash: 1) => digest
+}
