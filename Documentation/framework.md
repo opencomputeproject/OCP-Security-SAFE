@@ -277,7 +277,7 @@ has concluded:
   [review areas](#security-review-scope). As alluded to above, the areas are neither exhaustive nor complete, therefore
   the DV is encouraged to socialize the Scope with the OCP Security WG, either through its regular calls, or on its
   mailing list. The scope itself can be any number of documents, as long as the concatenation of them is provided to the OCP Security
-  WG. Aside from level of effort estimates, no part of the DV/SRP statement of work, NDAs, etc. needs to be published.
+  WG. Aside from level of assessment effort, no part of the DV/SRP statement of work, NDAs, etc. needs to be published.
 * **Short-Form Report** \
   The SRP must produce a cryptographically signed machine-readable short-form report. Only the final results are to be
   in the signed SFR (after remediation and retesting). This document will summarize the audit scope, and uniquely identify
