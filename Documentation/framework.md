@@ -218,7 +218,7 @@ description of the scopes is provided in the [review areas](./review_areas.md) d
       the firmware, and the corresponding Confidentiality, Integrity and Availability requirements for each. Examples of
       critical assets may include secret keys, the fuse configuration, or any configuration data residing in external flash.
 
-The SAFE program defines 3 security review scopes. These scopes increase the complexity of attacks in the threat model.
+The SAFE program defines 3 security review scopes. These scopes increase with complexity of attacks in the threat model.
 It is expected that devices will have reviews done with different review scopes. For example, a CPU may have a scope 3
 review of the root of trust due to the need for glitch protection when using a long-term device private key. This CPU
 may use a scope 2 review for the application cores.
@@ -257,7 +257,7 @@ may use a scope 2 review for the application cores.
         * Safe generation and handling of all cryptographic material.
         * Encryption capability controls (disk encryption, erase, rotation).
         * Secure boot key rotation capabilities.
-* **Scope 2 - Focusing on Trust boundaries**
+* **Scope 2 - Focusing on Trust boundaries:** Includes all of the areas of Scope 1 above, with deeper review focus of the following areas:
     * Trusted execution environment assessment
     * Handling of trust boundaries
     * Attestation and non-repudiation across boundaries
@@ -295,10 +295,10 @@ has concluded:
 * **Signed Git Commits**\
   The OCP GitHub repository is configured to require all commits to be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits). Please remember this when preparing the submission (use [--amend --signoff](https://stackoverflow.com/a/15667644) if you forget).
 * **SRF Pull Request Path**\
-  The location of the signed SFRs should be in Reports/$Vendor/$Year/$Product. As a convenience,
+  The signed SFRs are published to the location Reports/$Vendor/$Year/$Product. As a convenience,
   the submission may choose to additionally include the human-readable SFR documents.
 * **SRP Public Key Pull Request Path**\
-  The location of the signing public key should be in SRP_certificates/$SRP. These are to be published and maintained by
+  The public signing key of each SRP is published to the location SRP_certificates/$SRP. These are to be published and maintained by
   the SRP, and may be revoked by the TAC (see [Disqualification](#Disqualification) above).
 
 
