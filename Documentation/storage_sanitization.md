@@ -17,12 +17,12 @@ The Internal Key is one of the two keys required to derive or access the MEK. It
 * The Internal Key must never be disclosed outside the drive.
   * Debug and manufacturing-related interfaces must be unable to access the Internal Key.
   * Debug dumps must not contain the Internal Key.
-  * The Internal Key must be protected against exfiltration via Differential Power Analysis side-channel attacks.
+  * The Internal Key must be protected against exfiltration via Differential Power Analysis side-channel attacks (Scope 3 only).
     * Rate limiting may be used to mitigate attacks.
   * The Internal Key should be encrypted at rest with a unique key derived from secrets burned into fuses, in order to protect against physical exfiltration.
 * The Internal Key must be erasable.
   * An erase command may only report success after all old copies of the Internal Key have been destroyed irreversibly. Status must be reported, so that failures can be addressed externally.
-  * Advanced attackers with physical access to the drive must be unable to recover the Internal Key.
+  * Advanced attackers with physical access to the drive must be unable to recover the Internal Key (Scope 3 only).
     * As a subjective guideline: The Internal Key should be unrecoverable with a budget of up to $10M.
   * It should be possible to destroy the Internal Key even when other parts of the drive are faulty, such as motors, magnetic platters, heads or flash chips that have reached the maximum number of write-cycles.
 

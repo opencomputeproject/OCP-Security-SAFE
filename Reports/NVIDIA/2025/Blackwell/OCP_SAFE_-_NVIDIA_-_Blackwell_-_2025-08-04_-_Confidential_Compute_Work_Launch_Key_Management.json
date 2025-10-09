@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "NVIDIA Corporation",
+        "product": "NVIDIA Blackwell GPU",
+        "category": "GPU - Confidential Compute - Work Launch, Key Manager",
+        "repo_tag": "36264796",
+        "fw_version": "580.65.06",
+        "fw_hash_sha2_384": "e34265a7befc266931d4c2757fb006dc0fcc0e383037ef9aa77ab7959deabca64bbb0962a417da9e5686fe3642f0c28b",
+        "fw_hash_sha2_512": ""
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2025-02-05",
+        "report_version": "1.1",
+        "scope_number": 1.0,
+        "cvss_version": "4.0",
+        "issues": []
+    }
+}
