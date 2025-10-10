@@ -1,0 +1,59 @@
+; Auditor CoRIM – Corim which embeds the SFR fields
+; OCP SAFE SFR CoRIM Profile OID: 1.3.6.1.4.1.42623.1.1
+
+$$measurement-values-map-extension //= (
+  &(ocp-safe-sfr: -1) => ocp-safe-sfr-map ; Private extension for OCP SAFE SFR
+)
+
+ocp-safe-sfr-map = {
+  &(review-framework-version: 0) => tstr
+  &(report-version: 1) => tstr
+  &(completion-date: 2) => time
+  &(scope-number: 3) => integer
+  &(fw-identifiers: 4) => [ + fw-identifier ]
+  ? &(device-category: 5) => $device-category
+  ? &(issues: 6) => [ + issue-entry ]
+  * $$ocp-safe-sfr-map-ext
+}
+
+issue-entry = {
+  &(title: 0) => tstr
+  &(cvss-score: 1) => tstr
+  &(cvss-vector: 2) => tstr
+  &(cwe: 3) => tstr
+  &(description: 4) => tstr
+  ? &(cvss-version: 5) => tstr
+  ? &(cve: 6) => tstr
+  * $$ocp-safe-issue-entry-ext
+}
+
+fw-identifier = non-empty<{
+  ? &(fw-version: 0) => version-map
+  ? &(fw-file-digests: 1) => digests-type
+  ? &(repo-tag: 2) => tstr
+  ? &(src-manifest: 3) => src-manifest
+}>
+
+manifest-entry = {
+  &(filename: 0) => tstr
+  &(file-hash: 1) => digests-type 
+}
+
+src-manifest = {
+  &(manifest-digest: 0) => digests-type 
+  &(manifest: 1) => [ + manifest-entry ]
+}
+
+$device-category /= storage
+$device-category /= network
+$device-category /= gpu
+$device-category /= cpu
+$device-category /= apu
+$device-category /= bmc
+
+storage = 0
+network = 1
+gpu = 2
+cpu = 3
+apu = 4
+bmc = 5

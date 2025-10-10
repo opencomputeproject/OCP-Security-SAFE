@@ -1,0 +1,104 @@
+/ tagged-corim-map / 501({
+  / corim.id (0) /
+  0: "acme-trap-audit-2025-08-03",
+  / corim.profile (3) /
+  3: 111(h'060A2B0601040182F4170101'), / OID 1.3.6.1.4.1.42623.1.1 for OCP SAFE SFR profile /
+  / corim.entities (5) /
+  5: [
+    / audit-entity / {
+      / entity-name (0) / 0: "My Pentest Corporation",
+      / role (2) /        2: [ 1 ] / manifest-creator /
+    }
+  ],
+   / corim.tags / 1 : [
+    / concise-mid-tag / 506( <<
+      / concise-mid-tag / {
+        / comid.tag-identity / 1 : {
+          / comid.tag-id / 0 : "acme-trap-review-comid-001"
+        },
+        / comid.triples / 4 : {
+              / conditional-endorsement-triples / 10 : [	
+              [  / conditional-endorsement-triple-record /
+                [ / conditions array /
+                  [ / *** stateful-environment-record *** /
+                    / environment-map / {
+                      / comid.class / 0 : {
+                        / comid.vendor / 1 : "ACME Inc.",
+                        / comid.model / 2 : "ACME RoadRunner Trap"
+                    }
+                  },
+                  [ / claims-list / 
+                      / *** measurement-map *** / {
+                        / comid.mval / 1 : {
+                          / comid.digests / 2 : [ [
+                            / hash-alg-id / -43, / sha384 /
+                            / hash-value / h'52047e070cddf496a7f77bf6a47792797e8ee90a149bb7555d08c5f93c5ca7ea46a63a7c99edaa1659e8afadfb9c6114'
+                          ],
+                          [
+                            / hash-alg-id / -44, / sha512 /
+                            / hash-value / h'12a5b961a5eb7e548ed436fe7b5848d428bff908cb6ffcb47ec3ac1e2a43e0b8d1ff047d387fb0a940dc7b8b0014acf344364c43ab4de624dcd15f98bee552a5'
+                          ]      
+                        ]
+                      }
+                    }
+                  ]
+                ]
+              ], /*** end stateful-environment-records ***/
+              [  /*** endorsements ***/
+                [ /*** endorsed-triple-record ***/
+                  / environment-map / {
+                    / class / 0 : {	
+                      / vendor / 1 : "ACME Inc.",	
+                      / model / 2 : "ACME RoadRunner Trap"	
+                    }
+                  },
+                  [ / endorsement #1/
+                    / measurement-map / {
+                      / comid.mval / 1 : { / measurement-values-map /
+                        / ocp-safe-sfr / -1 : {
+                          / 0: review-framework-version / 0: "1.1",
+                          / 1: report-version /           1: "1.2",
+                          / 2: completion-date /          2: 1(1687651200),
+                          / 3: scope-number /             3: 1,
+                          / 4: fw-identifiers /           4: [
+                            /fw-identifier / {
+                                / 0: fw-version /  0: {
+                                      / 0: version /         0: "1.2.3",
+                                      / 1: version-scheme /  1: "semver"
+                                }
+                            }
+                          ],
+                          / 5: device-category /          5: 0,  / 0: storage, 1: network, 2: gpu, 3: cpu, 4: apu, 5: bmc /
+                          / 6: issues /                   6: [
+                               / issue-entry / {
+                                / 0: title /         0: "Memory corruption when reading record from SPI flash",
+                                / 1: cvss-score /    1: "7.9",
+                                / 2: cvss-vector /   2: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
+                                / 3: cwe /           3: "CWE-111",
+                                / 4: description /   4: "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
+                                / 5: cvss-version /  5: "3.1"
+                            },
+                              / issue-entry / {
+                                / 0: title /         0: "Debug commands enable arbitrary memory read/write",
+                                / 1: cvss-score /    1: "8.7",
+                                / 2: cvss-vector /   2: "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+                                / 3: cwe /           3: "CWE-222",
+                                / 4: description /   4: "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
+                                / 5: cvss-version /  5: "3.1",
+                                / 6: cve /           6: "CVE-2014-10000"
+                            }                            
+                          ]
+                        }                        
+                      }
+                    }
+                  ]
+                ]
+              ]
+              ]
+            ]
+        }
+      }
+    >> )
+    ]
+  }
+)
