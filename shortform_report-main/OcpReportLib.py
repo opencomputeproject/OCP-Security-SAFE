@@ -556,9 +556,7 @@ class ShortFormReport(object):
         if algo in ALLOWED_JWA_RSA_ALGOS:
             if pem.key_size not in ALLOWED_RSA_KEY_SIZES:
                 print(
-                    f"RSA key is too small: {pem.key_size}, must be one of: {
-                        ALLOWED_RSA_KEY_SIZES
-                    }"
+                    f"RSA key is too small: {pem.key_size}, must be one of: {ALLOWED_RSA_KEY_SIZES}"
                 )
                 return False
 
