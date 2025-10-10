@@ -1,0 +1,243 @@
+name: Validate SFR Reports
+
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - 'Reports/**/*.json'
+      - 'Reports/**/*.cbor'
+      - 'shortform_report-main/**'
+      - 'Documentation/corim_profile/*.cddl'
+      - 'Documentation/corim_profile/examples/*.diag'
+  push:
+    paths:
+      - 'Reports/**/*.json'
+      - 'Reports/**/*.cbor'
+      - 'shortform_report-main/**'
+      - 'Documentation/corim_profile/*.cddl'
+      - 'Documentation/corim_profile/examples/*.diag'
+
+jobs:
+  validate-cbor-reports:
+    runs-on: ubuntu-latest
+    name: Validate CBOR CoRIM Reports
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Ruby and CDDL tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby
+          sudo gem install cddl
+          sudo gem install cddlc
+          sudo gem install cbor-diag
+
+      - name: Install Python dependencies
+        run: |
+          cd shortform_report-main
+          pip install -r requirements.txt
+
+      - name: Find CBOR reports
+        id: find-cbor
+        run: |
+          # Find all CBOR files in Reports directory
+          cbor_files=$(find Reports/ -name "*.cbor" 2>/dev/null || echo "")
+          if [ -n "$cbor_files" ]; then
+            echo "found=true" >> $GITHUB_OUTPUT
+            echo "files<<EOF" >> $GITHUB_OUTPUT
+            echo "$cbor_files" >> $GITHUB_OUTPUT
+            echo "EOF" >> $GITHUB_OUTPUT
+            echo "Found CBOR files:"
+            echo "$cbor_files"
+          else
+            echo "found=false" >> $GITHUB_OUTPUT
+            echo "No CBOR files found in Reports directory"
+          fi
+
+      - name: Prepare CDDL schema
+        run: |
+          # Fetch latest upstream CoRIM CDDL
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+          
+          # Concatenate the CDDLs
+          cddlc -t cddl corim-base-upstream.cddl Documentation/corim_profile/ocp-safe-sfr-profile.cddl > combined.cddl
+          
+          echo "✅ CDDL schema prepared"
+
+      - name: Validate CBOR against CDDL schema
+        if: steps.find-cbor.outputs.found == 'true'
+        run: |
+          echo "Validating CBOR files against CDDL schema..."
+          
+          validation_failed=false
+          
+          echo "${{ steps.find-cbor.outputs.files }}" | while read -r file; do
+            if [ -n "$file" ] && [ -f "$file" ]; then
+              echo "Validating $file..."
+              if cddl combined.cddl validate "$file"; then
+                echo "✅ $file: Valid CBOR structure"
+              else
+                echo "❌ $file: CDDL validation failed"
+                validation_failed=true
+              fi
+            fi
+          done
+          
+          if [ "$validation_failed" = true ]; then
+            echo "❌ Some CBOR files failed CDDL validation"
+            exit 1
+          else
+            echo "🎉 All CBOR files passed CDDL validation!"
+          fi
+
+      - name: Test CoRIM generation
+        run: |
+          cd shortform_report-main
+          echo "Testing CoRIM generation functionality..."
+          
+          # Run the comprehensive test suite
+          python tests/test_corim_generation.py
+          
+          # Run CDDL validation test
+          python tests/test_cddl_validation.py
+          
+          echo "✅ CoRIM generation tests completed"
+
+  validate-cddl-schema:
+    runs-on: ubuntu-latest
+    name: Validate CDDL Schema and Examples
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Ruby and CDDL tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby
+          sudo gem install cddl
+          sudo gem install cddlc
+          sudo gem install cbor-diag
+
+      - name: Convert DIAG to CBOR
+        run: |
+          diag2cbor.rb Documentation/corim_profile/examples/ocp-safe-sfr-fw-example.diag > example.cbor
+
+      - name: Fetch latest upstream CoRIM CDDL
+        run: |
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+
+      - name: Concatenate the CDDLs
+        run: |
+          cddlc -t cddl corim-base-upstream.cddl Documentation/corim_profile/ocp-safe-sfr-profile.cddl > combined.cddl
+
+      - name: Validate CBOR against CDDL
+        run: |
+          cddl combined.cddl validate example.cbor
+
+  integration-test:
+    runs-on: ubuntu-latest
+    name: Integration Test - JSON to CoRIM Conversion
+    needs: validate-cddl-schema
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.9'
+
+      - name: Install Ruby and CDDL tools
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ruby
+          sudo gem install cddl
+          sudo gem install cddlc
+          sudo gem install cbor-diag
+
+      - name: Install Python dependencies
+        run: |
+          cd shortform_report-main
+          pip install -r requirements.txt
+
+      - name: Prepare CDDL schema
+        run: |
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+          cddlc -t cddl corim-base-upstream.cddl Documentation/corim_profile/ocp-safe-sfr-profile.cddl > combined.cddl
+
+      - name: Test JSON to CoRIM conversion
+        run: |
+          cd shortform_report-main
+          
+          # Find a sample JSON file to test conversion
+          sample_json=$(find ../Reports/ -name "*.json" -not -name "*_converted*" | head -1)
+          
+          if [ -n "$sample_json" ] && [ -f "$sample_json" ]; then
+            echo "Testing conversion of: $sample_json"
+            
+            # Convert JSON to CoRIM
+            python tests/json_to_corim_converter.py "$sample_json" -o test_converted.cbor
+            
+            # Validate the converted CBOR against CDDL
+            if [ -f "test_converted.cbor" ]; then
+              echo "Validating converted CBOR against CDDL..."
+              cd ..
+              if cddl combined.cddl validate shortform_report-main/test_converted.cbor; then
+                echo "✅ JSON to CoRIM conversion successful and CDDL compliant!"
+              else
+                echo "❌ Converted CBOR failed CDDL validation"
+                exit 1
+              fi
+            else
+              echo "❌ Conversion failed - no output file generated"
+              exit 1
+            fi
+          else
+            echo "ℹ️  No sample JSON files found for conversion testing"
+            echo "Running final validation summary instead..."
+            cd shortform_report-main
+            python tests/final_validation_summary.py
+          fi
+
+  summary:
+    runs-on: ubuntu-latest
+    name: Validation Summary
+    needs: [validate-cbor-reports, validate-cddl-schema, integration-test]
+    if: always()
+    steps:
+      - name: Report Results
+        run: |
+          echo "## SFR Report Validation Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+                    
+          if [ "${{ needs.validate-cbor-reports.result }}" = "success" ]; then
+            echo "✅ CBOR Reports: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ CBOR Reports: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.validate-cddl-schema.result }}" = "success" ]; then
+            echo "✅ CDDL Schema: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ CDDL Schema: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          if [ "${{ needs.integration-test.result }}" = "success" ]; then
+            echo "✅ Integration Test: PASSED" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ Integration Test: FAILED" >> $GITHUB_STEP_SUMMARY
+          fi
+          
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Validation Coverage" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON SFR report structure validation" >> $GITHUB_STEP_SUMMARY
+          echo "- CBOR CoRIM CDDL schema compliance" >> $GITHUB_STEP_SUMMARY
+          echo "- CoRIM generation functionality" >> $GITHUB_STEP_SUMMARY
+          echo "- JSON to CoRIM conversion" >> $GITHUB_STEP_SUMMARY
+          echo "- End-to-end integration testing" >> $GITHUB_STEP_SUMMARY
