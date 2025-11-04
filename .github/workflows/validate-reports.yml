@@ -63,7 +63,7 @@ jobs:
       - name: Prepare CDDL schema
         run: |
           # Fetch latest upstream CoRIM CDDL
-          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/download/cddl-draft-ietf-rats-corim-08/corim-autogen.cddl
           
           # Concatenate the CDDLs
           cddlc -t cddl corim-base-upstream.cddl Documentation/corim_profile/ocp-safe-sfr-profile.cddl > combined.cddl
@@ -130,7 +130,7 @@ jobs:
 
       - name: Fetch latest upstream CoRIM CDDL
         run: |
-          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/download/cddl-draft-ietf-rats-corim-08/corim-autogen.cddl
 
       - name: Concatenate the CDDLs
         run: |
@@ -168,7 +168,7 @@ jobs:
 
       - name: Prepare CDDL schema
         run: |
-          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/download/cddl-draft-ietf-rats-corim-08/corim-autogen.cddl
           cddlc -t cddl corim-base-upstream.cddl Documentation/corim_profile/ocp-safe-sfr-profile.cddl > combined.cddl
 
       - name: Test JSON to CoRIM conversion

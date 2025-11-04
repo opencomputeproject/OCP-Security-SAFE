@@ -28,7 +28,7 @@ jobs:
 
       - name: Fetch latest upstream CoRIM CDDL
         run: |
-          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/latest/download/corim-autogen.cddl
+          curl -L -o corim-base-upstream.cddl https://github.com/ietf-rats-wg/draft-ietf-rats-corim/releases/download/cddl-draft-ietf-rats-corim-08/corim-autogen.cddl
 
       - name: Concatenate the CDDLs
         run: |
