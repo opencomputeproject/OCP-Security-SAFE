@@ -6,7 +6,7 @@ This document outlines requirements for sanitization of storage devices. When a 
 
 ### Media Encryption Key (MEK)
 
-The MEK is the key used to ultimately encrypt and decrypt all data on the drive. Is is generated within the device based on an Internal Key and External Key and must never leave the device. The following requirements apply:
+The MEK is the key used to ultimately encrypt and decrypt all data on the drive. It is generated within the device based on an Internal Key and External Key and must never leave the device. The following requirements apply:
 * The MEK must be generated with a cryptographically-strong amount of entropy.
 * An attacker without knowledge of either the Internal Key or External Key, but with knowledge of all other secrets stored at rest within the drive, as well as any external secrets, must be unable to recover the MEK.
 
