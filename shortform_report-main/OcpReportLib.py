@@ -510,7 +510,7 @@ class ShortFormReport(object):
         """Returns the signed short form report (a JWS) as a bytes object. May
         return a 'None' object if the report hasn't been signed yet.
         """
-        return self.signed_json_report
+        return self.signed_json_report.encode('utf-8')
 
     def sign_json_report_pem(self, priv_key: bytes, algo: str, kid: str) -> bool:
         """Sign the JSON object to make a JSON Web Signature. Refer to RFC7515
