@@ -275,10 +275,39 @@ def validate_corim_compliance():
                 encryption_algorithm=serialization.NoEncryption()
             )
             
-            if report.sign_corim_report_pem(private_pem, "ES512", "test-validation-key"):
+            # Sign the CoRIM report
+            signing_result = report.sign_corim_report_pem(private_pem, "ES512", "test-validation-key")
+            if signing_result:
                 signed_corim = report.get_signed_corim_report()
                 print(f"✓ CoRIM signing successful ({len(signed_corim)} bytes)")
                 print("✓ COSE-Sign1 format with cwt library")
+                
+                # Validate the signature is actually valid
+                try:
+                    import cwt
+                    from cwt import COSEKey
+                    
+                    # Extract public key from private key for verification
+                    public_key = private_key.public_key()
+                    public_pem = public_key.public_bytes(
+                        encoding=serialization.Encoding.PEM,
+                        format=serialization.PublicFormat.SubjectPublicKeyInfo
+                    )
+                    
+                    # Create COSE key for verification with proper key ID
+                    cose_key = COSEKey.from_pem(public_pem, kid="test-validation-key")
+                    
+                    # Verify the signature
+                    verified_payload = cwt.decode(signed_corim, cose_key)
+                    if verified_payload:
+                        print("✓ Signature verification successful")
+                    else:
+                        print("✗ Signature verification failed - invalid signature")
+                        return False
+                        
+                except Exception as verify_error:
+                    print(f"✗ Signature verification failed: {verify_error}")
+                    return False
             else:
                 print("✗ CoRIM signing failed")
                 return False

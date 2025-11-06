@@ -175,10 +175,10 @@ jobs:
         run: |
           cd shortform_report-main
           
-          # Find a sample JSON file to test conversion
-          sample_json=$(find ../Reports/ -name "*.json" -not -name "*_converted*" | head -1)
+          # Use a specific JSON file for testing conversion
+          sample_json="../Reports/CHIPS_Alliance/2024/Caliptra/caliptra_fw_report.json"
           
-          if [ -n "$sample_json" ] && [ -f "$sample_json" ]; then
+          if [ -f "$sample_json" ]; then
             echo "Testing conversion of: $sample_json"
             
             # Convert JSON to CoRIM
@@ -199,9 +199,8 @@ jobs:
               exit 1
             fi
           else
-            echo "ℹ️  No sample JSON files found for conversion testing"
+            echo "ℹ️  Test JSON file not found: $sample_json"
             echo "Running final validation summary instead..."
-            cd shortform_report-main
             python tests/final_validation_summary.py
           fi
 
