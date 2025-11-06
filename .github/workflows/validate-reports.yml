@@ -176,7 +176,7 @@ jobs:
           cd shortform_report-main
           
           # Use a specific JSON file for testing conversion
-          sample_json="../Reports/CHIPS_Alliance/2024/Caliptra/caliptra_fw_report.json"
+          sample_json="../Reports/AMD/2024/MI300X/OCP_SAFE_-_amd_asp_-_BL_-_Boot_Access_Module.json"
           
           if [ -f "$sample_json" ]; then
             echo "Testing conversion of: $sample_json"
