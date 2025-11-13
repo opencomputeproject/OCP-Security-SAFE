@@ -46,7 +46,8 @@ This document shows what information we want to see from Security Review Provide
 We need to see evidence that you are capable of performing reviews covering the scopes outlined [here](review_areas.md). The more evidence you can provide the better. This is the most important part of considering your application. We understand that it is difficult to provide evidence due to NDAs. However, without sufficient evidence we have no way to judge whether you are capable of performing reviews to a high standard and will therefore not admit you to the program.
 
 These items can be suitable evidence, but we are open to anything you think might be helpful:
-1. Appropriately-redactect reports of real engagements
+
+1. Appropriately-redacted reports of real engagements
 2. Public tools you developed, e.g. GitHub links
 3. Blog posts, white papers and other public documents
 4. Descriptions of internal tools you have
