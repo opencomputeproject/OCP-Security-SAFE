@@ -294,7 +294,7 @@ has concluded:
   forgo OCP SAFE endorsement.
 * **Signed Git Commits**\
   The OCP GitHub repository is configured to require all commits to be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits). Please remember this when preparing the submission (use [--amend --signoff](https://stackoverflow.com/a/15667644) if you forget).
-* **SRF Pull Request Path**\
+* **SFR Pull Request Path**\
   The signed SFRs are published to the location Reports/$Vendor/$Year/$Product. As a convenience,
   the submission may choose to additionally include the human-readable SFR documents.
 * **SRP Public Key Pull Request Path**\
