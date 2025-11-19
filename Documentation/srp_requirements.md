@@ -76,6 +76,7 @@ If you are SOC 2 or ISO27001 accredited you can tell us that instead of respondi
 ## Code of Conduct
 
 Please confirm that your organization will adhere to the following code of conduct for the duration of you being an OCP S.A.F.E. review provider.
+
 1. We will not sell vulnerabilities or exploits to entities other than the organizations responsible for securing the respective product.
 2. We will disclose all affiliations that might appear to be conflicts of interest to the OCP S.A.F.E. leadership, as well as the vendor before starting a review. For example affiliations with exploit sellers, law enforcement, military and intelligence.
 3. We will disclose any relationship we have with the vendor, other than performing security reviews, to the OCP S.A.F.E. leadership before starting a review.
