@@ -55,7 +55,7 @@ These items can be suitable evidence, but we are open to anything you think migh
 
 ## Business processes
 
-If you are ISO27001 accredited you can tell us that instead of responding to the questions here.
+If you are SOC 2 or ISO27001 accredited you can tell us that instead of responding to the questions here.
 
 1. Do you have an Information Security Policy defined and if so can you share that with us?
 2. Do all your employees receive IT security training when joining and regularly thereafter?
