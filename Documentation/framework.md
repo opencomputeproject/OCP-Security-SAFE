@@ -326,6 +326,17 @@ use the findings in the report to improve design, engineering, build, and test p
 
 Several SRP sample reports can be found in [Appendix A](#appendix-a-example-reports).
 
+
+
+## Short-Form Report Guidance
+
+* **Issue detail level:** The SFR should describe risks for product consumers and encourage vendors to improve security. Include enough detail to explain impact, but avoid exploit-enabling specifics. Protect IP by omitting code identifiers (variable, module, or function names).
+    * Example phrasing: “Integer overflow in secure boot could lead to arbitrary code execution in ROM”; “Insecure protection configuration allows loading unsigned code.”
+    * Avoid: “external_parser.c:195 parse_xml(xml_string) has a stack overflow when xml_string exceeds 1024 bytes, leading to arbitrary code execution.”
+* **Classifying “Informational”:** A finding can only be Informational when the CVSS score is 0.0. As such, informational findings are not included in the SFR. 
+* **Configuration-dependent findings:** If a finding hinges on deployment configuration and the secure configuration plus associated risks are clearly documented in integration guidelines, it should be excluded from the SFR. If integration guidelines are missing and insecure configurations are plausible, include the finding in the SFR.
+
+
 # Appendix A: Example Reports
 
 * Atredis Partners - [Sample Deliverables](https://www.atredis.com/sample-deliverables)
