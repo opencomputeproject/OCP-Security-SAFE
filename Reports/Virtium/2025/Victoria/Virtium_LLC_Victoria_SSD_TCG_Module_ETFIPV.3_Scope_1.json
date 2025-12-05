@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Virtium LLC",
+        "product": "Victoria SSD TCG Module",
+        "category": "storage",
+        "repo_tag": "",
+        "fw_version": "ETFIPV.3",
+        "fw_hash_sha2_384": "38267cc5245f4d5dd0a7be5aac901c872f2994ce828dd9b87ab5d9316fcbe201f3caa0bb6013c4542fabc1e6a4a5f85d",
+        "fw_hash_sha2_512": "a9fa52bf4fa913149a42ac73edac2698296d4162c4d713ca710e40449e0b1a4b7fa9b1e63f413079384121fb99a83aa4181eab0f587346298787139fe3a55355"
+    },
+    "audit": {
+        "srp": "Keysight Riscure",
+        "methodology": "whitebox",
+        "completion_date": "2025-11-03",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
