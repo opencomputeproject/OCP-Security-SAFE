@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (PMU PHY)",
+        "category": "Physical Layer Microcontroller Unit(Type0x65_AppbDdr5RdimmDmem4_BRH.csbin)",
+        "repo_tag": "3482c2362445ad36c5853e9623654ea79fd090bf",
+        "fw_version": "9C12",
+        "fw_hash_sha2_384": "8f4c912e53e0c4e10d2930ce10cbc9328ae415b37eaaafaf20b230a812c64f07bc0818813a57f43d28a768fe1c71a37c",
+        "fw_hash_sha2_512": "843c82c6f7a0ef286fe01047fd2a322c9a7e4a1447e7740a3f7c14e8f7acf80c6d55da13329df159e681c7527aa416819b004fb27930cc2c926d1f08dea4e632"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-08-29",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
