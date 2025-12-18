@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (EMCR)",
+        "category": "Enhanced Memory Context Restore (Type0x64_AppbDdr5RdimmQuickbootImem11_BRH.ecsbin)",
+        "repo_tag": "EC15",
+        "fw_version": "0xEC15",
+        "fw_hash_sha2_384": "59d78e274ca911a0a645b0331f200b1a1f28a8dcb93c6b27afdb3a74616f8958eee0d6cb3d94d63b8f3d5ab52290a629",
+        "fw_hash_sha2_512": "9483a3d6611fd0138b465e396dd40ccd8a130a6f8fd69a3765d692742017ab50388b49ffb08449a871f9af2baedee284b1bf424c7f808fbe813e6ebba497e28d"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-12-04",
+        "report_version": "1.6",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
