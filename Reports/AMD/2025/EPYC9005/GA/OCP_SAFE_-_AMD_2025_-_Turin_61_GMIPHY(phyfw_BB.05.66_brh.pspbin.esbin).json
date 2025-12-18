@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (GMI PHY)",
+        "category": "GMI Physical Layer Firmware (phyfw_BB.05.66_brh.pspbin.esbin)",
+        "repo_tag": "BB0566",
+        "fw_version": "BB.05.66 (66 decimal = 0x42)",
+        "fw_hash_sha2_384": "ac103106085f5af6c6137db65c305b18fcda496792544de3cd7e1ab83473482edb8375345b378bec8cd384d61a6d0ffa",
+        "fw_hash_sha2_512": "0938ac5b8a7944d76d420ac5081989ab8ea19fb551104df4aff19b16ff7b6bc2eb05f7617b3abe754a4ece8f575c3ae13738c602037812cb264fe3b0f98387a5"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-12-04",
+        "report_version": "1.6",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

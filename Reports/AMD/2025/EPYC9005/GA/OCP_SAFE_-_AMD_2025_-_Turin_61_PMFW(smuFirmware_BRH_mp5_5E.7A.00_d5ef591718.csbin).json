@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (PMFW)",
+        "category": "Power Management Firmware(smuFirmware_BRH_mp5_5E.7A.00_d5ef591718.csbin)",
+        "repo_tag": "BRH_Release_5E.7A.00",
+        "fw_version": "5E.7A.00",
+        "fw_hash_sha2_384": "16e2e78a349a38cbfcc74035d14d1748a141ccae1f5f661849a21de751bf26ed0681a8e3577616c85476a1ee6baab583",
+        "fw_hash_sha2_512": "15fdafa3daddeae5faae7beb9a02cf83c94f893f36b515398f9bd961a598bf639e4a0b972b483ad5cc4e08de46e4f1c22871fa929a1ce07857187ad949f00f60"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-08-29",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
