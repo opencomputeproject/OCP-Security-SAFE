@@ -1,0 +1,31 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Axiado Corp",
+        "product": "Axiado AX3000 Series Bootrom",
+        "category": "tcu",
+        "repo_tag": "release/B0-ROM-TAPEOUT",
+        "fw_version": "",
+        "fw_hash_sha2_384": "8c043baa1f26dffa38ac666d9f887ba765a9850984e6209e8f42dc5060758cda196b4ac4cc6d5af319740de39087ace0",
+        "fw_hash_sha2_512": "048a4d2998c4ffe13692863a7546f185fac53b014a617c3f3ae00f0eb4ee40f145c7b17927050218d0f48975498193495ee8804937e46bd3e580bb54eaac15f9",
+        "manifest": [
+            {
+                "file_name": "core0",
+                "file_hash": "f60dfd98977d3073edb95d74687cadb1bb6df718fdfe198b22f190d41cb5b597db4cfe1f6f7d154b58c972a03b4179f12874d8ceac10088e0efb809cfaccdf94"
+            },
+            {
+                "file_name": "core1",
+                "file_hash": "469036bde2e4d3129e2eb4dc590a0af5b487636a530e24c406be2dd6669e6518fce678de6c2e44550fc728d35582377fd39f8d6f0760dc5ca1ce725afab3a8d5"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "Keysight Riscure",
+        "methodology": "whitebox",
+        "completion_date": "2025-11-24",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
