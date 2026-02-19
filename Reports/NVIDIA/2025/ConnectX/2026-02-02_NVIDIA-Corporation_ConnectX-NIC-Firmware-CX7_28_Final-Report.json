@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.2",
+    "device": {
+        "vendor": "NVIDIA Corporation",
+        "product": "ConnectX7 NIC Firmware",
+        "category": "NIC Firmware",
+        "repo_tag": "",
+        "fw_version": "28.46.5020",
+        "fw_hash_sha2_384": "5d5df47cf8a0a2ebacfd063b75a940e2a40f3edfc8f7f5b53c9ce9df90e4e0e9f88b50a2e459db07dd32e556b1a97f2a",
+        "fw_hash_sha2_512": "0e5a569859baaac0ff59d27c6bc76821d8459ab0c6951fd629c925c3479339dd783c1fdc9b3509b2be7992118d3603cc3788d765164ffd421ea393a2fc0ef10c"
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2025-09-22",
+        "report_version": "1.0",
+        "scope_number": "1",
+        "cvss_version": "4.0",
+        "issues": []
+    }
+}

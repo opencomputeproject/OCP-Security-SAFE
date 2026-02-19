@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.2",
+    "device": {
+        "vendor": "NVIDIA Corporation",
+        "product": "ConnectX4LX NIC Firmware",
+        "category": "NIC Firmware",
+        "repo_tag": "",
+        "fw_version": "14.30.5026",
+        "fw_hash_sha2_384": "1ba0bf606fc9a1aa79e45515ba19fcfe2fe045208c4930019aa714fda52e3ffe405d7706778847d2ed1f377f8fe92517",
+        "fw_hash_sha2_512": "cc58b47449fa44cfeb204f7e1c346b6db9180626a4b979cbd471bde85e9bf3ca9b8428d41a1f2e86930bf296855aa7a2d222b486cccbc8f91190dd19adcc6515"
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2025-09-22",
+        "report_version": "1.0",
+        "scope_number": "1",
+        "cvss_version": "4.0",
+        "issues": []
+    }
+}
