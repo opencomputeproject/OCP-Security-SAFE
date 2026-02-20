@@ -13,7 +13,7 @@ import hashlib
 
 
 # Hardcoding these is crude, but whatever, this is just an example script to
-# show how it might work in field. 
+# show how it might work in field.
 #
 # To quickly get up and running, you can use these openssl commands to generate the keypair:
 #   $ openssl genrsa -out testkey_rsa3k.pem 3072
@@ -27,8 +27,8 @@ MY_PUB_KEY   = "testkey_ecdsa_p521.pub"
 #MY_SIGN_ALGO = "PS512"
 MY_SIGN_ALGO = "ES512"
 
-# XXX: Note to SRPs: You must include a 'kid' header to uniquely identify your 
-# signing key. 
+# XXX: Note to SRPs: You must include a 'kid' header to uniquely identify your
+# signing key.
 MY_KID = "Wile E Coyote"
 
 ###############################################################################
@@ -42,7 +42,8 @@ rep = ShortFormReport()
 # XXX: Note to SRP: if this is a certification for a source code deliverable rather
 #      than a binary deliverable, then uncomment this section and provide the file
 #      input file generated as:
-#            "find . -type f -exec sha512sum {} \; > file_hashes.txt"
+#            "find . -type f -exec sha512sum {} \; | sort -k 2 > file_hashes.txt"
+#      The sorting step above is redundant with the sort below, but may make diffs easier
 # manifest = []
 # with open("file_hashes.txt") as hashfile:
 #     for line in hashfile:
@@ -62,9 +63,8 @@ rep = ShortFormReport()
 # XXX
 
 
-
 # Add vendor device information
-# XXX: Note to SRP: This is where you must calculate the hash of the firmware 
+# XXX: Note to SRP: This is where you must calculate the hash of the firmware
 # image that you tested.
 fw_hash_sha384 = "cd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4"
 fw_hash_sha512 = "84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a7b6ab1cb91d7d35b49e2bd007a80ae16f292be3ea2b9d9a88cb3cc8dff6a216988"
@@ -77,7 +77,7 @@ rep.add_device(
     # fw_hash_sha384
     fw_hash_sha384,
     # fw_hash_sha512
-    fw_hash_sha512
+    fw_hash_sha512,
     # manifest          # optional: comment if not using
 )
 
@@ -86,9 +86,9 @@ rep.add_audit(
     "My Pentest Corporation",  # SRP name
     "whitebox",   # Test methodology
     "2023-06-25", # Test completion date
-    "1.2",         # Report version
+    "1.2",        # Report version
     1,            # The OCP SAFE scope level
-    )
+)
 
 # Add issue details.
 rep.add_issue("Memory corruption when reading record from SPI flash",
@@ -112,25 +112,25 @@ rep.add_issue("Debug commands enable arbitrary memory read/write",
 )
 
 # Print the short form report to console
-print( "The short-form report:" )
-print( rep.get_report_as_str() ) 
+print("The short-form report:")
+print(rep.get_json_report_as_str())
 
 # Sign the short-form report (as a JWS) and print the signed report to the console
 print("\n\n")
 with open(MY_PRIV_KEY, "rb") as f:
     privkey = f.read()
 
-success = rep.sign_report( privkey, MY_SIGN_ALGO, MY_KID )
-# XXX: note that sign_report_azure() could be used here instead if using the
+success = rep.sign_json_report_pem(privkey, MY_SIGN_ALGO, MY_KID)
+# XXX: note that sign_json_report_azure() could be used here instead if using the
 #      Azure Key Vault for key management. In that case use the following:
-#        rep.sign_report_azure( MY_KEYVAULT_URL, MY_KID )
+# success = rep.sign_json_report_azure(MY_KEYVAULT_URL, MY_KID)
 if not success:
-    print( "Error encountered while signing short-form report" )
+    print("Error encountered while signing short-form report")
     sys.exit(1)
 
 print("The corresponding signed JWS:")
-signed_report = rep.get_signed_report()
-print( signed_report )
+signed_json_report = rep.get_signed_json_report()
+print(signed_json_report)
 
 ###############################################################################
 # Verify the signature
@@ -139,18 +139,18 @@ print( signed_report )
 # Step 1. Read the JWS header and ensure we have the correct key for the kid.
 print("\n\n")
 print("Checking the signed header:")
-kid = rep.get_signed_report_kid( signed_report )
+kid = rep.get_signed_json_report_kid(signed_json_report)
 if kid is None:
-    print( "kid is not present in JWS header." )
+    print("kid is not present in JWS header.")
     sys.exit(1)
 
-# XXX: Note for consumers of the short-form report: This is where you must 
+# XXX: Note for consumers of the short-form report: This is where you must
 # lookup the correct key that corresponds to the kid.
 if kid != MY_KID:
-    print( "Unknown kid in JWS header." )
+    print("Unknown kid in JWS header.")
     sys.exit(1)
 else:
-    print( f"Found the correct kid='{kid}'" )
+    print(f"Found the correct kid='{kid}'")
 
 # Step 2. Read the public key
 print("\n\n")
@@ -159,18 +159,18 @@ with open(MY_PUB_KEY, "rb") as f:
     pubkey = f.read()
 
 try:
-    decoded = rep.verify_signed_report( signed_report, pubkey )
-    # XXX: note that verify_signed_report_azure() could be used here for online
+    decoded = rep.verify_signed_json_report( signed_json_report, pubkey )
+    # XXX: note that verify_signed_json_report_azure() could be used here for online
     #      validation by the SRP, but the above is more appropriate for the OCP
     #      member once the public key is published. Azure-based public keys are
     #      retreived using get_public_key_azure()).
     #      If testing online validation replace the above with the following:
-    #        rep.verify_signed_report_azure( MY_KEYVAULT_URL, MY_KID, signed_report )
-    print( "Success!" )
-    print( "\n\n" )
-    print( "Decoded report:" )
-    print( decoded )
+    # decoded = rep.verify_signed_json_report_azure( MY_KEYVAULT_URL, MY_KID, signed_json_report)
+    print("Success!")
+    print("\n\n")
+    print("Decoded report:")
+    print(decoded)
 except Exception:
-    print( "Error during JWS decoding:" )
+    print("Error during JWS decoding:")
     traceback.print_exc()
 
