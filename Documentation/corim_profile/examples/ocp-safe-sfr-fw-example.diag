@@ -72,9 +72,9 @@
                                / issue-entry / {
                                 / 0: title /              0: "Memory corruption when reading record from SPI flash",
                                 / 1: description /        1: "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
-                                / 2: assessment /  2: {
-                                  / 0: cvss-score /   0: "7.9",
-                                  / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
+                                / 2: assessment-scheme /  2: {
+                                  / 0: cvss-score /    0: "7.9",
+                                  / 1: cvss-vector /  1: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
                                   / 2: cvss-version / 2: "3.1"
                                 },
                                 / 3: cwe /                3: "CWE-111"
@@ -82,7 +82,7 @@
                               / issue-entry / {
                                 / 0: title /              0: "Debug commands enable arbitrary memory read/write",
                                 / 1: description /        1: "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
-                                / 2: assessment /  2: {
+                                / 2: assessment-scheme /  2: {
                                   / 0: cvss-score /   0: "8.7",
                                   / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
                                   / 2: cvss-version / 2: "3.1"

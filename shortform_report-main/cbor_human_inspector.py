@@ -834,25 +834,31 @@ def inspect_sfr_data(sfr_data, indent=""):
         elif field_num == 5:  # Issues
             if isinstance(field_value, list):
                 print(f"{indent}   🚨 {len(field_value)} security issue(s) found:")
-                
+
                 for i, issue in enumerate(field_value):
                     if isinstance(issue, dict):
                         print(f"\n{indent}      🔴 Issue #{i+1}:")
                         if 0 in issue:  # title
                             print(f"{indent}         Title: {issue[0]}")
-                        if 1 in issue:  # cvss-score
-                            print(f"{indent}         CVSS Score: {issue[1]}")
-                        if 2 in issue:  # cvss-vector
-                            print(f"{indent}         CVSS Vector: {issue[2]}")
-                        if 3 in issue:  # cwe
-                            print(f"{indent}         CWE: {issue[3]}")
-                        if 4 in issue:  # description
-                            desc = issue[4]
+                        if 1 in issue:  # description
+                            desc = issue[1]
                             if len(desc) > 100:
                                 desc = desc[:100] + "..."
                             print(f"{indent}         Description: {desc}")
-                        if 5 in issue:  # cve
-                            print(f"{indent}         CVE: {issue[5]}")
+                        if 2 in issue:  # assessment-scheme (nested cvss-scheme)
+                            assessment = issue[2]
+                            if isinstance(assessment, dict):
+                                print(f"{indent}         Assessment Scheme: CVSS")
+                                if 0 in assessment:  # cvss-score
+                                    print(f"{indent}            CVSS Score: {assessment[0]}")
+                                if 1 in assessment:  # cvss-vector
+                                    print(f"{indent}            CVSS Vector: {assessment[1]}")
+                                if 2 in assessment:  # cvss-version
+                                    print(f"{indent}            CVSS Version: {assessment[2]}")
+                        if 3 in issue:  # cwe
+                            print(f"{indent}         CWE: {issue[3]}")
+                        if 4 in issue:  # cve
+                            print(f"{indent}         CVE: {issue[4]}")
             else:
                 print(f"{indent}   Issues: {type(field_value).__name__}")
         

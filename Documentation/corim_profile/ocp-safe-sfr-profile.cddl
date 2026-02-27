@@ -18,18 +18,18 @@ ocp-safe-sfr-map = {
 issue-entry = {
   &(title: 0) => tstr
   &(description: 1) => tstr
-  &(assessment: 2) => $assessment
+  &(assessment-scheme: 2) => $assessment-scheme
   ?&(cwe: 3) => tstr
   ?&(cve: 4) => tstr
   * $$ocp-safe-issue-entry-ext
 }
 
-$assessment /= cvss
+$assessment-scheme /= cvss-scheme
 
-cvss = {
-  &(score: 0) => tstr
-  &(vector: 1) => tstr
-  &(version: 2) => tstr
+cvss-scheme = {
+  &(cvss-score: 0) => tstr
+  &(cvss-vector: 1) => tstr
+  ? &(cvss-version: 2) => tstr
 }
 
 fw-identifier = non-empty<{

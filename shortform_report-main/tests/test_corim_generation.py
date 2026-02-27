@@ -165,12 +165,20 @@ def test_schema_compliance():
         issues = sfr_map[5]
         for issue in issues:
             assert 0 in issue  # title
-            assert 1 in issue  # cvss-score
-            assert 2 in issue  # cvss-vector
+            assert 1 in issue  # description
+            assert 2 in issue  # assessment-scheme
+
+            # Validate nested assessment-scheme structure
+            assessment_scheme = issue[2]
+            assert isinstance(assessment_scheme, dict), "assessment-scheme must be a dict"
+            assert 0 in assessment_scheme  # cvss-score
+            assert 1 in assessment_scheme  # cvss-vector
+            # cvss-version is optional (key 2)
+
             assert 3 in issue  # cwe
-            assert 4 in issue  # description
-        
-        print("✓ Issues structure: PASS")
+            # cve is optional (key 4)
+
+        print("✓ Issues structure with nested assessment-scheme: PASS")
         
         return True
         

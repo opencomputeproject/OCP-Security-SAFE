@@ -234,12 +234,26 @@ def validate_corim_compliance():
                     # Validate first issue structure
                     if len(issues) > 0:
                         first_issue = issues[0]
-                        required_issue_fields = [0, 1, 2, 3, 4]  # title, cvss-score, cvss-vector, cwe, description
+                        required_issue_fields = [0, 1, 2, 3]  # title, description, assessment-scheme, cwe
                         for field in required_issue_fields:
                             if field in first_issue:
                                 print(f"✓ Issue field {field} present")
                             else:
                                 print(f"✗ Issue field {field} missing")
+                                return False
+
+                        # Validate nested assessment-scheme structure
+                        if 2 in first_issue:
+                            assessment = first_issue[2]
+                            if isinstance(assessment, dict):
+                                print("✓ Assessment-scheme is properly nested")
+                                if 0 in assessment and 1 in assessment:
+                                    print("✓ Assessment-scheme contains cvss-score and cvss-vector")
+                                else:
+                                    print("✗ Assessment-scheme missing required CVSS fields")
+                                    return False
+                            else:
+                                print("✗ Assessment-scheme is not a dict")
                                 return False
                 else:
                     print("✗ Issues not properly structured as list")
