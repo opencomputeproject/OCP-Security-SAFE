@@ -845,10 +845,10 @@ def inspect_sfr_data(sfr_data, indent=""):
                             if len(desc) > 100:
                                 desc = desc[:100] + "..."
                             print(f"{indent}         Description: {desc}")
-                        if 2 in issue:  # assessment-scheme (nested cvss-scheme)
+                        if 2 in issue:  # assessment (nested cvss)
                             assessment = issue[2]
                             if isinstance(assessment, dict):
-                                print(f"{indent}         Assessment Scheme: CVSS")
+                                print(f"{indent}         Assessment: CVSS")
                                 if 0 in assessment:  # cvss-score
                                     print(f"{indent}            CVSS Score: {assessment[0]}")
                                 if 1 in assessment:  # cvss-vector

@@ -340,21 +340,21 @@ class ShortFormReport(object):
         # Convert issues
         corim_issues = []
         for issue in self.report["audit"]["issues"]:
-            # Build nested cvss-scheme structure
-            cvss_scheme = {
+            # Build nested cvss structure
+            cvss = {
                 0: issue["cvss_score"],   # cvss-score
                 1: issue["cvss_vector"],  # cvss-vector
             }
 
             # Add optional cvss-version
             if "cvss_version" in self.report["audit"]:
-                cvss_scheme[2] = self.report["audit"]["cvss_version"]  # cvss-version
+                cvss[2] = self.report["audit"]["cvss_version"]  # cvss-version
 
-            # Build issue-entry with nested assessment-scheme
+            # Build issue-entry with nested assessment
             corim_issue = {
                 0: issue["title"],        # title
                 1: issue["description"],  # description
-                2: cvss_scheme,           # assessment-scheme (nested cvss-scheme)
+                2: cvss,                  # assessment (nested cvss)
                 3: issue["cwe"],          # cwe
             }
 

@@ -193,15 +193,15 @@ Security issues identified during the review are represented using the `issue-en
 issue-entry = {
   &(title: 0) => tstr
   &(description: 1) => tstr
-  &(assessment-scheme: 2) => $assessment-scheme
+  &(assessment: 2) => $assessment
   ?&(cwe: 3) => tstr
   ?&(cve: 4) => tstr
   * $$ocp-safe-issue-entry-ext
 }
 
-$assessment-scheme /= cvss-scheme
+$assessment /= cvss
 
-cvss-scheme = {
+cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
@@ -214,15 +214,15 @@ cvss-scheme = {
 |-------|-----|------|----------|-------------|
 | title | 0 | tstr | Yes | Brief title describing the security issue |
 | description | 1 | tstr | Yes | Detailed description of the security issue |
-| assessment-scheme | 2 | $assessment-scheme | Yes | Assessment scheme used (e.g., CVSS) |
+| assessment | 2 | $assessment | Yes | Assessment used (e.g., CVSS) |
 | cwe | 3 | tstr | No | Common Weakness Enumeration identifier |
 | cve | 4 | tstr | No | CVE identifier if assigned |
 
-### Assessment Schemes
+### Assessments
 
-The specification supports various assessment schemes for vulnerability scoring. Currently, CVSS is the primary supported scheme:
+The specification supports various assessments for vulnerability scoring. Currently, CVSS is the primary supported assesment:
 
-**CVSS Scheme Structure**
+**CVSS Structure**
 
 | Field | Key | Type | Required | Description |
 |-------|-----|------|----------|-------------|
@@ -438,7 +438,7 @@ The following example demonstrates a complete CoRIM structure containing OCP S.A
                                / issue-entry / {
                                 / 0: title /              0: "Memory corruption when reading record from SPI flash",
                                 / 1: description /        1: "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
-                                / 2: assessment-scheme /  2: {
+                                / 2: assessment /  2: {
                                   / 0: cvss-score /   0: "7.9",
                                   / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
                                   / 2: cvss-version / 2: "3.1"
@@ -448,7 +448,7 @@ The following example demonstrates a complete CoRIM structure containing OCP S.A
                               / issue-entry / {
                                 / 0: title /              0: "Debug commands enable arbitrary memory read/write",
                                 / 1: description /        1: "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
-                                / 2: assessment-scheme /  2: {
+                                / 2: assessment /  2: {
                                   / 0: cvss-score /   0: "8.7",
                                   / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
                                   / 2: cvss-version / 2: "3.1"

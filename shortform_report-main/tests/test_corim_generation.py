@@ -166,19 +166,19 @@ def test_schema_compliance():
         for issue in issues:
             assert 0 in issue  # title
             assert 1 in issue  # description
-            assert 2 in issue  # assessment-scheme
+            assert 2 in issue  # assessment
 
-            # Validate nested assessment-scheme structure
-            assessment_scheme = issue[2]
-            assert isinstance(assessment_scheme, dict), "assessment-scheme must be a dict"
-            assert 0 in assessment_scheme  # cvss-score
-            assert 1 in assessment_scheme  # cvss-vector
+            # Validate nested assessment structure
+            assessment = issue[2]
+            assert isinstance(assessment, dict), "assessment must be a dict"
+            assert 0 in assessment  # cvss-score
+            assert 1 in assessment  # cvss-vector
             # cvss-version is optional (key 2)
 
             assert 3 in issue  # cwe
             # cve is optional (key 4)
 
-        print("✓ Issues structure with nested assessment-scheme: PASS")
+        print("✓ Issues structure with nested assessment: PASS")
         
         return True
         
