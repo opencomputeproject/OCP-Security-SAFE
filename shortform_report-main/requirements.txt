@@ -3,3 +3,8 @@ pyjwt[crypto]
 azure-core
 azure-keyvault
 azure-identity
+
+# New dependencies for CoRIM support
+cbor2>=5.4.0
+cwt>=1.5.0
+prettyprinter

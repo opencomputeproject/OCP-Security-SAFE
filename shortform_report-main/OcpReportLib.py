@@ -1,22 +1,26 @@
 """
-A simple library for generating the short-form vendor security review report.
+A library for generating Security Review Short-Form Reports (SFR) in both JSON and CoRIM formats.
 
 This script is intended to be used by Security Review Providers who are
 participating in the Open Compute Project's Firmware Security Review Framework.
 The script complies with version 0.3 (draft) of the Security Review Framework
-document.
+document and supports the new CoRIM (CBOR) format.
 
 More details about the OCP review framework can be found here:
 *  https://www.opencompute.org/wiki/Security
 
 For example usage of this script, refer to the following:
-  * example_generate.py:
-      Demonstrates how to generate, sign and verify the JSON report.
-  * sample_report.json
-      An example JSON report that was created by this script.
+  * example_gen_sign_verify.py:
+      Demonstrates how to generate, sign and verify reports in legacy JSON format.
+  * example_dual_format_generation.py
+      Demonstrates how to generate, sign and verify reports in both formats.
+  * samples/*
+      Example reports that were created by this library
 
-Author: Jeremy Boone, NCC Group
-Date  : June 5th, 2023
+Author: Jeremy Boone, NCC Group (original),
+        Alex Tzonkov, AMD and Rob Wood, Tetrel Security (Extended for CoRIM support)
+Date  : June 5th, 2023 (original)
+        October 2025 (CoRIM extension)
 """
 
 import time
@@ -24,6 +28,13 @@ import json
 import jwt
 import base64
 import hashlib
+import cbor2
+import cwt
+import logging
+import prettyprinter
+from datetime import datetime
+from typing import Dict, List, Any
+
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.backends import default_backend
 from cryptography.hazmat.primitives.asymmetric.rsa import RSAPrivateKey
@@ -56,12 +67,82 @@ ALLOWED_RSA_KEY_SIZES = (
     4096,  # RSA 512
 )
 
+# CBOR tags for CoRIM
+CORIM_TAG = 501
+COMID_TAG = 506
+
+# OCP SAFE SFR Profile OID: 1.3.6.1.4.1.42623.1.1
+# DER encoded OID bytes
+OCP_SAFE_SFR_PROFILE_OID = bytes.fromhex("060A2B0601040182F4170101")
+
+
+# Define the custom pretty-print function for CBORTag
+@prettyprinter.register_pretty(cbor2.CBORTag)
+def pretty_cbor_tag(value, ctx):
+    """
+    Pretty-prints a cbor2.CBORTag object using the modern prettyprinter API.
+    """
+    if isinstance(value.value, bytes):
+        try:
+            # attempt to handle a bytes object as a nested CBORTag
+            c = cbor2.loads(value.value)
+        except Exception:
+            c = value.value
+    else:
+        c = value.value
+    return prettyprinter.pretty_call(ctx, cbor2.CBORTag, (value.tag, c))
+
+
+class AzureKeyVaultSigner(cwt.Signer):
+    """
+    A custom Signer class that uses Azure Key Vault for the actual signing
+    operation, adhering to the required interface of the python-cwt library.
+    """
+
+    def __init__(self, vault: str, kid: str, debug: bool = False):
+        self._signature_value = ""
+        super().__init__(
+            cose_key=None, protected=None, unprotected={4: kid.encode("utf-8")}
+        )
+        if not debug:
+            logger = logging.getLogger("azure")
+            logger.setLevel(logging.ERROR)
+
+        credential = DefaultAzureCredential(logging_enable=debug)
+        key_client = KeyClient(vault_url=vault, credential=credential)
+        key = key_client.get_key(kid)
+        self.crypto_client = CryptographyClient(key, credential=credential)
+
+        if key.key.crv != "P-521":
+            print(f"Key must be a P-521 key, but is actually a {key.key.crv}.")
+            raise Exception("unsupported algorithm.")
+
+    def sign(self, message: bytes) -> bytes:
+        """
+        Calculates the message hash and delegates the signing operation to Azure Key Vault.
+        """
+        digest = hashlib.sha512(message).digest()
+
+        # Call Azure Key Vault to sign the digest
+        try:
+            self._signature_value = self.crypto_client.sign(
+                SignatureAlgorithm.es512, digest
+            ).signature
+            return self._signature_value
+        except Exception as e:
+            raise Exception(f"Failed to sign using Azure Key Vault: {e}")
+
+    @property
+    def signature(self):
+        return self._signature_value
+
 
 class ShortFormReport(object):
     def __init__(self, framework_ver: str = "1.1"):
         self.report = {}
         self.report["review_framework_version"] = f"{framework_ver}".strip()
-        self.signed_report = None
+        self.signed_json_report = None
+        self.signed_corim_report = None
 
     def add_device(
         self,
@@ -78,8 +159,9 @@ class ShortFormReport(object):
 
         vendor:    The name of the vendor that manufactured the device.
         product:   The name of the device. Usually a model name or number.
-        category:  The type of device that was audited. Usually a short string
-                     such as: 'storage', 'network', 'gpu', 'cpu', 'apu', or 'bmc'.
+        category:  [LEGACY] The type of device (e.g., 'storage', 'network', 'gpu').
+                   This field is included for backward compatibility with the JSON schema
+                   but is NOT included in CoRIM output as it's not part of the CDDL spec.
         repo_tag:  The Git repository tag associated with the audit. Useful when
                      evaluating ROMs for which we cannot easily calculate or
                      verify the hash.
@@ -183,19 +265,247 @@ class ShortFormReport(object):
         """Returns the short-form report as a Python dict."""
         return self.report
 
-    def get_report_as_str(self) -> str:
+    def get_json_report_as_str(self) -> str:
         """Return the short-form report as a formatted and indented string."""
         return json.dumps(self.get_report_as_dict(), indent=4)
 
-    def print_report(self) -> None:
+    def print_json_report(self) -> None:
         """Pretty-prints the short-form report"""
         print(self.get_report_as_str())
+
+    ###########################################################################
+    # APIs for creating the CoRIM CBOR format methods
+    ###########################################################################
+
+    def _convert_to_corim_structure(self) -> Dict[str, Any]:
+        """Convert internal JSON structure to CoRIM structure."""
+        if "audit" not in self.report or "device" not in self.report:
+            raise ValueError("Report must have both device and audit information")
+
+        # Parse completion date to Unix timestamp with CBOR tag 1
+        date_str = self.report["audit"]["completion_date"]
+        try:
+            dt = datetime.strptime(date_str, "%Y-%m-%d")
+            completion_timestamp = cbor2.CBORTag(1, int(dt.timestamp()))
+        except ValueError:
+            raise ValueError(f"Invalid date format: {date_str}. Expected YYYY-MM-DD")
+
+        # Build fw-identifier structure
+        fw_identifiers = []
+        fw_id = {}
+
+        # Add version information
+        if self.report["device"]["fw_version"]:
+            fw_id[0] = {  # fw-version
+                0: self.report["device"]["fw_version"],  # version
+                1: "semver",  # version-scheme (default)
+            }
+
+        # Add digests
+        digests = self._get_fw_digests()
+        if digests:
+            fw_id[1] = digests  # fw-file-digests
+
+        # Add repo tag
+        if self.report["device"]["repo_tag"]:
+            fw_id[2] = self.report["device"]["repo_tag"]  # repo-tag
+
+        # Add manifest if present
+        if "manifest" in self.report["device"]:
+            manifest_entries = []
+            for entry in self.report["device"]["manifest"]:
+                manifest_entries.append(
+                    {
+                        0: entry["file_name"],  # filename
+                        # file-hash (assuming SHA-512)
+                        1: [[-44, bytes.fromhex(entry["file_hash"])]],
+                    }
+                )
+
+            # Calculate manifest digest
+            manifest_str = json.dumps(
+                self.report["device"]["manifest"],
+                sort_keys=False,
+                separators=(",", ":"),
+            ).encode("utf-8")
+            manifest_digest = hashlib.sha512(manifest_str).digest()
+
+            fw_id[3] = {  # src-manifest
+                0: [[-44, manifest_digest]],  # manifest-digest
+                1: manifest_entries,  # manifest
+            }
+
+        fw_identifiers.append(fw_id)
+
+        # Convert issues
+        corim_issues = []
+        for issue in self.report["audit"]["issues"]:
+            # Build nested cvss structure
+            cvss = {
+                0: issue["cvss_score"],   # cvss-score
+                1: issue["cvss_vector"],  # cvss-vector
+            }
+
+            # Add optional cvss-version
+            if "cvss_version" in self.report["audit"]:
+                cvss[2] = self.report["audit"]["cvss_version"]  # cvss-version
+
+            # Build issue-entry with nested assessment
+            corim_issue = {
+                0: issue["title"],        # title
+                1: issue["description"],  # description
+                2: cvss,                  # assessment (nested cvss)
+                3: issue["cwe"],          # cwe
+            }
+
+            # Add optional cve
+            if issue.get("cve"):
+                corim_issue[4] = issue["cve"]  # cve
+
+            corim_issues.append(corim_issue)
+
+        # Build the ocp-safe-sfr-map
+        sfr_map = {
+            # review-framework-version
+            0: self.report["review_framework_version"],
+            1: self.report["audit"]["report_version"],  # report-version
+            2: completion_timestamp,  # completion-date
+            3: self.report["audit"]["scope_number"],  # scope-number
+            4: fw_identifiers,  # fw-identifiers
+        }
+
+        if corim_issues:
+            sfr_map[5] = corim_issues  # issues
+
+        return sfr_map
+
+    def _build_corim_structure(self, sfr_map: Dict[str, Any]) -> Dict[str, Any]:
+        """Build the complete CoRIM structure with embedded SFR data."""
+
+        # Create the measurement-values-map with SFR extension
+        measurement_values = {
+            -1: sfr_map  # ocp-safe-sfr extension
+        }
+
+        # Create measurement-map for endorsement
+        endorsement_measurement_map = {
+            1: measurement_values  # mval
+        }
+
+        # Create measurement-map for conditions (with digests)
+        condition_measurement_map = {
+            1: {  # mval
+                2: self._get_fw_digests()  # digests
+            }
+        }
+
+        # Create endorsed-triple-record
+        endorsed_triple = [
+            # environment-map
+            {
+                0: {  # class
+                    1: self.report["device"]["vendor"],  # vendor
+                    2: self.report["device"]["product"],  # model
+                }
+            },
+            # endorsement (array of measurement-map)
+            [endorsement_measurement_map],
+        ]
+
+        # Create stateful-environment-record for conditions
+        stateful_environment = [
+            # environment-map
+            {
+                0: {  # class
+                    1: self.report["device"]["vendor"],  # vendor
+                    2: self.report["device"]["product"],  # model
+                }
+            },
+            # claims-list (measurement-map array)
+            [condition_measurement_map],
+        ]
+
+        # Create conditional-endorsement-triple-record
+        conditional_endorsement = [
+            # conditions (stateful-environment-record array)
+            [stateful_environment],
+            # endorsements (endorsed-triple-record array)
+            [endorsed_triple],
+        ]
+
+        # Create concise-mid-tag
+        comid = {
+            1: {  # tag-identity
+                # tag-id
+                0: f"{self.report['device']['vendor'].lower().replace(' ', '-')}-review-comid-001"
+            },
+            4: {  # triples
+                # conditional-endorsement-triples
+                10: [conditional_endorsement]
+            },
+        }
+
+        # Create the main CoRIM structure
+        corim = {
+            0: f"sfr-corim-{int(time.time())}",  # id
+            1: [cbor2.CBORTag(COMID_TAG, cbor2.dumps(comid))],  # tags
+            3: cbor2.CBORTag(
+                111, OCP_SAFE_SFR_PROFILE_OID
+            ),  # profile: OID 1.3.6.1.4.1.42623.1.1
+            5: [  # entities
+                {
+                    0: self.report["audit"]["srp"],  # entity-name
+                    2: [1],  # role: manifest-creator
+                }
+            ],
+        }
+
+        return corim
+
+    def _get_fw_digests(self) -> List[List]:
+        """Get firmware digests in CoRIM format."""
+        digests = []
+        if self.report["device"]["fw_hash_sha2_384"]:
+            digests.append(
+                [-43, bytes.fromhex(self.report["device"]["fw_hash_sha2_384"])]
+            )
+        if self.report["device"]["fw_hash_sha2_512"]:
+            digests.append(
+                [-44, bytes.fromhex(self.report["device"]["fw_hash_sha2_512"])]
+            )
+        return digests
+
+    def get_report_as_corim_dict(self) -> Dict[str, Any]:
+        """Returns the report as a CoRIM-structured dictionary."""
+        sfr_map = self._convert_to_corim_structure()
+        return self._build_corim_structure(sfr_map)
+
+    def get_report_as_corim_cbor(self) -> bytes:
+        """Returns the report as CBOR-encoded CoRIM bytes."""
+        corim_dict = self.get_report_as_corim_dict()
+        tagged_corim = cbor2.CBORTag(CORIM_TAG, corim_dict)
+        return cbor2.dumps(tagged_corim)
+
+    def get_corim_report_as_str(self) -> str:
+        """return the report as human-readable CBOR diagnostic notation."""
+        c = cbor2.loads(self.get_report_as_corim_cbor())
+        return prettyprinter.pformat(c)
+
+    def print_corim_report(self) -> None:
+        """Pretty-prints the short-form report"""
+        print(self.get_corim_report_as_str())
 
     ###########################################################################
     # APIs for signing the report
     ###########################################################################
 
-    def sign_report(self, priv_key: bytes, algo: str, kid: str) -> bool:
+    def get_signed_json_report(self) -> bytes:
+        """Returns the signed short form report (a JWS) as a bytes object. May
+        return a 'None' object if the report hasn't been signed yet.
+        """
+        return self.signed_json_report.encode('utf-8')
+
+    def sign_json_report_pem(self, priv_key: bytes, algo: str, kid: str) -> bool:
         """Sign the JSON object to make a JSON Web Signature. Refer to RFC7515
         for additional details of the JWS specification.
 
@@ -257,18 +567,12 @@ class ShortFormReport(object):
         jws_headers = {"kid": f"{kid}"}
 
         # Finally, we can sign the short-form report.
-        self.signed_report = jwt.encode(
+        self.signed_json_report = jwt.encode(
             self.get_report_as_dict(), key=priv_key, algorithm=algo, headers=jws_headers
         )
         return True
 
-    def get_signed_report(self) -> bytes:
-        """Returns the signed short form report (a JWS) as a bytes object. May
-        return a 'None' object if the report hasn't been signed yet.
-        """
-        return self.signed_report
-
-    def sign_report_azure(self, vault: str, kid: str) -> bool:
+    def sign_json_report_azure(self, vault: str, kid: str, debug: bool = False) -> bool:
         """Sign the JSON object to make a JSON Web Signature. Refer to RFC7515
         for additional details of the JWS specification.
 
@@ -285,7 +589,10 @@ class ShortFormReport(object):
         Returns True on success, and False on failure.
         """
 
-        credential = DefaultAzureCredential()
+        if not debug:
+            logger = logging.getLogger("azure")
+            logger.setLevel(logging.ERROR)
+        credential = DefaultAzureCredential(logging_enable=debug)
         key_client = KeyClient(vault_url=vault, credential=credential)
         key = key_client.get_key(kid)
         crypto_client = CryptographyClient(key, credential=credential)
@@ -306,38 +613,144 @@ class ShortFormReport(object):
             .decode()
             .rstrip("="),
         }
-        to_sign = f'{token_components.get("header")}.{token_components.get("payload")}'
+        to_sign = f"{token_components.get('header')}.{token_components.get('payload')}"
         digest = hashlib.sha512(to_sign.encode()).digest()
         result = crypto_client.sign(SignatureAlgorithm.es512, digest)
         token_components["signature"] = (
             base64.urlsafe_b64encode(result.signature).decode().rstrip("=")
         )
-        self.signed_report = f'{token_components.get("header")}.{token_components.get("payload")}.{token_components["signature"]}'
+        self.signed_json_report = f"{token_components.get('header')}.{
+            token_components.get('payload')
+        }.{token_components['signature']}"
 
         return True
+
+    def get_signed_corim_report(self) -> bytes:
+        """Returns the signed CoRIM report (COSE-Sign1)."""
+        return self.signed_corim_report
+
+    def _sign_corim_report_internal(self, signer) -> bool:
+        """Sign the CoRIM report using COSE-Sign1 with the cwt library.
+
+        Uses the cwt (CBOR Web Token) library for better COSE compatibility.
+        do not call directly, use either sign_corim_report_pem() or sign_corim_report_azure()
+        which provide appropriate signer modules.
+        """
+        # Get CoRIM payload as claims (cwt expects claims, not raw payload)
+        corim_cbor = self.get_report_as_corim_cbor()
+
+        # For COSE signing, we need to create claims structure
+        # The CoRIM data becomes the payload claim
+        claims = {
+            # Use a custom claim number for CoRIM data
+            -65537: corim_cbor  # Custom claim for CoRIM payload
+        }
+
+        # Sign using cwt library with the signer
+        signed_corim_report = cwt.encode_and_sign(
+            claims=claims,
+            signers=[signer],
+            tagged=True,  # Use CBOR tag for COSE_Sign1
+        )
+
+        self.signed_corim_report = signed_corim_report
+        return True
+
+    def sign_corim_report_pem(self, priv_key: bytes, algo: str, kid: str) -> bool:
+        """Sign the CoRIM report using COSE-Sign1 with the cwt library.
+
+        Uses the cwt (CBOR Web Token) library for better COSE compatibility.
+        """
+        try:
+            # Load private key using cryptography
+            pem = serialization.load_pem_private_key(
+                priv_key, None, backend=default_backend()
+            )
+
+            # Map algorithm to COSE algorithm identifier
+            cose_alg = None
+            if (
+                algo == "ES512"
+                and isinstance(pem, EllipticCurvePrivateKey)
+                and pem.curve.name == "secp521r1"
+            ):
+                cose_alg = -36  # ES512
+            elif (
+                algo == "ES384"
+                and isinstance(pem, EllipticCurvePrivateKey)
+                and pem.curve.name == "secp384r1"
+            ):
+                cose_alg = -35  # ES384
+            elif algo == "PS512" and isinstance(pem, RSAPrivateKey):
+                cose_alg = -38  # PS512
+            elif algo == "PS384" and isinstance(pem, RSAPrivateKey):
+                cose_alg = -37  # PS384
+            else:
+                print(f"Unsupported algorithm/key combination: {algo} with {type(pem)}")
+                return False
+
+            # Create Signer using cwt library
+            signer = cwt.Signer.from_pem(priv_key, alg=cose_alg, kid=kid)
+
+            # sign and return result
+            return self._sign_corim_report_internal(signer)
+
+        except Exception as e:
+            print(f"Error signing CoRIM with cwt: {e}")
+            return False
+
+    def sign_corim_report_azure(self, vault: str, kid: str) -> bool:
+        """Sign the CoRIM report using COSE-Sign1 with the cwt library.
+
+        Uses the cwt (CBOR Web Token) library for better COSE compatibility.
+
+        This uses an Azure Key Vault key for signing. Login must be performed
+        using the Azure CLI (i.e., `az login`) before running this function.
+
+        Only P-521 keys are supported currently. Any other key type will fail.
+
+        vault:    The Azure Key Vault URL to use.
+        kid:      The Key ID to be included in the JWS header. This field will
+                    be used to uniquely identify the unique SRP key that was used
+                    to sign the report. It also is used as the key name in Azure.
+
+        Returns True on success, and False on failure.
+        """
+        try:
+            # Create Signer using Azure KeyVault
+            signer = AzureKeyVaultSigner(vault=vault, kid=kid)
+
+            # sign and return result
+            return self._sign_corim_report_internal(signer)
+
+        except Exception as e:
+            print(f"Error signing CoRIM with cwt/azure: {e}")
+            return False
 
     ###########################################################################
     # APIs for verifying a signed report
     ###########################################################################
 
-    def get_signed_report_kid(self, signed_report: bytes) -> str:
+    def get_signed_json_report_kid(self, signed_json_report: bytes) -> str:
         """Read the unverified JWS header to extract the Key ID. This will be
         used to find the appropriate public key for verifying the report
         signature.
 
-        signed_report: A bytes object containing the signed report as a JWS
+        signed_json_report: A bytes object containing the signed report as a JWS
                          object.
 
         Returns None if the 'kid' isn't present, otherwise return the 'kid' string.
         """
-        header = jwt.get_unverified_header(signed_report)
+        header = jwt.get_unverified_header(signed_json_report)
         kid = header.get("kid", None)
         return kid
 
-    def verify_signed_report(self, signed_report: bytes, pub_key: bytes) -> dict:
+    def verify_signed_json_report(
+        self, signed_json_report: bytes, pub_key: bytes
+    ) -> dict:
         """Verify the signed report using the provided public key.
 
-        signed_report: A bytes object containing the signed report as a JWS
+        signed_json_report: A bytes object containing the signed report as a JWS
                          object.
         pub_key:       A bytes object containing the public key used to verify
                          the signed report, which corresponds to the SRP's 'kid'.
@@ -345,15 +758,35 @@ class ShortFormReport(object):
         Returns a dictionary containing the decoded JSON short-form report
         payload.
         """
-        decoded = jwt.decode(signed_report, pub_key, algorithms=ALLOWED_JWA_ALGOS)
+        decoded = jwt.decode(signed_json_report, pub_key, algorithms=ALLOWED_JWA_ALGOS)
 
         # verify additional contents of the report
-        if self.verify_report_contents(decoded) is not True:
-            raise Exception("Report contents failed to validate!")
+        if self.verify_json_report_contents(decoded) is not True:
+            raise Exception("JSON report contents failed to validate!")
 
         return decoded
 
-    def get_public_key_azure(self, vault, kid):
+    def verify_signed_corim_report(
+        self, signed_corim_report: bytes, pub_key: bytes, kid: str
+    ) -> bool:
+        """Verify the signed report using the provided public key.
+
+        signed_corim_report: A bytes object containing the signed report as a CoRIM CBOR object.
+        pub_key:       A bytes object containing the public key used to verify the signed report, which corresponds to the SRP's 'kid'.
+
+        Returns a dictionary containing the decoded short-form report payload.
+        """
+        try:
+            cwt.decode(
+                data=signed_corim_report,
+                keys=cwt.COSEKey.from_pem(pub_key, alg=-36, kid=kid),
+            )  # alg -36 is ES512
+            return True
+
+        except Exception as e:
+            raise Exception(f"CBOR report contents failed to validate! {e}")
+
+    def get_public_key_azure(self, vault, kid, debug: bool = False):
         """Get the public key of an Azure KeyVault key.
 
         vault:    The Azure Key Vault URL to use.
@@ -361,7 +794,10 @@ class ShortFormReport(object):
 
         Returns the public key in PEM format.
         """
-        credential = DefaultAzureCredential()
+        if not debug:
+            logger = logging.getLogger("azure")
+            logger.setLevel(logging.ERROR)
+        credential = DefaultAzureCredential(logging_enable=debug)
         key_client = KeyClient(vault_url=vault, credential=credential)
         key = key_client.get_key(kid)
         pub = EllipticCurvePublicNumbers(
@@ -373,29 +809,29 @@ class ShortFormReport(object):
             serialization.Encoding.PEM, serialization.PublicFormat.SubjectPublicKeyInfo
         ).decode()
 
-    def verify_signed_report_azure(
-        self, vault: str, kid: str, signed_report: bytes
+    def verify_signed_json_report_azure(
+        self, signed_json_report: bytes, vault: str, kid: str, debug: bool = False
     ) -> dict:
         """Verify the signed report using an Azure KeyVault key.
 
         vault:    The Azure Key Vault URL to use.
         kid:      The Azure key name to use.
-        signed_report: A bytes object containing the signed report as a JWS
+        signed_json_report: A bytes object containing the signed report as a JWS
                          object.
 
         Returns a dictionary containing the decoded JSON short-form report
         payload.
         """
-        pubkey = self.get_public_key_azure(vault, kid)
-        decoded = jwt.decode(signed_report, pubkey, algorithms=ALLOWED_JWA_ALGOS)
+        pubkey = self.get_public_key_azure(vault, kid, debug)
+        decoded = jwt.decode(signed_json_report, pubkey, algorithms=ALLOWED_JWA_ALGOS)
 
         # verify additional contents of the report
-        if self.verify_report_contents(decoded) is not True:
+        if self.verify_json_report_contents(decoded) is not True:
             raise Exception("Report contents failed to validate!")
 
         return decoded
 
-    def verify_report_contents(self, decoded: dict) -> bool:
+    def verify_json_report_contents(self, decoded: dict) -> bool:
         """Verify the contents of the report wherever possible.
 
         decoded:  A SFR report, decoded, with its signature assumed to have already been validated.
@@ -406,7 +842,10 @@ class ShortFormReport(object):
         # At least one of the hashes must be present for this JSON to be valid.
         if (
             "fw_hash_sha2_384" not in decoded["device"]
-            and "fw_hash_sha2_512" not in decoded["device"]
+            or len(decoded["device"]["fw_hash_sha2_384"]) == 0
+        ) and (
+            "fw_hash_sha2_512" not in decoded["device"]
+            or len(decoded["device"]["fw_hash_sha2_512"]) == 0
         ):
             # Suppress this error for the one report that has no hash:
             # https://github.com/opencomputeproject/OCP-Security-SAFE/blob/main/Reports/CHIPS_Alliance/2023/Caliptra
@@ -419,20 +858,26 @@ class ShortFormReport(object):
             "fw_hash_sha2_384" in decoded["device"]
             and len(decoded["device"]["fw_hash_sha2_384"])
             != hashlib.sha384().digest_size * 2
+            and len(decoded["device"]["fw_hash_sha2_384"]) != 0
         ):
             l3 = len(decoded["device"]["fw_hash_sha2_384"])
             print(
-                f"fw_hash_sha2_384 hash digest length must be {hashlib.sha384().digest_size*2} (found {l3})!"
+                f"fw_hash_sha2_384 hash digest length must be {
+                    hashlib.sha384().digest_size * 2
+                } (found {l3})!"
             )
             return False
         if (
             "fw_hash_sha2_512" in decoded["device"]
             and len(decoded["device"]["fw_hash_sha2_512"])
             != hashlib.sha512().digest_size * 2
+            and len(decoded["device"]["fw_hash_sha2_512"]) != 0
         ):
             l5 = len(decoded["device"]["fw_hash_sha2_512"])
             print(
-                f"fw_hash_sha2_512 hash digest length must be {hashlib.sha512().digest_size*2} (found {l5})!"
+                f"fw_hash_sha2_512 hash digest length must be {
+                    hashlib.sha512().digest_size * 2
+                } (found {l5})!"
             )
             return False
 
