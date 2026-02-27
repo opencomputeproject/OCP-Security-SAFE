@@ -67,9 +67,6 @@ ALLOWED_RSA_KEY_SIZES = (
     4096,  # RSA 512
 )
 
-# CoRIM specific constants
-DEVICE_CATEGORIES = {"storage": 0, "network": 1, "gpu": 2, "cpu": 3, "apu": 4, "bmc": 5}
-
 # CBOR tags for CoRIM
 CORIM_TAG = 501
 COMID_TAG = 506
@@ -162,8 +159,9 @@ class ShortFormReport(object):
 
         vendor:    The name of the vendor that manufactured the device.
         product:   The name of the device. Usually a model name or number.
-        category:  The type of device that was audited. Usually a short string
-                     such as: 'storage', 'network', 'gpu', 'cpu', 'apu', or 'bmc'.
+        category:  [LEGACY] The type of device (e.g., 'storage', 'network', 'gpu').
+                   This field is included for backward compatibility with the JSON schema
+                   but is NOT included in CoRIM output as it's not part of the CDDL spec.
         repo_tag:  The Git repository tag associated with the audit. Useful when
                      evaluating ROMs for which we cannot easily calculate or
                      verify the hash.
@@ -339,14 +337,6 @@ class ShortFormReport(object):
 
         fw_identifiers.append(fw_id)
 
-        # Convert device category to integer
-        category_str = self.report["device"]["category"].lower()
-        device_category = None
-        for cat, val in DEVICE_CATEGORIES.items():
-            if cat in category_str:
-                device_category = val
-                break
-
         # Convert issues
         corim_issues = []
         for issue in self.report["audit"]["issues"]:
@@ -378,11 +368,8 @@ class ShortFormReport(object):
             4: fw_identifiers,  # fw-identifiers
         }
 
-        if device_category is not None:
-            sfr_map[5] = device_category  # device-category
-
         if corim_issues:
-            sfr_map[6] = corim_issues  # issues
+            sfr_map[5] = corim_issues  # issues
 
         return sfr_map
 

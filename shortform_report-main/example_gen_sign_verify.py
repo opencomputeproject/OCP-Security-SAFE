@@ -71,7 +71,7 @@ fw_hash_sha512 = "84635baabc039a8c74aed163a8deceab8777fed32dc925a4a8dacfd478729a
 rep.add_device(
     "ACME Inc",         # vendor name
     "Roadrunner Trap",  # product name
-    "storage",          # device category
+    "storage",          # category (legacy - for JSON schema compatibility)
     "release_v1_2_3",   # repo tag
     "1.2.3",            # firmware version
     # fw_hash_sha384

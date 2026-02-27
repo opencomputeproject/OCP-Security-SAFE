@@ -128,9 +128,7 @@ def format_identity_claim_human_readable(claim, indent=""):
                                             result += f"{indent}               {explain_sfr_field(sfr_key)}: "
                                             if sfr_key == 2 and isinstance(sfr_value, datetime):
                                                 result += f"{sfr_value.strftime('%Y-%m-%d %H:%M:%S UTC')}\n"
-                                            elif sfr_key == 5:
-                                                result += f"{sfr_value} ({explain_device_category(sfr_value)})\n"
-                                            elif sfr_key == 6 and isinstance(sfr_value, list):
+                                            elif sfr_key == 5 and isinstance(sfr_value, list):
                                                 result += f"{len(sfr_value)} security issue(s)\n"
                                             elif sfr_key == 4:
                                                 # Format firmware identifiers with enhanced byte display
@@ -262,24 +260,11 @@ def explain_sfr_field(field_num):
         2: "Completion Date - When the security review was completed",
         3: "Scope Number - Numerical identifier for the review scope",
         4: "Firmware Identifiers - Information about the reviewed firmware",
-        5: "Device Category - Type of device (CPU, GPU, BMC, etc.)",
         6: "Issues - List of security issues found during review",
         7: "Methodology - Review methodology used (whitebox, blackbox, etc.)",
         8: "Security Review Provider - Organization that performed the review"
     }
     return sfr_fields.get(field_num, f"Unknown SFR field {field_num}")
-
-def explain_device_category(category_num):
-    """Explain device category numbers."""
-    categories = {
-        0: "CPU (Central Processing Unit)",
-        1: "GPU (Graphics Processing Unit)", 
-        2: "BMC (Baseboard Management Controller)",
-        3: "NIC (Network Interface Controller)",
-        4: "Storage (Storage devices)",
-        5: "Other (Other device types)"
-    }
-    return categories.get(category_num, f"Unknown category {category_num}")
 
 def extract_corim_from_cose_sign1(cose_sign1_value):
     """Extract CoRIM payload from COSE-Sign1 structure."""
@@ -845,14 +830,8 @@ def inspect_sfr_data(sfr_data, indent=""):
                         print(f"{indent}         {format_value_recursively(fw_item, indent + '         ')}")
             else:
                 print(f"{indent}   📦 Firmware Info: {format_value_recursively(field_value, indent + '      ')}")
-        
-        elif field_num == 5:  # Device category
-            if isinstance(field_value, int):
-                print(f"{indent}   Category: {field_value} ({explain_device_category(field_value)})")
-            else:
-                print(f"{indent}   Category: {field_value} (Type: {type(field_value).__name__})")
-        
-        elif field_num == 6:  # Issues
+                
+        elif field_num == 5:  # Issues
             if isinstance(field_value, list):
                 print(f"{indent}   🚨 {len(field_value)} security issue(s) found:")
                 

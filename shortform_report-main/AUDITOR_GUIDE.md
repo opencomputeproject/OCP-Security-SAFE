@@ -58,8 +58,7 @@ The most important section for auditors shows the actual security review finding
    🔸 Field 2: Completion Date
    🔸 Field 3: Scope Number
    🔸 Field 4: Firmware Identifiers
-   🔸 Field 5: Device Category
-   🔸 Field 6: Issues - List of security issues found
+   🔸 Field 5: Issues - List of security issues found
 ```
 
 ### 4. Security Issues Detail
@@ -90,7 +89,6 @@ When reviewing a CoRIM file, verify the following:
 - [ ] SFR extension (-1) is present in measurement values
 - [ ] All required SFR fields are present (0-6)
 - [ ] Completion date is properly encoded with CBOR timestamp tag
-- [ ] Device category is a valid integer (0-5)
 - [ ] Framework version matches expected value
 
 ### ✅ Security Issues Validation
@@ -131,17 +129,6 @@ When reviewing a CoRIM file, verify the following:
 ❌ Required CoRIM field X missing
 ```
 **Solution**: Check that all mandatory CoRIM fields are included during generation.
-
-## Device Category Reference
-
-The tool automatically translates device category numbers:
-
-- **0**: CPU (Central Processing Unit)
-- **1**: GPU (Graphics Processing Unit)
-- **2**: BMC (Baseboard Management Controller)
-- **3**: NIC (Network Interface Controller)
-- **4**: Storage (Storage devices)
-- **5**: Other (Other device types)
 
 ## CBOR Tag Reference
 

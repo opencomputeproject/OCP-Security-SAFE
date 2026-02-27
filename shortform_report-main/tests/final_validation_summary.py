@@ -33,7 +33,7 @@ def validate_corim_compliance():
     report.add_device(
         vendor="Example Vendor",
         product="Example Product",
-        category="cpu",
+        category="storage",
         repo_tag="v2.1.0",
         fw_ver="2.1.0",
         fw_hash_sha384="1234567890abcdef" * 6,  # 48 bytes = 96 hex chars
@@ -71,7 +71,6 @@ def validate_corim_compliance():
     print_section("1. JSON Report Generation")
     print("✓ JSON report structure created successfully")
     print(f"✓ Framework version: {report.report['review_framework_version']}")
-    print(f"✓ Device category: {report.report['device']['category']}")
     print(f"✓ Issues count: {len(report.report['audit']['issues'])}")
     
     print_section("2. CoRIM Structure Generation")
@@ -226,18 +225,9 @@ def validate_corim_compliance():
                 print(f"✗ Completion date incorrect format: {type(completion_date)}")
                 return False
             
-            # Validate device category mapping
-            if 5 in sfr_data:
-                device_category = sfr_data[5]
-                if isinstance(device_category, int) and 0 <= device_category <= 5:
-                    print(f"✓ Device category properly mapped to integer: {device_category}")
-                else:
-                    print(f"✗ Invalid device category: {device_category}")
-                    return False
-            
             # Validate issues structure
-            if 6 in sfr_data:
-                issues = sfr_data[6]
+            if 5 in sfr_data:
+                issues = sfr_data[5]
                 if isinstance(issues, list):
                     print(f"✓ Issues properly structured as list with {len(issues)} items")
                     
@@ -324,7 +314,6 @@ def validate_corim_compliance():
         print("✓ COMID tag structure: PASSED")
         print("✓ SFR extension mapping: PASSED")
         print("✓ Date encoding (CBOR tag 1): PASSED")
-        print("✓ Device category mapping: PASSED")
         print("✓ Issues structure: PASSED")
         print("✓ COSE-Sign1 signing: PASSED")
         

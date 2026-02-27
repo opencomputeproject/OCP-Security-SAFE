@@ -53,7 +53,7 @@ def main():
     rep.add_device(
         "ACME Inc",         # vendor name
         "Roadrunner Trap",  # product name
-        "storage",          # device category
+        "storage",          # category (legacy - for JSON schema compatibility)
         "release_v1_2_3",   # repo tag
         "1.2.3",            # firmware version
         fw_hash_sha384,     # SHA-384 hash

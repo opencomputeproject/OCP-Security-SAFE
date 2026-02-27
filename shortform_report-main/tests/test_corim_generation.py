@@ -90,7 +90,7 @@ def test_schema_compliance():
         rep.add_device(
             vendor="ACME Corp",
             product="Test Widget",
-            category="gpu",  # Test different category
+            category="network",
             repo_tag="v2.1.0",
             fw_ver="2.1.0",
             fw_hash_sha384="c" * 96,
@@ -144,10 +144,8 @@ def test_schema_compliance():
         assert 4 in sfr_map  # fw-identifiers
         
         # Check optional fields
-        assert 5 in sfr_map  # device-category (should be 2 for GPU)
-        assert sfr_map[5] == 2  # GPU category
-        assert 6 in sfr_map  # issues
-        assert len(sfr_map[6]) == 2  # Two issues added
+        assert 5 in sfr_map  # issues
+        assert len(sfr_map[5]) == 2  # Two issues added
         
         print("✓ SFR structure compliance: PASS")
         
@@ -164,7 +162,7 @@ def test_schema_compliance():
         print("✓ Firmware identifier structure: PASS")
         
         # Check issues structure
-        issues = sfr_map[6]
+        issues = sfr_map[5]
         for issue in issues:
             assert 0 in issue  # title
             assert 1 in issue  # cvss-score
@@ -178,55 +176,6 @@ def test_schema_compliance():
         
     except Exception as e:
         print(f"✗ Schema compliance test failed: {e}")
-        traceback.print_exc()
-        return False
-
-def test_device_categories():
-    """Test device category mapping."""
-    print("\n=== Testing Device Categories ===")
-    
-    categories = [
-        ("storage", 0),
-        ("network", 1),
-        ("gpu", 2),
-        ("cpu", 3),
-        ("apu", 4),
-        ("bmc", 5)
-    ]
-    
-    try:
-        for category_str, expected_int in categories:
-            rep = ShortFormReport()
-            
-            rep.add_device(
-                vendor="Test",
-                product="Test",
-                category=category_str,
-                repo_tag="test",
-                fw_ver="1.0",
-                fw_hash_sha384="a" * 96,
-                fw_hash_sha512="b" * 128
-            )
-            
-            rep.add_audit(
-                srp="Test",
-                methodology="test",
-                date="2023-01-01",
-                report_ver="1.0",
-                scope_number=1
-            )
-            
-            sfr_map = rep._convert_to_corim_structure()
-            
-            if 5 in sfr_map:  # device-category is optional
-                assert sfr_map[5] == expected_int, f"Category {category_str} should map to {expected_int}, got {sfr_map[5]}"
-            
-            print(f"✓ Category '{category_str}' → {expected_int}: PASS")
-        
-        return True
-        
-    except Exception as e:
-        print(f"✗ Device category test failed: {e}")
         traceback.print_exc()
         return False
 
@@ -331,7 +280,6 @@ def main():
     tests = [
         test_basic_functionality,
         test_schema_compliance,
-        test_device_categories,
         test_error_handling,
         test_backward_compatibility
     ]

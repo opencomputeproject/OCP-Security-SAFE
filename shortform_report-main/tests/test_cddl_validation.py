@@ -35,7 +35,7 @@ def test_corim_generation():
     report.add_device(
         vendor="Test Vendor",
         product="Test Product",
-        category="cpu",
+        category="storage",
         repo_tag="v1.0.0",
         fw_ver="1.2.3",
         fw_hash_sha384="a" * 96,  # 48 bytes = 96 hex chars

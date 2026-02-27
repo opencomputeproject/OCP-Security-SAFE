@@ -87,7 +87,7 @@ class JsonToCorimConverter:
             rep.add_device(
                 vendor=device.get("vendor", "Unknown Vendor"),
                 product=device.get("product", "Unknown Product"),
-                category=device.get("category", "storage"),
+                category=device.get("category", "unknown"),
                 repo_tag=device.get("repo_tag", ""),
                 fw_ver=device.get("fw_version", ""),
                 fw_hash_sha384=device.get("fw_hash_sha2_384", ""),

@@ -9,7 +9,6 @@ This directory contains testing and validation scripts for the OCP SAFE SFR CoRI
 - **`test_corim_generation.py`** - Comprehensive test suite for CoRIM generation functionality
   - Tests basic JSON to CoRIM conversion
   - Validates schema compliance
-  - Tests device category mapping
   - Validates error handling
   - Tests backward compatibility
 

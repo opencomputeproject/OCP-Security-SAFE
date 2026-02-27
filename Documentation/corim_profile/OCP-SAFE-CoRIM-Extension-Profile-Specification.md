@@ -25,7 +25,6 @@
 
 - Table 1: OCP S.A.F.E. SFR Map Fields
 - Table 2: Issue Entry Structure
-- Table 3: Device Category Mappings
 - Table 4: Firmware Identifier Components
 
 ## Acknowledgements
@@ -50,9 +49,6 @@ This specification provides an efficient method for embedding security review fi
 
 ### Impact
 This specification enables standardized security review reporting across diverse datacenter hardware components, significantly improving security transparency and assessment capabilities.
-
-### Scale
-This specification is designed to scale across various device categories including storage, network, GPU, CPU, APU, and BMC components within datacenter environments.
 
 ### Sustainability
 This specification promotes sustainable security practices by providing a standardized framework for ongoing security assessments and reviews.
@@ -90,7 +86,7 @@ Modern datacenter security requires comprehensive assessment of firmware and har
 
 This specification addresses these challenges by:
 
-1. **Standardizing Security Review Reporting**: Providing a common format for representing security assessment findings across all device categories
+1. **Standardizing Security Review Reporting**: Providing a common format for representing security assessment findings
 2. **Enabling Cryptographic Verification**: Leveraging CoRIM's integrity protection mechanisms to ensure security review authenticity
 3. **Facilitating Automated Processing**: Supporting machine-readable security assessment data for automated policy enforcement
 4. **Improving Supply Chain Transparency**: Enabling verifiable security assessment results throughout the hardware supply chain
@@ -99,7 +95,6 @@ This specification addresses these challenges by:
 
 This profile defines a CoRIM extension for representing OCP S.A.F.E. Security Framework Review findings. The extension is designed to be:
 
-- **Device Category Agnostic**: Supporting storage, network, GPU, CPU, APU, and BMC components
 - **Review Framework Flexible**: Accommodating various security assessment methodologies and frameworks
 - **Vulnerability Standard Compliant**: Supporting CVSS, CWE, and CVE standard vulnerability representations
 - **Cryptographically Verifiable**: Maintaining CoRIM's integrity protection properties
@@ -142,9 +137,8 @@ ocp-safe-sfr-map = {
   &(report-version: 1) => tstr
   &(completion-date: 2) => time
   &(scope-number: 3) => integer
-  &(fw-identifiers: 4) => [ + fw-identifier ]
-  ? &(device-category: 5) => $device-category
-  ? &(issues: 6) => [ + issue-entry ]
+  ? &(fw-identifiers: 4) => [ + fw-identifier ]
+  ? &(issues: 5) => [ + issue-entry ]
   * $$ocp-safe-sfr-map-ext
 }
 ```
@@ -161,13 +155,12 @@ ocp-safe-sfr-map = {
 | report-version | 1 | tstr | Version of the specific security review report |
 | completion-date | 2 | time | Date when the security review was completed |
 | scope-number | 3 | integer | Numerical identifier for the review scope |
-| fw-identifiers | 4 | array | Array of firmware identifier objects |
 
 #### Optional Fields
 
 | Field | Key | Type | Description |
 |-------|-----|------|-------------|
-| device-category | 5 | enum | Category of the device being reviewed |
+| fw-identifiers | 4 | array | Array of firmware identifier objects |
 | issues | 6 | array | Array of security issues identified during review |
 
 ### Firmware Identifiers
@@ -192,21 +185,6 @@ fw-identifier = non-empty<{
 | repo-tag | 2 | tstr | Source repository tag or commit identifier |
 | src-manifest | 3 | src-manifest | Source code manifest with file hashes |
 
-### Device Categories
-
-The specification supports the following device categories:
-
-**Table 3: Device Category Mappings**
-
-| Category | Value | Description |
-|----------|-------|-------------|
-| storage | 0 | Storage devices (SSDs, HDDs, etc.) |
-| network | 1 | Network interface controllers and switches |
-| gpu | 2 | Graphics processing units and accelerators |
-| cpu | 3 | Central processing units |
-| apu | 4 | Accelerated processing units |
-| bmc | 5 | Baseboard management controllers |
-
 ### Security Issues
 
 Security issues identified during the review are represented using the `issue-entry` structure:
@@ -214,13 +192,19 @@ Security issues identified during the review are represented using the `issue-en
 ```cddl
 issue-entry = {
   &(title: 0) => tstr
-  &(cvss-score: 1) => tstr
-  &(cvss-vector: 2) => tstr
-  &(cwe: 3) => tstr
-  &(description: 4) => tstr
-  ? &(cvss-version: 5) => tstr
-  ? &(cve: 6) => tstr
+  &(description: 1) => tstr
+  &(assessment-scheme: 2) => $assessment-scheme
+  ?&(cwe: 3) => tstr
+  ?&(cve: 4) => tstr
   * $$ocp-safe-issue-entry-ext
+}
+
+$assessment-scheme /= cvss-scheme
+
+cvss-scheme = {
+  &(cvss-score: 0) => tstr
+  &(cvss-vector: 1) => tstr
+  ? &(cvss-version: 2) => tstr
 }
 ```
 
@@ -229,12 +213,22 @@ issue-entry = {
 | Field | Key | Type | Required | Description |
 |-------|-----|------|----------|-------------|
 | title | 0 | tstr | Yes | Brief title describing the security issue |
-| cvss-score | 1 | tstr | Yes | CVSS numerical score (e.g., "7.9") |
-| cvss-vector | 2 | tstr | Yes | CVSS vector string |
-| cwe | 3 | tstr | Yes | Common Weakness Enumeration identifier |
-| description | 4 | tstr | Yes | Detailed description of the security issue |
-| cvss-version | 5 | tstr | No | CVSS version used for scoring (default: "3.1") |
-| cve | 6 | tstr | No | CVE identifier if assigned |
+| description | 1 | tstr | Yes | Detailed description of the security issue |
+| assessment-scheme | 2 | $assessment-scheme | Yes | Assessment scheme used (e.g., CVSS) |
+| cwe | 3 | tstr | No | Common Weakness Enumeration identifier |
+| cve | 4 | tstr | No | CVE identifier if assigned |
+
+### Assessment Schemes
+
+The specification supports various assessment schemes for vulnerability scoring. Currently, CVSS is the primary supported scheme:
+
+**CVSS Scheme Structure**
+
+| Field | Key | Type | Required | Description |
+|-------|-----|------|----------|-------------|
+| cvss-score | 0 | tstr | Yes | CVSS numerical score (e.g., "7.9") |
+| cvss-vector | 1 | tstr | Yes | CVSS vector string |
+| cvss-version | 2 | tstr | No | CVSS version used for scoring (default: "3.1") |
 
 ### Source Manifest Support
 
@@ -297,7 +291,6 @@ Systems consuming OCP S.A.F.E. SFR CoRIM data SHOULD:
 
 1. **Validate Profile Compatibility**: Check for supported profile OID before processing
 2. **Implement Policy Enforcement**: Define policies for handling different severity levels
-3. **Support Multiple Categories**: Handle security review data for all supported device categories
 4. **Maintain Audit Trails**: Log all security review data processing activities
 
 ### Interoperability Considerations
@@ -315,35 +308,37 @@ To ensure broad interoperability:
 
 ```cddl
 ; Auditor CoRIM – Corim which embeds the SFR fields
-; OCP S.A.F.E. SFR CoRIM Profile OID: 1.3.6.1.4.1.42623.1.1
+; OCP SAFE SFR CoRIM Profile OID: 1.3.6.1.4.1.42623.1.1
 
 $$measurement-values-map-extension //= (
-  &(ocp-safe-sfr: -1) => ocp-safe-sfr-map ; Private extension for OCP S.A.F.E. SFR
+  &(ocp-safe-sfr: -1) => ocp-safe-sfr-map ; Private extension for OCP SAFE SFR
 )
-
-; Profile definition for OCP S.A.F.E. SFR CoRIM
-ocp-safe-sfr-profile-oid = h'060A2B0601040182F4170101' ; OID 1.3.6.1.4.1.42623.1.1 in DER encoding
 
 ocp-safe-sfr-map = {
   &(review-framework-version: 0) => tstr
   &(report-version: 1) => tstr
   &(completion-date: 2) => time
   &(scope-number: 3) => integer
-  &(fw-identifiers: 4) => [ + fw-identifier ]
-  ? &(device-category: 5) => $device-category
-  ? &(issues: 6) => [ + issue-entry ]
+  ? &(fw-identifiers: 4) => [ + fw-identifier ]
+  ? &(issues: 5) => [ + issue-entry ]
   * $$ocp-safe-sfr-map-ext
 }
 
 issue-entry = {
   &(title: 0) => tstr
-  &(cvss-score: 1) => tstr
-  &(cvss-vector: 2) => tstr
-  &(cwe: 3) => tstr
-  &(description: 4) => tstr
-  ? &(cvss-version: 5) => tstr
-  ? &(cve: 6) => tstr
+  &(description: 1) => tstr
+  &(assessment: 2) => $assessment
+  ?&(cwe: 3) => tstr
+  ?&(cve: 4) => tstr
   * $$ocp-safe-issue-entry-ext
+}
+
+$assessment /= cvss
+
+cvss = {
+  &(score: 0) => tstr
+  &(vector: 1) => tstr
+  &(version: 2) => tstr
 }
 
 fw-identifier = non-empty<{
@@ -362,20 +357,6 @@ src-manifest = {
   &(manifest-digest: 0) => digests-type 
   &(manifest: 1) => [ + manifest-entry ]
 }
-
-$device-category /= storage
-$device-category /= network
-$device-category /= gpu
-$device-category /= cpu
-$device-category /= apu
-$device-category /= bmc
-
-storage = 0
-network = 1
-gpu = 2
-cpu = 3
-apu = 4
-bmc = 5
 ```
 
 ### Example CoRIM with SFR Extension
@@ -387,7 +368,7 @@ The following example demonstrates a complete CoRIM structure containing OCP S.A
   / corim.id (0) /
   0: "acme-trap-audit-2025-08-03",
   / corim.profile (3) /
-  3: 111(h'060A2B0601040182F4170101'), / OID 1.3.6.1.4.1.42623.1.1 for OCP S.A.F.E. SFR profile /
+  3: 111(h'060A2B0601040182F4170101'), / OID 1.3.6.1.4.1.42623.1.1 for OCP SAFE SFR profile /
   / corim.entities (5) /
   5: [
     / audit-entity / {
@@ -395,34 +376,34 @@ The following example demonstrates a complete CoRIM structure containing OCP S.A
       / role (2) /        2: [ 1 ] / manifest-creator /
     }
   ],
-  / corim.tags / 1 : [
+   / corim.tags / 1 : [
     / concise-mid-tag / 506( <<
       / concise-mid-tag / {
         / comid.tag-identity / 1 : {
           / comid.tag-id / 0 : "acme-trap-review-comid-001"
         },
         / comid.triples / 4 : {
-          / conditional-endorsement-triples / 10 : [	
-            [  / conditional-endorsement-triple-record /
-              [ / conditions array /
-                [ / *** stateful-environment-record *** /
-                  / environment-map / {
-                    / comid.class / 0 : {
-                      / comid.vendor / 1 : "ACME Inc.",
-                      / comid.model / 2 : "ACME RoadRunner Trap"
+              / conditional-endorsement-triples / 10 : [	
+              [  / conditional-endorsement-triple-record /
+                [ / conditions array /
+                  [ / *** stateful-environment-record *** /
+                    / environment-map / {
+                      / comid.class / 0 : {
+                        / comid.vendor / 1 : "ACME Inc.",
+                        / comid.model / 2 : "ACME RoadRunner Trap"
                     }
                   },
                   [ / claims-list / 
-                    / *** measurement-map *** / {
-                      / comid.mval / 1 : {
-                        / comid.digests / 2 : [ [
-                          / hash-alg-id / -43, / sha384 /
-                          / hash-value / h'52047e070cddf496a7f77bf6a47792797e8ee90a149bb7555d08c5f93c5ca7ea46a63a7c99edaa1659e8afadfb9c6114'
-                        ],
-                        [
-                          / hash-alg-id / -44, / sha512 /
-                          / hash-value / h'12a5b961a5eb7e548ed436fe7b5848d428bff908cb6ffcb47ec3ac1e2a43e0b8d1ff047d387fb0a940dc7b8b0014acf344364c43ab4de624dcd15f98bee552a5'
-                        ]      
+                      / *** measurement-map *** / {
+                        / comid.mval / 1 : {
+                          / comid.digests / 2 : [ [
+                            / hash-alg-id / -43, / sha384 /
+                            / hash-value / h'52047e070cddf496a7f77bf6a47792797e8ee90a149bb7555d08c5f93c5ca7ea46a63a7c99edaa1659e8afadfb9c6114'
+                          ],
+                          [
+                            / hash-alg-id / -44, / sha512 /
+                            / hash-value / h'12a5b961a5eb7e548ed436fe7b5848d428bff908cb6ffcb47ec3ac1e2a43e0b8d1ff047d387fb0a940dc7b8b0014acf344364c43ab4de624dcd15f98bee552a5'
+                          ]      
                         ]
                       }
                     }
@@ -447,30 +428,33 @@ The following example demonstrates a complete CoRIM structure containing OCP S.A
                           / 3: scope-number /             3: 1,
                           / 4: fw-identifiers /           4: [
                             /fw-identifier / {
-                              / 0: fw-version /  0: {
-                                / 0: version /         0: "1.2.3",
-                                / 1: version-scheme /  1: "semver"
-                              }
+                                / 0: fw-version /  0: {
+                                      / 0: version /         0: "1.2.3",
+                                      / 1: version-scheme /  1: "semver"
+                                }
                             }
                           ],
-                          / 5: device-category /          5: 0,  / 0: storage /
-                          / 6: issues /                   6: [
-                            / issue-entry / {
-                              / 0: title /         0: "Memory corruption when reading record from SPI flash",
-                              / 1: cvss-score /    1: "7.9",
-                              / 2: cvss-vector /   2: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
-                              / 3: cwe /           3: "CWE-111",
-                              / 4: description /   4: "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
-                              / 5: cvss-version /  5: "3.1"
+                          / 5: issues /                   6: [
+                               / issue-entry / {
+                                / 0: title /              0: "Memory corruption when reading record from SPI flash",
+                                / 1: description /        1: "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
+                                / 2: assessment-scheme /  2: {
+                                  / 0: cvss-score /   0: "7.9",
+                                  / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
+                                  / 2: cvss-version / 2: "3.1"
+                                },
+                                / 3: cwe /                3: "CWE-111"
                             },
-                            / issue-entry / {
-                              / 0: title /         0: "Debug commands enable arbitrary memory read/write",
-                              / 1: cvss-score /    1: "8.7",
-                              / 2: cvss-vector /   2: "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
-                              / 3: cwe /           3: "CWE-222",
-                              / 4: description /   4: "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
-                              / 5: cvss-version /  5: "3.1",
-                              / 6: cve /           6: "CVE-2014-10000"
+                              / issue-entry / {
+                                / 0: title /              0: "Debug commands enable arbitrary memory read/write",
+                                / 1: description /        1: "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
+                                / 2: assessment-scheme /  2: {
+                                  / 0: cvss-score /   0: "8.7",
+                                  / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
+                                  / 2: cvss-version / 2: "3.1"
+                                },
+                                / 3: cwe /                3: "CWE-222",
+                                / 4: cve /                4: "CVE-2014-10000"
                             }                            
                           ]
                         }                        
@@ -479,13 +463,14 @@ The following example demonstrates a complete CoRIM structure containing OCP S.A
                   ]
                 ]
               ]
+              ]
             ]
-          ]
         }
       }
     >> )
-  ]
-})
+    ]
+  }
+)
 ```
 
 ## References

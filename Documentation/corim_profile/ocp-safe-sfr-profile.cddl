@@ -10,21 +10,26 @@ ocp-safe-sfr-map = {
   &(report-version: 1) => tstr
   &(completion-date: 2) => time
   &(scope-number: 3) => integer
-  &(fw-identifiers: 4) => [ + fw-identifier ]
-  ? &(device-category: 5) => $device-category
-  ? &(issues: 6) => [ + issue-entry ]
+  ? &(fw-identifiers: 4) => [ + fw-identifier ]
+  ? &(issues: 5) => [ + issue-entry ]
   * $$ocp-safe-sfr-map-ext
 }
 
 issue-entry = {
   &(title: 0) => tstr
-  &(cvss-score: 1) => tstr
-  &(cvss-vector: 2) => tstr
-  &(cwe: 3) => tstr
-  &(description: 4) => tstr
-  ? &(cvss-version: 5) => tstr
-  ? &(cve: 6) => tstr
+  &(description: 1) => tstr
+  &(assessment: 2) => $assessment
+  ?&(cwe: 3) => tstr
+  ?&(cve: 4) => tstr
   * $$ocp-safe-issue-entry-ext
+}
+
+$assessment /= cvss
+
+cvss = {
+  &(score: 0) => tstr
+  &(vector: 1) => tstr
+  &(version: 2) => tstr
 }
 
 fw-identifier = non-empty<{
@@ -43,17 +48,3 @@ src-manifest = {
   &(manifest-digest: 0) => digests-type 
   &(manifest: 1) => [ + manifest-entry ]
 }
-
-$device-category /= storage
-$device-category /= network
-$device-category /= gpu
-$device-category /= cpu
-$device-category /= apu
-$device-category /= bmc
-
-storage = 0
-network = 1
-gpu = 2
-cpu = 3
-apu = 4
-bmc = 5
