@@ -24,8 +24,9 @@
 ## List of Tables
 
 - Table 1: OCP S.A.F.E. SFR Map Fields
-- Table 2: Issue Entry Structure
-- Table 4: Firmware Identifier Components
+- Table 2: Firmware Identifier Components
+- Table 3: Issue Entry Structure
+- Table 4: CVSS Structure
 
 ## Acknowledgements
 
@@ -176,7 +177,7 @@ fw-identifier = non-empty<{
 }>
 ```
 
-**Table 4: Firmware Identifier Components**
+**Table 2: Firmware Identifier Components**
 
 | Field | Key | Type | Description |
 |-------|-----|------|-------------|
@@ -208,7 +209,7 @@ cvss = {
 }
 ```
 
-**Table 2: Issue Entry Structure**
+**Table 3: Issue Entry Structure**
 
 | Field | Key | Type | Required | Description |
 |-------|-----|------|----------|-------------|
@@ -222,7 +223,7 @@ cvss = {
 
 The specification supports various assessments for vulnerability scoring. Currently, CVSS is the primary supported assesment:
 
-**CVSS Structure**
+**Table 4: CVSS Structure**
 
 | Field | Key | Type | Required | Description |
 |-------|-----|------|----------|-------------|
