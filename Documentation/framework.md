@@ -293,7 +293,7 @@ has concluded:
   SRP might publish an SFR without the DV's blessing. The DV, at their discretion, may elect to delay the publication, or not to publish at all and
   forgo OCP SAFE endorsement.
 * **Signed Git Commits**\
-  The OCP GitHub repository is configured to require all commits to be [signed](https://docs.github.com/en/authentication/managing-commit-signature-verification/signing-commits). Please remember this when preparing the submission (use [--amend --signoff](https://stackoverflow.com/a/15667644) if you forget).
+  The OCP GitHub repository is configured to require all commits to include `Signed-off-by` using the `--signoff` argument. Please remember this when preparing the submission (use [--amend --signoff](https://stackoverflow.com/a/15667644) if you forget).
 * **SFR Pull Request Path**\
   The signed SFRs are published to the location Reports/$Vendor/$Year/$Product. As a convenience,
   the submission may choose to additionally include the human-readable SFR documents.
