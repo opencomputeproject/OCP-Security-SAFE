@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Cigent Technology, Inc.",
+        "product": "Cigent Software FDE version 1.2.1",
+        "category": "source_only",
+        "repo_tag": "release_efi_v1.2.0.39",
+        "fw_version": "1.2.0.39",
+        "fw_hash_sha2_384": "059AEFE0C6D317BFAE7D5F5ABD768E4D921CDD856591C03703BC403177BCD45A580038B4473A6D389F304A9B1A3878AE",
+        "fw_hash_sha2_512": "51BFBC611A84C94BCE84CCCD35DDC7B68A540706CF6AFB71E96D4A306582C7B14468C886A66AECDAB27033B41EED32082AF9841FB9167AC796532C837889EAD3"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2026-02-11",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
