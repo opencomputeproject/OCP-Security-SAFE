@@ -629,71 +629,44 @@ class ShortFormReport(object):
         """Returns the signed CoRIM report (COSE-Sign1)."""
         return self.signed_corim_report
 
-    def _sign_corim_report_internal(self, signer) -> bool:
-        """Sign the CoRIM report using COSE-Sign1 with the cwt library.
+    def _sign_corim_report_internal(self, cose_key) -> bool:
+        """Sign the CoRIM report as COSE_Sign1 (CBOR tag 18) using cwt.COSE.
 
-        Uses the cwt (CBOR Web Token) library for better COSE compatibility.
-        do not call directly, use either sign_corim_report_pem() or sign_corim_report_azure()
-        which provide appropriate signer modules.
+        Uses cwt.COSE.encode() to produce a proper COSE_Sign1 envelope,
+        as required by the CoRIM spec:
+            signed-corim = #6.18(COSE_Sign1_Tagged<corim-map>)
+
+        The raw CoRIM CBOR is used directly as the COSE_Sign1 payload
+        (no CWT claims wrapping).
+
+        cose_key: A cwt.COSEKeyInterface (e.g. from cwt.COSEKey.from_pem()).
+
+        Do not call directly; use sign_corim_report_pem() or
+        sign_corim_report_azure().
         """
-        # Get CoRIM payload as claims (cwt expects claims, not raw payload)
         corim_cbor = self.get_report_as_corim_cbor()
-
-        # For COSE signing, we need to create claims structure
-        # The CoRIM data becomes the payload claim
-        claims = {
-            # Use a custom claim number for CoRIM data
-            -65537: corim_cbor  # Custom claim for CoRIM payload
-        }
-
-        # Sign using cwt library with the signer
-        signed_corim_report = cwt.encode_and_sign(
-            claims=claims,
-            signers=[signer],
-            tagged=True,  # Use CBOR tag for COSE_Sign1
-        )
-
-        self.signed_corim_report = signed_corim_report
+        cose = cwt.COSE(alg_auto_inclusion=True, kid_auto_inclusion=True)
+        self.signed_corim_report = cose.encode(corim_cbor, cose_key)
         return True
 
     def sign_corim_report_pem(self, priv_key: bytes, algo: str, kid: str) -> bool:
-        """Sign the CoRIM report using COSE-Sign1 with the cwt library.
+        """Sign the CoRIM report as COSE_Sign1 (tag 18) using a PEM private key.
 
-        Uses the cwt (CBOR Web Token) library for better COSE compatibility.
+        Uses cwt.COSE to produce a proper COSE_Sign1 envelope.
+
+        priv_key: PEM-encoded private key bytes.
+        algo:     Algorithm name (ES384, ES512, PS384, PS512).
+        kid:      Key identifier string for the unprotected header.
         """
         try:
-            # Load private key using cryptography
-            pem = serialization.load_pem_private_key(
-                priv_key, None, backend=default_backend()
-            )
-
-            # Map algorithm to COSE algorithm identifier
-            cose_alg = None
-            if (
-                algo == "ES512"
-                and isinstance(pem, EllipticCurvePrivateKey)
-                and pem.curve.name == "secp521r1"
-            ):
-                cose_alg = -36  # ES512
-            elif (
-                algo == "ES384"
-                and isinstance(pem, EllipticCurvePrivateKey)
-                and pem.curve.name == "secp384r1"
-            ):
-                cose_alg = -35  # ES384
-            elif algo == "PS512" and isinstance(pem, RSAPrivateKey):
-                cose_alg = -38  # PS512
-            elif algo == "PS384" and isinstance(pem, RSAPrivateKey):
-                cose_alg = -37  # PS384
-            else:
-                print(f"Unsupported algorithm/key combination: {algo} with {type(pem)}")
+            algo_map = {"ES384": -35, "ES512": -36, "PS384": -37, "PS512": -38}
+            cose_alg = algo_map.get(algo)
+            if cose_alg is None:
+                print(f"Unsupported algorithm: {algo}")
                 return False
 
-            # Create Signer using cwt library
-            signer = cwt.Signer.from_pem(priv_key, alg=cose_alg, kid=kid)
-
-            # sign and return result
-            return self._sign_corim_report_internal(signer)
+            cose_key = cwt.COSEKey.from_pem(priv_key, alg=cose_alg, kid=kid)
+            return self._sign_corim_report_internal(cose_key)
 
         except Exception as e:
             print(f"Error signing CoRIM with cwt: {e}")
@@ -767,20 +740,24 @@ class ShortFormReport(object):
         return decoded
 
     def verify_signed_corim_report(
-        self, signed_corim_report: bytes, pub_key: bytes, kid: str
+        self, signed_corim_report: bytes, pub_key: bytes, kid: str,
+        algo: int = -36,
     ) -> bool:
-        """Verify the signed report using the provided public key.
+        """Verify a signed CoRIM report (COSE_Sign1, tag 18).
 
-        signed_corim_report: A bytes object containing the signed report as a CoRIM CBOR object.
-        pub_key:       A bytes object containing the public key used to verify the signed report, which corresponds to the SRP's 'kid'.
+        signed_corim_report: Signed COSE_Sign1 bytes.
+        pub_key:             PEM-encoded public key bytes.
+        kid:                 Key identifier string.
+        algo:                COSE algorithm identifier
+                             (default: -36 / ES512 for backward compatibility;
+                              use -35 for ES384).
 
-        Returns a dictionary containing the decoded short-form report payload.
+        Returns True on success, raises Exception on failure.
         """
         try:
-            cwt.decode(
-                data=signed_corim_report,
-                keys=cwt.COSEKey.from_pem(pub_key, alg=-36, kid=kid),
-            )  # alg -36 is ES512
+            cose_key = cwt.COSEKey.from_pem(pub_key, alg=algo, kid=kid)
+            cose = cwt.COSE()
+            cose.decode(signed_corim_report, cose_key)
             return True
 
         except Exception as e:

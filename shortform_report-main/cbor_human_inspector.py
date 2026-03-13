@@ -210,8 +210,9 @@ def explain_cbor_tag(tag_num):
     """Provide human-readable explanations for CBOR tags."""
     tag_explanations = {
         1: "POSIX timestamp (seconds since epoch)",
-        18: "COSE-Sign (Multi-Signer COSE Signature)",
-        61: "COSE-Sign1 (Single Signer COSE Signature)",
+        18: "COSE_Sign1 (Single Signer COSE Signature)",
+        61: "CWT (CBOR Web Token)",
+        98: "COSE_Sign (Multi-Signer COSE Signature)",
         111: "Object Identifier (OID)",
         501: "CoRIM (CBOR Object Representation of Information Model)",
         506: "COMID (Concise Module Identifier)",
@@ -539,31 +540,31 @@ def inspect_corim_structure(cbor_data, show_raw_data=False):
                 print("✅ This is a valid CoRIM structure")
                 inspect_corim_content_details(decoded.value)
                 
-            elif decoded.tag == 61:  # COSE-Sign1 tag
-                print("✅ This is a signed CoRIM with COSE-Sign1 signature")
+            elif decoded.tag == 18:  # COSE_Sign1 tag
+                print("✅ This is a signed CoRIM with COSE_Sign1 signature")
                 print("🔓 Extracting CoRIM payload from COSE signature...")
                 
-                # Extract CoRIM from COSE-Sign1 structure
+                # Extract CoRIM from COSE_Sign1 structure
                 corim_payload = extract_corim_from_cose_sign1(decoded.value)
                 if corim_payload:
                     print("✅ Successfully extracted CoRIM payload from signature")
                     inspect_corim_content_details(corim_payload)
                 else:
-                    print("❌ Failed to extract CoRIM payload from COSE-Sign1 structure")
+                    print("❌ Failed to extract CoRIM payload from COSE_Sign1 structure")
                     
-            elif decoded.tag == 18:  # COSE-Sign tag
-                print("✅ This is a signed CoRIM with COSE-Sign signature (multi-signer)")
+            elif decoded.tag == 98:  # COSE_Sign tag
+                print("✅ This is a signed CoRIM with COSE_Sign signature (multi-signer)")
                 print("🔓 Extracting CoRIM payload from COSE signature...")
                 
-                # Extract CoRIM from COSE-Sign structure
+                # Extract CoRIM from COSE_Sign structure
                 corim_payload = extract_corim_from_cose_sign(decoded.value)
                 if corim_payload:
                     print("✅ Successfully extracted CoRIM payload from signature")
                     inspect_corim_content_details(corim_payload)
                 else:
-                    print("❌ Failed to extract CoRIM payload from COSE-Sign structure")
+                    print("❌ Failed to extract CoRIM payload from COSE_Sign structure")
             else:
-                print(f"❌ Expected CoRIM tag (501), COSE-Sign1 tag (61), or COSE-Sign tag (18), found tag {decoded.tag}")
+                print(f"❌ Expected CoRIM tag (501), COSE_Sign1 tag (18), or COSE_Sign tag (98), found tag {decoded.tag}")
         else:
             print(f"❌ Expected CBOR tag at top level, found: {type(decoded)}")
     
@@ -892,8 +893,8 @@ def show_help():
     print("  python cbor_human_inspector.py signed_corim.jws")
     print("\nSUPPORTED FORMATS:")
     print("  • Unsigned CoRIMs (CBOR tag 501)")
-    print("  • COSE-Sign1 signed CoRIMs (CBOR tag 61)")
-    print("  • COSE-Sign multi-signer CoRIMs (CBOR tag 18)")
+    print("  • COSE_Sign1 signed CoRIMs (CBOR tag 18)")
+    print("  • COSE_Sign multi-signer CoRIMs (CBOR tag 98)")
     print("\nOUTPUT:")
     print("  The tool provides detailed analysis including:")
     print("  • CoRIM structure validation")
