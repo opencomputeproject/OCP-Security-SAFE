@@ -154,6 +154,7 @@ class ShortFormReport(object):
         fw_hash_sha384: str,
         fw_hash_sha512: str,
         manifest: str = None,
+        class_id: str = None,
     ) -> None:
         """Add metadata that describes the vendor's device that was tested.
 
@@ -175,6 +176,9 @@ class ShortFormReport(object):
                         this is a hash of that field instead.
         fw_hash_sha512: ... ditto but using SHA2-512 ...
         manifest:  A JSON list of filename and file hash pairs. This field is optional.
+        class_id:  Optional class identifier string (e.g. "FMC_INFO"). When set,
+                   the CoRIM environment class-map includes this as the class-id
+                   (encoded as raw bytes at key 0) in addition to vendor/model.
         """
         self.report["device"] = {}
         self.report["device"]["vendor"] = f"{vendor}".strip()
@@ -186,6 +190,8 @@ class ShortFormReport(object):
         self.report["device"]["fw_hash_sha2_512"] = f"{fw_hash_sha512}".strip()
         if manifest is not None:
             self.report["device"]["manifest"] = manifest
+        if class_id is not None:
+            self.report["device"]["class_id"] = f"{class_id}".strip()
 
     def add_audit(
         self,
@@ -379,6 +385,22 @@ class ShortFormReport(object):
 
         return sfr_map
 
+    def _build_class_map(self) -> dict:
+        """Build the class-map for the environment, using class-id when
+        available, otherwise falling back to vendor/model."""
+        class_map = {}
+        class_id = self.report["device"].get("class_id")
+        if class_id:
+            # Encode class-id as raw bytes (UTF-8) at key 0
+            class_map[0] = class_id.encode("utf-8")
+        vendor = self.report["device"].get("vendor", "").strip()
+        model = self.report["device"].get("product", "").strip()
+        if vendor:
+            class_map[1] = vendor
+        if model:
+            class_map[2] = model
+        return class_map
+
     def _build_corim_structure(self, sfr_map: Dict[str, Any]) -> Dict[str, Any]:
         """Build the complete CoRIM structure with embedded SFR data."""
 
@@ -399,15 +421,12 @@ class ShortFormReport(object):
             }
         }
 
+        class_map = self._build_class_map()
+
         # Create endorsed-triple-record
         endorsed_triple = [
             # environment-map
-            {
-                0: {  # class
-                    1: self.report["device"]["vendor"],  # vendor
-                    2: self.report["device"]["product"],  # model
-                }
-            },
+            {0: class_map},
             # endorsement (array of measurement-map)
             [endorsement_measurement_map],
         ]
@@ -415,12 +434,7 @@ class ShortFormReport(object):
         # Create stateful-environment-record for conditions
         stateful_environment = [
             # environment-map
-            {
-                0: {  # class
-                    1: self.report["device"]["vendor"],  # vendor
-                    2: self.report["device"]["product"],  # model
-                }
-            },
+            {0: class_map},
             # claims-list (measurement-map array)
             [condition_measurement_map],
         ]
