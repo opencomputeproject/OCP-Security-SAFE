@@ -1,7 +1,8 @@
 This repository contains an example implementation of the [Open Compute Project's](https://www.opencompute.org/) short-form report generator for [Vendor Security Reviews](https://drive.google.com/file/d/18m0q3ZFZarYJzZ5lOuPShyBKIx6QfGVA/view).
 
-The short-form report is a JSON object which must be signed according to the JSON Web Signature ([RFC-7515](https://www.rfc-editor.org/rfc/rfc7515)) specification. 
+The short-form report is a JSON object which must be signed according to the JSON Web Signature ([RFC-7515](https://www.rfc-editor.org/rfc/rfc7515)) specification.
 
+**NEW: CoRIM Format Support** - The library now also supports generating reports in CoRIM (Concise Reference Integrity Manifest) format using CBOR encoding, which complies with the OCP SAFE SFR CDDL schema. This provides a more compact binary format while maintaining full backward compatibility with existing JSON workflows.
 
 # Installation
 
@@ -15,6 +16,31 @@ pip install -r requirements.txt
 
 The `example_gen_sign_verify.py` script demonstrates how to use the API exported by `OcpReportLib.py`, covering all use cases from report generation, to signing, and also the signature verification process.
 
+## New CoRIM Methods
+
+In addition to the existing JSON methods, the following new methods are available for CoRIM format:
+
+```python
+# Generate CoRIM format
+corim_dict = report.get_report_as_corim_dict()    # Returns CoRIM as Python dict
+corim_cbor = report.get_report_as_corim_cbor()    # Returns CBOR-encoded bytes
+
+# Sign CoRIM format (experimental)
+report.sign_corim(private_key, "ES512", "key-id")  # COSE-Sign1 signing
+signed_corim = report.get_signed_corim_report()    # Returns signed COSE
+```
+
+See `example_dual_format_generation.py` for a complete example of generating both JSON and CoRIM formats from the same data.
+
+## Testing and Validation
+
+The `tests/` directory contains comprehensive testing and validation scripts for both JSON and CoRIM formats:
+
+- **Test Scripts**: Validate CoRIM generation and CDDL compliance
+- **Analysis Tools**: Debug CBOR structure and schema issues  
+- **Conversion Utilities**: Migrate existing JSON reports to CoRIM format
+
+See `tests/README.md` for detailed information about running tests and validation tools.
 
 ## Integration With Workflows
 
@@ -28,6 +54,7 @@ Use of the API is straight forward:
 2. Call `add_audit()` to add audit details to the report.
 3. Call `add_issue()` any number of times to add vulnerability details to the report.
 4. Call `sign_report()` (or `sign_report_azure()`) to sign the JSON report.
+5. **NEW:** Optionally call `get_report_as_corim_cbor()` and `sign_corim()` to generate CoRIM format.
 
 When signing the report, the SRP must use an asymmetric signing key per those specified in the [Allowed Algorithms](#Allowed-Algorithms) section. [Azure Key Vault](https://azure.microsoft.com/en-us/products/key-vault) support is included as an example of more sophisticated key management, however this Python package does not attempt to solve the key management problem in all possible ways, and we encourage SRPs to protect the private key as appropriate.
 
@@ -35,12 +62,12 @@ The SRP's public key and [Key ID](#Header-Fields), as well as the signed short-f
 
 ### Report Consumption (By OCP Members)
 
-OCP members, such as cloud service providers, will be the primary consumers of these reports. Whenever an OCP member obtains a new firmware image from a vendor, they will pull the corresponding short-form report to decide whether the firmware image is safe to deploy into production. 
+OCP members, such as cloud service providers, will be the primary consumers of these reports. Whenever an OCP member obtains a new firmware image from a vendor, they will pull the corresponding short-form report to decide whether the firmware image is safe to deploy into production.
 
 1. The OCP member will extract the `kid` header field from the report, and use it to lookup the correct SRP public key.
-2. The OCP member will then use the public key to verify the report's signature, using the `verify_signed_report()` API.
+2. The OCP member will then use the public key to verify the report's signature, using the `verify_signed_json_report()` API.
 3. Once the report authenticity is proven, the firmware hash contained in the report (e.g., `fw_hash_sha2_384/512`) can be safely extracted.
-4. This extracted hash can be compared to a locally-calculated hash of the vendor-provided firmware image. 
+4. This extracted hash can be compared to a locally-calculated hash of the vendor-provided firmware image.
 5. If these hashes match, then the OCP member has now successfully verified that the firmware they wish to deploy has undergone a security audit.
 
 
@@ -54,7 +81,6 @@ What follows is an example JSON payload for a hypothetical review of a typical b
     "device": {
         "vendor": "ACME Inc",
         "product": "Roadrunner Trap",
-        "category": "storage",
         "repo_tag": "release_v1_2_3",
         "fw_version": "1.2.3",
         "fw_hash_sha2_384": "0xcd484defa77e8c3e4a8dd73926e32365ea0dbd01e4eff017f211d4629cfcd8e4890dd66ab1bded9be865cd1c849800d4",
@@ -96,7 +122,6 @@ This second example is an example JSON payload for a small SDK source code packa
     "device": {
         "vendor": "ACME Inc",
         "product": "Roadrunner Trap",
-        "category": "storage",
         "repo_tag": "release_v1_2_3",
         "fw_version": "1.2.3",
         "fw_hash_sha2_384": "848aff556097fc1eaf08253abd00af0aad0c317c3490e88bef09348658ce6e14829815fca075d9e03fcf236a47ff91dc",
@@ -165,7 +190,6 @@ A collection of fields that describe the vendor, device, and firmware version th
 
 * `vendor`: The name of the vendor that manufactured the device or firmware being tested.
 * `product`: The name of the device. Usually a model name of number.
-* `category`: The type of device that was audited. Usually a short string such as: `storage`, `network`, `gpu`, `cpu`, `apu`, or `bmc`.
 * `repo_tag`: If applicable, the report can include the repository tag for the code that was audited. This may also be useful for ROM audits where the OCP Member is unable to verify the firmware hash.
 * `fw_version`: The version of the firmware image that is attested by the signed short-form report. In most cases this will be the firmware version compiled by the vendor after the security audit completes, which contains fixes for all vulnerabilities that were found during the audit.
 * `fw_hash_sha2_384`: A hex-encoded string containing the SHA2-384 hash of the firmware image. If the `manifest` field is present, it is a hash of that field instead.
@@ -224,5 +248,4 @@ Note above that the RSA-PSS algorithms "PS384" and "PS512" are named after the h
 
 * 3072 bits (384 bytes)
 * 4096 bits (512 bytes)
-
 

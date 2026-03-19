@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (RAS-TA)",
+        "category": "Reliability, Availability, Serviceability Trusted Application (ta_ras_tee3_prod_amdTEE.sbin)",
+        "repo_tag": "43498ce16faae320b6743f28581b0a33460e088b",
+        "fw_version": "00.3D.00.3F",
+        "fw_hash_sha2_384": "c5e4e175ae778a0fa318eeb0c277bd92c50f9e08885b99c38be2e4f7eb392e892fd4bc941f2a4fa81787c22e97890b4c",
+        "fw_hash_sha2_512": "f3d6d1d5efa6dfde4e084b2690a76fbb56f96b265671849395d20b1a45bbc9380f4b7dc57870146faef9e0b3f9ead7ebf8d47e8da68aa31e765047342b764895"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-08-29",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

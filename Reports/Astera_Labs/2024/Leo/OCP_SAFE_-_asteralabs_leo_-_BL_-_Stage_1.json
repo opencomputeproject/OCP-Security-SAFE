@@ -1,0 +1,53 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Astera Labs",
+        "product": "Leo",
+        "category": "Memory Controller - BL - Stage 1 (boot_rom_bytes.bin)",
+        "repo_tag": "",
+        "fw_version": "0.1",
+        "fw_hash_sha2_384": "4d3b1b91adb97d9200448909ada9c41533994ef2618789bb1c95dc79fbd43b855ea983a83215604253580de9c7ea2117",
+        "fw_hash_sha2_512": "e5e31c21f97ae743bc7dcffac1b4165a52055396d23b056c8e02aecd5ef41158d4ace725fd4cf3be23628536a4aa396800db3d40c921596020a81b6e4a12a06e"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2024-05-03",
+        "report_version": "1.1",
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "[INFO] Additional informational recommendations - Out-of-Bounds Memory Exposure to Restricted Logs Due to Integer Overflow",
+                "cvss_score": "2.4",
+                "cvss_vector": "AV:P/AC:L/PR:L/UI:N/S:C/C:L/I:N/A:N",
+                "cwe": "CWE-125",
+                "description": "An attacker able to send malicious secure debug responses  may cause internal memory to be exposed in log data.  This log data is not intended to be accessible   without secure debug access, so additional   vulnerabilities would be required to exploit this.",
+                "cve": null
+            },
+            {
+                "title": "[INFO] Additional informational recommendations - Limited Register Exposure Due to Integer Overflow in Mailbox Command Parameter Validation",
+                "cvss_score": "2.4",
+                "cvss_vector": "AV:P/AC:L/PR:L/UI:N/S:C/C:L/I:N/A:N",
+                "cwe": "CWE-125",
+                "description": "An attacker able to send a malicious MMB command may be   able to read and output data beyond the intended   range of the persistent register values.",
+                "cve": null
+            },
+            {
+                "title": "[INFO] Additional informational recommendations - Fail Open Behaviour in Security Store eFuse Check",
+                "cvss_score": "2.1",
+                "cvss_vector": "AV:P/AC:H/PR:L/UI:N/S:C/C:N/I:L/A:N",
+                "cwe": "CWE-636",
+                "description": "Changes to functionality may introduce a vulnerability   that allows an attacker to cause errors when reading   eFuse data and bypass security settings.",
+                "cve": null
+            },
+            {
+                "title": "[INFO] Additional informational recommendations - Cryptography Helper Functions Lack Input Validation",
+                "cvss_score": "2.1",
+                "cvss_vector": "AV:P/AC:H/PR:L/UI:N/S:C/C:L/I:N/A:N",
+                "cwe": "CWE-20",
+                "description": "Changes to the code may more easily introduce potentially   critical memory safety vulnerabilities from misuse   of cryptographic operations.",
+                "cve": null
+            }
+        ]
+    }
+}

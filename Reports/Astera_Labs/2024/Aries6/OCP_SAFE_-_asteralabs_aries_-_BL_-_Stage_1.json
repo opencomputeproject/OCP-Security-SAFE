@@ -1,0 +1,37 @@
+{
+    "review_framework_version": "0.3",
+    "device": {
+        "vendor": "Astera Labs",
+        "product": "Aries",
+        "category": "PCIe/CXL Retimer - BL - Stage 1 (boot_rom_bytes.bin)",
+        "repo_tag": "",
+        "fw_version": "0.1",
+        "fw_hash_sha2_384": "ba7d7e6e259e0ab2e9de9cc614d0654a99f0b026e99eb0a5d875b249c9749fe749f28cdc716d64f46e48ed911313b3b5",
+        "fw_hash_sha2_512": "dca3832ccb824a6591f143e15cf310e66a658a370f7a9f5a8e4426655606b4d7a46749785728d045002b491774e1f3b8abe606cb10f7f272c7a3f516119fb685"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2024-05-02",
+        "report_version": "1.0",
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "[LOW] Suggestions to improve - Mechanism to Protect Against Fault Injection Can Be Improved",
+                "cvss_score": "2.2",
+                "cvss_vector": "AV:P/AC:H/PR:N/UI:N/S:C/C:L/I:N/A:N",
+                "cwe": "CWE-1332",
+                "description": "Fault injection protection can be further enhanced beyond multiple evaluations with some additional measures.",
+                "cve": null
+            },
+            {
+                "title": "[INFO] Additional informational recommendations - Bootloader Code Can Be Improved",
+                "cvss_score": "0.0",
+                "cvss_vector": "AV:P/AC:H/PR:N/UI:N/S:U/C:N/I:N/A:N",
+                "cwe": "CWE-561",
+                "description": "Implementing the recommendations in the full report below will reduce the   likelihood of bugs being introduced in the code.",
+                "cve": null
+            }
+        ]
+    }
+}

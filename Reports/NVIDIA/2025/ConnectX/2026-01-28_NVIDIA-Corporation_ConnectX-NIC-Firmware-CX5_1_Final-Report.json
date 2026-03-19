@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.2",
+    "device": {
+        "vendor": "NVIDIA Corporation",
+        "product": "ConnectX5 NIC Firmware",
+        "category": "NIC Firmware",
+        "repo_tag": "",
+        "fw_version": "16.30.5026",
+        "fw_hash_sha2_384": "a21489fe5c152eea0e14855a7cf6c65a8701ce1c2c9e00e6c1c0b1ed4e942db7780d25b8ab9f5140119a207646a1bd62",
+        "fw_hash_sha2_512": "68ea141e90adf47d20be5ccf9613143598f2c106a3019b015bc2573435ba9ceed9601789ba5625b688588c36aa2937e4d498f91e956df7948505775bccb60112"
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2025-09-22",
+        "report_version": "1.0",
+        "scope_number": "1",
+        "cvss_version": "4.0",
+        "issues": []
+    }
+}

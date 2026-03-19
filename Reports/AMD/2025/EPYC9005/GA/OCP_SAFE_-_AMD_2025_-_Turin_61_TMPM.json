@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (TMPM)",
+        "category": "Tiered Memory Page Migration (ucode_pm_mpdma.sbin)",
+        "repo_tag": "ba73b4bb811731c8b65f7e74e94afb39c4b4b0f7",
+        "fw_version": "5E.1D.00",
+        "fw_hash_sha2_384": "f2f85a9c19c25690a01ca1d73826c0470ed398bb778ca047586f51326d0ce1e756266e84ae79009c52cccb14408009bf",
+        "fw_hash_sha2_512": "48f403abe91cde80feaf1f46acc971c033ca840ab3143fcce9dceed4ab9479f3d7c2adf5f158b7556b178c4353dd69518aa90841b45c40b1d34ac2883fbe80cd"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-08-29",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}

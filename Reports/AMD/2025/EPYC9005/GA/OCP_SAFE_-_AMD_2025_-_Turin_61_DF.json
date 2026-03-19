@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (DF)",
+        "category": "Data Fabric (TypeId0x76_DfRib_WH.sbin)",
+        "repo_tag": "ad7d97fd",
+        "fw_version": "18.0.9.3",
+        "fw_hash_sha2_384": "ae0087e45d5ddae645669e160c16d516e671af95699582722d316cb6e783a4c93845153ab6b543b1fe50230528d93c01",
+        "fw_hash_sha2_512": "d6087e585a13ecb1982030aaff8cf01c47fb2eabe25373942e5949cd3dca2f75ec8ac95b73bcdc04fbec9d78f175d5314d71a62630459d499f0d39d464f6b672"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2025-08-29",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
