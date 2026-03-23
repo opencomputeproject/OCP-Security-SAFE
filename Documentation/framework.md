@@ -78,6 +78,16 @@ OCP Security Workgroup
    <td>Clarify publication process
    </td>
   </tr>
+  <tr>
+   <td>2.0
+   </td>
+   <td>March, 2026
+   </td>
+   <td> Alex Tzonkov
+   </td>
+   <td>Added CoRIM SFR support
+   </td>
+  </tr>
 </table>
 
 # Glossary

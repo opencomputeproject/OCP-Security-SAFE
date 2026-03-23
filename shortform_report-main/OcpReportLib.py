@@ -3,7 +3,7 @@ A library for generating Security Review Short-Form Reports (SFR) in both JSON a
 
 This script is intended to be used by Security Review Providers who are
 participating in the Open Compute Project's Firmware Security Review Framework.
-The script complies with version 0.3 (draft) of the Security Review Framework
+The script complies with version 2.0 of the Security Review Framework
 document and supports the new CoRIM (CBOR) format.
 
 More details about the OCP review framework can be found here:
@@ -138,7 +138,7 @@ class AzureKeyVaultSigner(cwt.Signer):
 
 
 class ShortFormReport(object):
-    def __init__(self, framework_ver: str = "1.1"):
+    def __init__(self, framework_ver: str = "2.0"):
         self.report = {}
         self.report["review_framework_version"] = f"{framework_ver}".strip()
         self.signed_json_report = None
@@ -708,7 +708,10 @@ class ShortFormReport(object):
             signer = AzureKeyVaultSigner(vault=vault, kid=kid)
 
             # sign and return result
-            return self._sign_corim_report_internal(signer)
+            corim_cbor = self.get_report_as_corim_cbor()
+            cose = cwt.COSE(alg_auto_inclusion=True, kid_auto_inclusion=True)
+            self.signed_corim_report = cose.encode(corim_cbor, signers=[signer])
+            return True
 
         except Exception as e:
             print(f"Error signing CoRIM with cwt/azure: {e}")
