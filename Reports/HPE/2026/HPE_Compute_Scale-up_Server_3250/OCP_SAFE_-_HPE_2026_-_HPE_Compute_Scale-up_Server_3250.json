@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Hewlett Packard Enterprise",
+        "product": "HPE Compute Scale-up Server 3250",
+        "category": "Server Firmware",
+        "repo_tag": "1.0.204-20260113_101709",
+        "fw_version": "1.0.204",
+        "fw_hash_sha2_384": "deb072bf1e8095435723fc3653af3202f885d2a2b4ed254c2a4820d545370232f20b0344edd213bd5088025ae6c2ab5e",
+        "fw_hash_sha2_512": "0268e3d0464ccf79e577750bca91dc39bb9992728fa6d8dd17c68221c6f8e658e93a1c045f03c60c3679c88704ec24fb938309048b44637e7b4422717d884806"
+    },
+    "audit": {
+        "srp": "Atredis Partners",
+        "methodology": "whitebox",
+        "completion_date": "2026-01-27",
+        "report_version": "1.1",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
