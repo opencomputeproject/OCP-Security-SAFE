@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Hewlett Packard Enterprise",
+        "product": "HPE secure enclave",
+        "category": "secure module",
+        "repo_tag": "GSE.110.45",
+        "fw_version": "GSE.110.45",
+        "fw_hash_sha2_384": "f37bbcbe0baebc84772355dfe84900488c13c26e457d157768c2916426864e0b26ea73ea204ae9cf92cf59f969905250",
+        "fw_hash_sha2_512": "fe1bb4e09662f0a9c49a686e24834f9b64b2aef035c19fcabfb17bc160f4ca3cff2a9bac04f263e7a800acb668221df0be67fc4cd4ef0543e2419e0a0f210fb3"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2026-02-06",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
