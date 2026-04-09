@@ -53,14 +53,14 @@ This document sets the rules for approval and dismissal of security review provi
 
 To be approved as security review provider, please provide to us what is listed under [Requirements](#requirements). S.A.F.E. leadership will review your application. If you are admitted you will have to join the OCP and pay the membership fee.
 
-From the date you are approved as review provider, you have 9 months to have a short-form report for a review you conducted submitted to the repository. If you fail to do so, you will be dismissed from the program again. This is to avoid having providers sign up just to get another endorsement for marketing purposes with no intention of conducting reviews.
+From the date you are approved as review provider, you have 9 months to have a short-form report for a review you conducted submitted to the repository. If you fail to do so, you will be dismissed from the program again. This is to avoid having providers sign up just to get another endorsement for marketing purposes with no intention of conducting reviews. Exceptions can be made case by case if there are good reasons.
 
 ## Continuous approval
 
 To remain a security review provider:
 
 *   You must continue to meet the [requirements](#requirements).
-*   You must have a short-form report for a review you conducted submitted to the repository at least every 2 years on a rolling basis. Failure to do results in dismissal. For providers that were already approved before this rule came into effect (2026-04-09), it will apply starting from 2026-10-01.
+*   You must have a short-form report for a review you conducted submitted to the repository at least every 2 years on a rolling basis. Failure to do results in dismissal. Exceptions can be made case by case if there are good reasons. For providers that were already approved before this rule came into effect (2026-04-09), it will apply starting from 2026-10-01.
 
 ## Quality control
 
