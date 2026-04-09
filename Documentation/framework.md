@@ -167,37 +167,6 @@ The key objectives of this framework are:
 * Through iterative refinement of review areas, testing scopes, and reporting requirements, progressively advance the
   security posture of hardware and firmware components across the supply chain.
 
-## Security Review Provider Selection
-
-The reputation and integrity of the Security Review Providers are as important as their technical expertise. If there is
-a belief that the SRP delivers work of variable quality this brings into question all the reports they produce.
-Similarly, a conflict of interest degrades the value of the reports and in turn decreases the value of the SAFE
-program.
-
-The [SRP requirements document](./srp_requirements.md) contains requirements for the SRPs business, management, and
-technical requirements. These requirements will be
-evaluated in totality by the OCP SAFE Technical Advisory Committee (TAC).
-
-The sample reports carry the most weight when evaluating an SRP. The reports demonstrate their ability to identify
-vulnerabilities and justify why a vulnerability likely does not exist. Documenting the lack of a vulnerability will
-require significantly more work than showing one exists. Additionally, a good report will describe areas for improvement
-in the code or architecture of the device.
-
-Successful SRPs will demonstrate thought leadership in the security and vulnerability finding community. This can be
-done through papers, presentations, blog posts, videos etc. In addition to educating the security industry, successful
-SRPs will have a history of publishing and maintaining the tools they use.
-
-A newly approved SRP will be given a one-year probationary period to demonstrate their ability to produce quality
-reports. If approved by the TAC, subsequent endorsements will be for 1-3 years. Continued endorsement is not automatic,
-an SRP must be nominated and approved by the TAC.
-
-### Disqualification
-
-SRPs may have their endorsement suspended or revoked at any time for issues that cause SAFE to question the SRPs
-security practices, commitment to quality, or allegiances. Examples of such issues include losing control of a private
-signing key or overlooking hard-coded credentials in firmware. Beyond egregious technical mistakes, an SRP must not be
-controlled by a company it is auditing or affiliated with a firm that sells vulnerabilities or exploits.
-
 ## Security Review Scope
 
 The following sections describe at a high level the areas that should be in scope for any security audit performed under
