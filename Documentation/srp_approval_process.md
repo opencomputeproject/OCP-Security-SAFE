@@ -51,7 +51,7 @@ This document sets the rules for approval and dismissal of security review provi
 
 ## Initial approval
 
-To be approved as security review provider, please provide to us what is listed under [Requirements](#requirements). S.A.F.E. leadership will review your application. If you are admitted you will have to join the OCP and pay the membership fee.
+To be approved as security review provider, please provide to us what is listed under [Requirements](#requirements). S.A.F.E. leadership will review your application. If you are admitted you will have to join the OCP and pay the membership fee (if not already a member).
 
 From the date you are approved as review provider, you have 9 months to have a short-form report for a review you conducted submitted to the repository. If you fail to do so, you will be dismissed from the program again. This is to avoid having providers sign up just to get another endorsement for marketing purposes with no intention of conducting reviews. Exceptions can be made case by case if there are good reasons.
 
