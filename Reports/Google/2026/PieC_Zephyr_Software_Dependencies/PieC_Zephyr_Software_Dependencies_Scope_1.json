@@ -1,0 +1,30 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Google Inc",
+        "product": "Zephyr RTOS and its dependencies (MCUboot, CMSIS, hal_nxp, nanopb) for Google Data Center Rack Telemetry and Control",
+        "category": "open-source dependencies",
+        "repo_tag": "",
+        "fw_version": "Zephyr v4.4.0-rc1, MCUboot v2.4.0-rc1, CMSIS version 6, hal_nxp, nanopb 0.4.9.1",
+        "fw_hash_sha2_384": "",
+        "fw_hash_sha2_512": ""
+    },
+    "audit": {
+        "srp": "Keysight Riscure",
+        "methodology": "whitebox",
+        "completion_date": "2026-04-15",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "Reliance of assert statements in Zephyr OS",
+                "cvss_score": "0.0",
+                "cvss_vector": "N/A",
+                "cwe": "CWE-691",
+                "description": "Zephyr OS relies heavily on asserts to validate function inputs and return values rather than performing runtime validation. This finding regards defense in depth. Google accepts the compromise between performance and security.",
+                "cve": null
+            }
+        ]
+    }
+}
