@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "Microsoft Corporation",
+        "product": "Microsoft HSM Cryptographic Module (HSM Runtime)",
+        "category": "HSM Firmware",
+        "repo_tag": "",
+        "fw_version": "3.4.6.7-60219024",
+        "fw_hash_sha2_384": "37ef2a8381bf2fb69f1ab220f07ef6483571dfc9c0d8af6b74723aba612a4fdcb60443ba4889a2eec200eeca207dcb96",
+        "fw_hash_sha2_512": ""
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2026-03-18",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "4.0",
+        "issues": []
+    }
+}
