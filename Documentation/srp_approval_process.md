@@ -75,7 +75,7 @@ We encourage product vendors and consumers of reports to provide feedback on sec
 
 ### Technical expertise
 
-We need to see evidence that you are capable of performing reviews covering the scopes outlined [here](review_areas.md). The more evidence you can provide the better. This is the most important part of considering your application. We understand that it is difficult to provide evidence due to NDAs. However, without sufficient evidence we have no way to judge whether you are capable of performing reviews to a high standard and will therefore not admit you to the program.
+We need to see evidence that you are capable of performing reviews covering the scopes outlined [here](./review_scope.md). The more evidence you can provide the better. This is the most important part of considering your application. We understand that it is difficult to provide evidence due to NDAs. However, without sufficient evidence we have no way to judge whether you are capable of performing reviews to a high standard and will therefore not admit you to the program.
 
 These items can be suitable evidence, but we are open to anything you think might be helpful:
 

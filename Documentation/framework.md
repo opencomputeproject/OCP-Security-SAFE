@@ -142,7 +142,7 @@ The conditions under which these reviews take place, are of two main types:
 At a high level, the process flows through the following sequence of steps:
 
 1. DV selects an SRP from the list of [approved providers](./security_review_providers.md).
-2. DV and SRP prepare a scope for the security review according to the [Security Review Scope](#security-review-scope) information provided below and in the supplementary [review areas](./review_areas.md).
+2. DV and SRP prepare a scope specific to the security review according to the general [Review Scope](./review_scope.md).
 3. SRP performs the security review.
 4. DV addresses any findings from the SRP.
 5. SRP reviews the changes and issues the final reports.
@@ -167,84 +167,6 @@ The key objectives of this framework are:
 * Through iterative refinement of review areas, testing scopes, and reporting requirements, progressively advance the
   security posture of hardware and firmware components across the supply chain.
 
-## Security Review Scope
-
-The following sections describe at a high level the areas that should be in scope for any security audit performed under
-this framework.
-They are intended as starting points for DVs and SRPs when undertaking a device or firmware security assessment. Under
-the framework, it is required for every production version of device firmware to have undergone the assessment. A more
-detailed
-description of the scopes is provided in the [review areas](./review_areas.md) document.
-
-* **Threat Model** \
-  The SRP should assess the DV’s documented threat models and perform a gap analysis, ensuring they are adequately
-  covered by the observed hardware and firmware implementation. If the DV cannot provide a threat model, then the SRP
-  should create one as part of the assessment scope. The threat model document should include the following details, and
-  be aligned with the in-scope and out-of-scope threats described by
-  the [Common Security Threats](https://www.opencompute.org/documents/common-security-threats-notes-1-pdf)
-  document:
-    * **Security Objectives**: The high-level security objectives or key
-      risks exposed by the firmware. Examples of such objectives may include the strict requirement that the secure boot
-      or firmware anti-rollback features must not be subverted or bypassed by an attacker.
-    * **Adversarial Model**: A listing of all threat actors along with their
-      motivation and capabilities. Examples may include a simple opportunistic hardware adversary, or advanced
-      persistent threats that are able to keep the device under antagonistic conditions for an extended duration.
-    * **Attack Surface Enumeration**: A listing of all remote, local and
-      physical attack surfaces exposed by the device. Examples may include mailbox or IPC interfaces exposed via MMIO, a
-      command shell exposed via a serial interface, inter-chip buses which transmit sensitive data, or external
-      non-volatile storage media.
-    * **Critical Assets**: A listing of all security-impacting assets within
-      the firmware, and the corresponding Confidentiality, Integrity and Availability requirements for each. Examples of
-      critical assets may include secret keys, the fuse configuration, or any configuration data residing in external flash.
-
-The SAFE program defines 3 security review scopes. These scopes increase with complexity of attacks in the threat model.
-It is expected that devices will have reviews done with different review scopes. For example, a CPU may have a scope 3
-review of the root of trust due to the need for glitch protection when using a long-term device private key. This CPU
-may use a scope 2 review for the application cores.
-
-* **Scope 1 Code and Architecture Assessment**
-    * **Source Code Review** \
-      The SRP should perform a whitebox security review of the device’s ROM and mutable firmware source code for
-      identification of vulnerabilities and lapses in industry best practices. Issues uncovered during the review should
-      be fixed by the DV and subsequently verified as fixed by the SRP. The review scope should include:
-        * Analysis of the firmware loading and verification procedures to ensure that a secure boot implementation is
-          present and cannot be circumvented. All critical assets that impact the device’s security must be
-          cryptographically signed. The
-          OCP [Secure Boot](https://www.opencompute.org/documents/secure-boot-2-pdf)
-          document should be used for guidance.
-        * Discovery of hard-coded credentials, seeds, private keys, or symmetric secrets.
-        * Identifying temporal and spatial memory safety issues that arise due to improper input validation or race
-          conditions that may occur along the attack surfaces that were identified in the threat model.
-        * Discovery of remnant debug handlers on production builds
-        * Analysis of the cryptographic constructions employed by the firmware when protecting the confidentiality or
-          integrity of any critical assets.
-        * Improper handling of cryptographic material, e.g. keys, counters, nonces, seeds.
-        * Trust-boundary violations between privilege levels or across components, such as confused deputy problems or
-          insufficient privilege separation between a firmware’s user and supervisor modes.
-        * Identify outdated third-party libraries which are associated with publicly known CVEs.
-        * Evaluation of exploit mitigation technologies such as: Address space randomization, stack canaries, data
-          execution prevention, NULL page mapping, guard pages, and so on.
-    * **Sensitive Functionality Review** \
-      The SRP should review the firmware source code and should describe the presence and scope of all
-      security-sensitive or commonly “restricted” functionality. This review can be used by consumers to measure risk
-      and to configure deployment or isolation controls. The review scope should include:
-        * TCG DICE implementation.
-        * SPDM implementation.
-        * Remote firmware update, manageability, or command and control functionality.
-        * Manufacturing, debug, diagnostics, testing and logging capabilities.
-        * Unauthenticated APIs.
-        * Safe generation and handling of all cryptographic material.
-        * Encryption capability controls (disk encryption, erase, rotation).
-        * Secure boot key rotation capabilities.
-* **Scope 2 - Focusing on Trust boundaries:** Includes all of the areas of Scope 1 above, with deeper review focus of the following areas:
-    * Trusted execution environment assessment
-    * Handling of trust boundaries
-    * Attestation and non-repudiation across boundaries
-    * Authenticated and encrypted IO, e.g., PCIe-IDE, TDISP, or vendor proprietary
-* **Scope 3 - Resilience to physical attacks**
-    * Critical components and operations are designed to securely handle glitch attacks in a documented way
-    * Crypto blocks are designed to be resistant to side channel analysis.
-
 ## OCP Report Deliverables
 
 This framework stipulates that the following be delivered to the OCP SAFE program for publication in the appropriate
@@ -252,8 +174,8 @@ public [GitHub](https://github.com/opencomputeproject/OCP-Security-SAFE) reposit
 has concluded:
 
 * **Scope Document** \
-  DV and SRP should jointly negotiate the scope of the review, based on the
-  [review areas](#security-review-scope). As alluded to above, the areas are neither exhaustive nor complete, therefore
+  DV and SRP should jointly negotiate the scope of the review, based on the general
+  [Review Scope](./review_scope.md). As alluded to above, the areas are neither exhaustive nor complete, therefore
   the DV is encouraged to socialize the Scope with the OCP Security WG, either through its regular calls, or on its
   mailing list. The scope itself can be any number of documents, as long as the concatenation of them is provided to the OCP Security
   WG. Aside from level of assessment effort, no part of the DV/SRP statement of work, NDAs, etc. needs to be published.
@@ -262,7 +184,7 @@ has concluded:
   in the signed SFR (after remediation and retesting). This document will summarize the audit scope, and uniquely identify
   the vendor, device and firmware version by means of a firmware hash. This report will enumerate all vulnerabilities
   with a CVSS score and a brief summary. The short-form report specification can be found in
-  [Appendix B](#appendix-b-machine-readable-short-form-report-format). To claim OCP SAFE endorsement for a
+  [here](./corim_profile/ocp-safe-sfr-profile.cddl). To claim OCP SAFE endorsement for a
   product-firmware combination this report must be published to the OCP GitHub repository. This signed SFR is delivered
   to the DV for publication.
 * **GitHub Pull Request Submission**\
@@ -278,8 +200,7 @@ has concluded:
   the submission may choose to additionally include the human-readable SFR documents.
 * **SRP Public Key Pull Request Path**\
   The public signing key of each SRP is published to the location SRP_certificates/$SRP. These are to be published and maintained by
-  the SRP, and may be revoked by the TAC (see [Disqualification](#Disqualification) above).
-
+  the SRP, and may be revoked by the TAC (see [SRP Approval Process](./srp_approval_process.md)).
 
 In addition to the short-form report, the SRP should deliver to the DV a detailed report. This report will likely be
 protected by NDA and will not be published. The DV should address the findings in the report. The DV is encouraged to
@@ -313,8 +234,3 @@ Several SRP sample reports can be found in [Appendix A](#appendix-a-example-repo
   and other [public reports](https://www.nccgroup.com/us/research-blog/?category=18157#hub)
 * NCC's first review of [Caliptra](https://chipsalliance.github.io/Caliptra/) can be
   found [here](https://github.com/chipsalliance/Caliptra/blob/main/doc/NCC_Group_Microsoft_MSFT283_Report_2023-10-13_v1.2.pdf)
-
-# Appendix B: Machine Readable Short-Form Report Format
-
-A reference implementation of the library to produce and verify short form reports is available
-in [this repo](https://github.com/opencomputeproject/OCP-Security-SAFE).
