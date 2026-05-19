@@ -200,6 +200,7 @@ class ShortFormReport(object):
         date: str,
         report_ver: str,
         scope_number: int,
+        solid_ver: str,
         cvss_ver: str = "3.1",
     ) -> None:
         """Add metadata that describes the scope of the security review.
@@ -211,6 +212,7 @@ class ShortFormReport(object):
                        YYYY-MM-DD format.
         report_ver:  Version of the report created by the SRP.
         scope:       The OCP scope number of the audit, 1, 2, or 3.
+        solid_ver:   OCP SOLID version the audit checks against.
         cvss_ver:    Version of CVSS used to calculate scores for each issue.
                        Defaults to "3.1".
         """
@@ -220,6 +222,7 @@ class ShortFormReport(object):
         self.report["audit"]["completion_date"] = f"{date}".strip()
         self.report["audit"]["report_version"] = f"{report_ver}".strip()
         self.report["audit"]["scope_number"] = scope_number
+        self.report["audit"]["solid_ver"] = solid_ver
         self.report["audit"]["cvss_version"] = f"{cvss_ver}".strip()
         self.report["audit"]["issues"] = []
 
@@ -378,6 +381,7 @@ class ShortFormReport(object):
             2: completion_timestamp,  # completion-date
             3: self.report["audit"]["scope_number"],  # scope-number
             4: fw_identifiers,  # fw-identifiers
+            6: self.report["audit"]["solid_ver"], # solid-version
         }
 
         if corim_issues:

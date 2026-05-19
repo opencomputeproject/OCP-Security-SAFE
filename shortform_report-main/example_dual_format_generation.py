@@ -67,6 +67,7 @@ def main():
         "2023-06-25",            # Test completion date
         "1.2",                   # Report version
         1,                       # The OCP SAFE scope level
+        "1.0",                   # The OCP SOLID version
     )
 
     # Add security issues
