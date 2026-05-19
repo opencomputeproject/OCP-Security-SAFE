@@ -200,7 +200,7 @@ class ShortFormReport(object):
         date: str,
         report_ver: str,
         scope_number: int,
-        solid_ver: str,
+        solid_ver: str = None,
         cvss_ver: str = "3.1",
     ) -> None:
         """Add metadata that describes the scope of the security review.
@@ -381,11 +381,13 @@ class ShortFormReport(object):
             2: completion_timestamp,  # completion-date
             3: self.report["audit"]["scope_number"],  # scope-number
             4: fw_identifiers,  # fw-identifiers
-            6: self.report["audit"]["solid_ver"], # solid-version
         }
 
         if corim_issues:
             sfr_map[5] = corim_issues  # issues
+
+        if self.report["audit"]["solid_ver"]:
+            sfr_map[6] = self.report["audit"]["solid_ver"] # solid-version
 
         return sfr_map
 
