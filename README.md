@@ -4,7 +4,7 @@ S.A.F.E. stands for Security Appraisal Framework and Enablement, do not read too
 
 The [Framework](./Documentation/framework.md) page describes the objectives in more detail and explains how to engage with the program.
 
-The [Review Areas](./Documentation/review_areas.md) page describes the areas that are to be reviewed as part of a S.A.F.E review.  
+The [Review Scope](./Documentation/review_scope.md) page defines what a review must look at.
 
 The [SRP Approval & Dismissal](./Documentation/srp_approval_process.md) page shows how to become an approved S.A.F.E. review provider.
 
