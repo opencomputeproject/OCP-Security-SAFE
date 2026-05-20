@@ -140,6 +140,7 @@ ocp-safe-sfr-map = {
   &(scope-number: 3) => integer
   ? &(fw-identifiers: 4) => [ + fw-identifier ]
   ? &(issues: 5) => [ + issue-entry ]
+  ? &(solid-version: 6) => tstr
   * $$ocp-safe-sfr-map-ext
 }
 ```
@@ -162,7 +163,8 @@ ocp-safe-sfr-map = {
 | Field | Key | Type | Description |
 |-------|-----|------|-------------|
 | fw-identifiers | 4 | array | Array of firmware identifier objects |
-| issues | 6 | array | Array of security issues identified during review |
+| issues | 5 | array | Array of security issues identified during review |
+| solid-version | 6 | tstr | Version of the SOLID requirements checked against |
 
 ### Firmware Identifiers
 
@@ -307,172 +309,11 @@ To ensure broad interoperability:
 
 ### Profile CDDL
 
-```cddl
-; Auditor CoRIM – Corim which embeds the SFR fields
-; OCP SAFE SFR CoRIM Profile OID: 1.3.6.1.4.1.42623.1.1
-
-$$measurement-values-map-extension //= (
-  &(ocp-safe-sfr: -1) => ocp-safe-sfr-map ; Private extension for OCP SAFE SFR
-)
-
-ocp-safe-sfr-map = {
-  &(review-framework-version: 0) => tstr
-  &(report-version: 1) => tstr
-  &(completion-date: 2) => time
-  &(scope-number: 3) => integer
-  ? &(fw-identifiers: 4) => [ + fw-identifier ]
-  ? &(issues: 5) => [ + issue-entry ]
-  * $$ocp-safe-sfr-map-ext
-}
-
-issue-entry = {
-  &(title: 0) => tstr
-  &(description: 1) => tstr
-  &(assessment: 2) => $assessment
-  ?&(cwe: 3) => tstr
-  ?&(cve: 4) => tstr
-  * $$ocp-safe-issue-entry-ext
-}
-
-$assessment /= cvss
-
-cvss = {
-  &(score: 0) => tstr
-  &(vector: 1) => tstr
-  &(version: 2) => tstr
-}
-
-fw-identifier = non-empty<{
-  ? &(fw-version: 0) => version-map
-  ? &(fw-file-digests: 1) => digests-type
-  ? &(repo-tag: 2) => tstr
-  ? &(src-manifest: 3) => src-manifest
-}>
-
-manifest-entry = {
-  &(filename: 0) => tstr
-  &(file-hash: 1) => digests-type 
-}
-
-src-manifest = {
-  &(manifest-digest: 0) => digests-type 
-  &(manifest: 1) => [ + manifest-entry ]
-}
-```
+[This file](./ocp-safe-sfr-profile.cddl) contains the formal definition.
 
 ### Example CoRIM with SFR Extension
 
-The following example demonstrates a complete CoRIM structure containing OCP S.A.F.E. SFR security review findings:
-
-```cbor-diag
-/ tagged-corim-map / 501({
-  / corim.id (0) /
-  0: "acme-trap-audit-2025-08-03",
-  / corim.profile (3) /
-  3: 111(h'060A2B0601040182F4170101'), / OID 1.3.6.1.4.1.42623.1.1 for OCP SAFE SFR profile /
-  / corim.entities (5) /
-  5: [
-    / audit-entity / {
-      / entity-name (0) / 0: "My Pentest Corporation",
-      / role (2) /        2: [ 1 ] / manifest-creator /
-    }
-  ],
-   / corim.tags / 1 : [
-    / concise-mid-tag / 506( <<
-      / concise-mid-tag / {
-        / comid.tag-identity / 1 : {
-          / comid.tag-id / 0 : "acme-trap-review-comid-001"
-        },
-        / comid.triples / 4 : {
-              / conditional-endorsement-triples / 10 : [	
-              [  / conditional-endorsement-triple-record /
-                [ / conditions array /
-                  [ / *** stateful-environment-record *** /
-                    / environment-map / {
-                      / comid.class / 0 : {
-                        / comid.vendor / 1 : "ACME Inc.",
-                        / comid.model / 2 : "ACME RoadRunner Trap"
-                    }
-                  },
-                  [ / claims-list / 
-                      / *** measurement-map *** / {
-                        / comid.mval / 1 : {
-                          / comid.digests / 2 : [ [
-                            / hash-alg-id / -43, / sha384 /
-                            / hash-value / h'52047e070cddf496a7f77bf6a47792797e8ee90a149bb7555d08c5f93c5ca7ea46a63a7c99edaa1659e8afadfb9c6114'
-                          ],
-                          [
-                            / hash-alg-id / -44, / sha512 /
-                            / hash-value / h'12a5b961a5eb7e548ed436fe7b5848d428bff908cb6ffcb47ec3ac1e2a43e0b8d1ff047d387fb0a940dc7b8b0014acf344364c43ab4de624dcd15f98bee552a5'
-                          ]      
-                        ]
-                      }
-                    }
-                  ]
-                ]
-              ], /*** end stateful-environment-records ***/
-              [  /*** endorsements ***/
-                [ /*** endorsed-triple-record ***/
-                  / environment-map / {
-                    / class / 0 : {	
-                      / vendor / 1 : "ACME Inc.",	
-                      / model / 2 : "ACME RoadRunner Trap"	
-                    }
-                  },
-                  [ / endorsement #1/
-                    / measurement-map / {
-                      / comid.mval / 1 : { / measurement-values-map /
-                        / ocp-safe-sfr / -1 : {
-                          / 0: review-framework-version / 0: "1.1",
-                          / 1: report-version /           1: "1.2",
-                          / 2: completion-date /          2: 1(1687651200),
-                          / 3: scope-number /             3: 1,
-                          / 4: fw-identifiers /           4: [
-                            /fw-identifier / {
-                                / 0: fw-version /  0: {
-                                      / 0: version /         0: "1.2.3",
-                                      / 1: version-scheme /  1: "semver"
-                                }
-                            }
-                          ],
-                          / 5: issues /                   6: [
-                               / issue-entry / {
-                                / 0: title /              0: "Memory corruption when reading record from SPI flash",
-                                / 1: description /        1: "Due to insufficient input validation in the firmware, a local attacker who tampers with a configuration structure in SPI flash, can cause stack-based memory corruption.",
-                                / 2: assessment /  2: {
-                                  / 0: cvss-score /   0: "7.9",
-                                  / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L",
-                                  / 2: cvss-version / 2: "3.1"
-                                },
-                                / 3: cwe /                3: "CWE-111"
-                            },
-                              / issue-entry / {
-                                / 0: title /              0: "Debug commands enable arbitrary memory read/write",
-                                / 1: description /        1: "The firmware exposes debug command handlers that enable host-side drivers to read and write arbitrary regions of the device's SRAM.",
-                                / 2: assessment /  2: {
-                                  / 0: cvss-score /   0: "8.7",
-                                  / 1: cvss-vector / 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:H/I:H/A:L",
-                                  / 2: cvss-version / 2: "3.1"
-                                },
-                                / 3: cwe /                3: "CWE-222",
-                                / 4: cve /                4: "CVE-2014-10000"
-                            }                            
-                          ]
-                        }                        
-                      }
-                    }
-                  ]
-                ]
-              ]
-              ]
-            ]
-        }
-      }
-    >> )
-    ]
-  }
-)
-```
+[This example file](./examples/ocp-safe-sfr-fw-example.diag) demonstrates a complete CoRIM structure containing OCP S.A.F.E. SFR security review findings.
 
 ## References
 

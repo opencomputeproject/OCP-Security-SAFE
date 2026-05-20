@@ -12,6 +12,7 @@ ocp-safe-sfr-map = {
   &(scope-number: 3) => integer
   ? &(fw-identifiers: 4) => [ + fw-identifier ]
   ? &(issues: 5) => [ + issue-entry ]
+  ? &(solid-version: 6) => tstr
   * $$ocp-safe-sfr-map-ext
 }
 

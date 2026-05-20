@@ -1,0 +1,44 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "SK hynix",
+        "product": "PEB110 Enterprise SSD",
+        "category": "storage",
+        "repo_tag": "",
+        "fw_version": "61082A50",
+        "fw_hash_sha2_384": "b460c323f18e98a9b948906a7e118df0cbb17cfcbc036c830151e16fa9ea9f524ae3db9bbc9fc990cff7aaaa76958249",
+        "fw_hash_sha2_512": "55e5cf70ccf1b111560070ae54a68ff5f8625ca73bb4a38c2ed5ef82baa33de51d2ee145945ae5350adef29b6638808818880f27da7172b141359b3fa93a3653",
+        "manifest": [
+            {
+                "file_name": "./PEB110.zip",
+                "file_hash": "603E04AEDA9ED24C41390499A7102F557C410CEF1E7790B027961D0750B289C5089347E5D83BDFEDE184F921E34A16419090B32B51413D16279390CDFEDB3BA7"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "Keysight Riscure",
+        "methodology": "whitebox",
+        "completion_date": "2025-09-12",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "Integer underflow leads to OOB Write",
+                "cvss_score": "3.7",
+                "cvss_vector": "/AV:P/AC:L/PR:H/UI:N/S:U/C:L/I:L/A:L",
+                "cwe": "CWE-787",
+                "description": "This is a low risk finding. There is no immediate consequence without physical access to the target device.",
+                "cve": null
+            },
+            {
+                "title": "Static stack guard value at Thread Implementation",
+                "cvss_score": "2.3",
+                "cvss_vector": "/AV:L/AC:L/PR:H/UI:N/S:U/C:N/I:N/A:L",
+                "cwe": "CWE-119",
+                "description": "This is a low risk finding; however, there is no immediate consequence.",
+                "cve": null
+            }
+        ]
+    }
+}

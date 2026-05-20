@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "Microsoft Corporation",
+        "product": "Microsoft HSM Cryptographic Module (Layer 1 RoT)",
+        "category": "RoT Firmware",
+        "repo_tag": "",
+        "fw_version": "3.4.6.7-60219024",
+        "fw_hash_sha2_384": "14383ba330e9490ecbe968a182e69fe8c780df757bf518583920f3eeff9136c9885a9ae8a4d1a739856213531d10483d",
+        "fw_hash_sha2_512": ""
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "Whitebox Review",
+        "completion_date": "2026-03-18",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "4.0",
+        "issues": []
+    }
+}

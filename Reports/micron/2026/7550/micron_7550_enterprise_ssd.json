@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Micron Technology, Inc",
+        "product": "Micron 7550 Enterprise SSD",
+        "category": "storage",
+        "repo_tag": "",
+        "fw_version": "E5MS002",
+        "fw_hash_sha2_384": "70b1bc97e274870f60a26263f8d82a5fc184e3094bce5e7fcd66e6d3799166edd9f2e5e690332bc3da54a3895b6edfbe",
+        "fw_hash_sha2_512": "8772662c9bb448bfb9a1d507cfbd7bfb291ec92dfab04526b12e12c4c4775f010c4e2f29a3a013a82da32d2a174c022c97dca5df183918401d8b1371ae24531b"
+    },
+    "audit": {
+        "srp": "Keysight Technologies Riscure, Inc.",
+        "methodology": "whitebox",
+        "completion_date": "2025-8-13",
+        "report_version": "1.0",
+        "scope_number": 1.0,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
