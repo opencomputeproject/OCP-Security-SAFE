@@ -222,7 +222,9 @@ class ShortFormReport(object):
         self.report["audit"]["completion_date"] = f"{date}".strip()
         self.report["audit"]["report_version"] = f"{report_ver}".strip()
         self.report["audit"]["scope_number"] = scope_number
-        self.report["audit"]["solid_ver"] = solid_ver
+        if solid_ver:
+            # optional before 2026-10-01
+            self.report["audit"]["solid_ver"] = solid_ver
         self.report["audit"]["cvss_version"] = f"{cvss_ver}".strip()
         self.report["audit"]["issues"] = []
 
@@ -386,7 +388,8 @@ class ShortFormReport(object):
         if corim_issues:
             sfr_map[5] = corim_issues  # issues
 
-        if self.report["audit"]["solid_ver"]:
+        if "solid_ver" in self.report["audit"] and self.report["audit"]["solid_ver"]:
+            # optional before 2026-10-01
             sfr_map[6] = self.report["audit"]["solid_ver"] # solid-version
 
         return sfr_map
