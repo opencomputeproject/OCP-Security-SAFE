@@ -1,0 +1,31 @@
+{
+  "review_framework_version": "1.1",
+  "device": {
+    "vendor": "Cornelis Networks, Inc.",
+    "product": "CN5000 SuperNIC",
+    "category": "Network Device",
+    "repo_tag": "CN5000-SuperNIC-UEFI_12.1.0.9.0",
+    "fw_version": "12.1.0.9.0",
+    "fw_hash_sha2_384": "2F7DD64E86DAA41BCDEBCDF89D7B751BDE3789C60B383CD6A64BD5535CAC984B519BC90795D247321AF52AC7F129B57F",
+    "fw_hash_sha2_512": "BB3BC02FDC4363783A3B522C7E31B42D80060396E94112925164734EA30F7BA424F29D1B69385D48191362BB742DF975FBF3998565404C7913E0AC5EEC845F4B",
+    "manifest": [
+        {
+            "file_name": "driver.efi",
+            "file_hash": "69818f5340a090bb7132e4ca93fe47b1a82b8c3988ee0ce753c324c9233d04061b005eab338828179562ab42ed10a261d5a6f0f721cad6dbb2ea763dbfc0899b"
+        },
+        {
+            "file_name": "loader.efi",
+            "file_hash": "929d534af151246f5b8c65a2d2403eb1af28590e486bc308c3c6f0bbdad8bdc88da53114fa9e093b66930db27defe8172f4c20a81c317bb1196cf495395083b2"
+        }
+	]
+  },
+  "audit": {
+    "srp": "IOActive, Incorporated",
+    "methodology": "whitebox",
+    "completion_date": "2026-05-14",
+    "report_version": "1.0",
+    "scope_number": "1",
+    "cvss_version": "3.1",
+    "issues": []
+  }
+}
