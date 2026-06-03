@@ -12,4 +12,4 @@ Using the review provider's AI subscription or the vendor giving the review prov
 
 This AI review must be performed in addition to, rather than instead of, a regular review by a security expert. What we have seen so far is that AI reviews find different issues from traditional reviews, rather than the same ones, so this increases coverage.
 
-This requirement will be optional but strongly recommended for 9 months before becoming mandatory, in order to give review providers and vendors time to set up suitable AI tools and processes. On publishing this change, we will write down an exact date.
+This requirement is optional, but strongly recommend, until 01.01.2027, at which time it becomes mandatory. This should give review providers and vendors time to set up suitable AI tools and processes.
