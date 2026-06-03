@@ -83,9 +83,19 @@ OCP Security Workgroup
    </td>
    <td>March, 2026
    </td>
-   <td> Alex Tzonkov
+   <td>Alex Tzonkov
    </td>
    <td>Added CoRIM SFR support
+   </td>
+  </tr>
+  <tr>
+   <td>2.1
+   </td>
+   <td>June, 2026
+   </td>
+   <td>Nick Hummel
+   </td>
+   <td>Added AI review requirement
    </td>
   </tr>
 </table>

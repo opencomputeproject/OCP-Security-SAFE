@@ -9,6 +9,8 @@ The first point is provided by [OCP S.O.L.I.D.](https://github.com/opencomputepr
 
 The second point is the definition of review areas below. Note that the review areas are purposefully vague because the OCP believes that high quality, timely assessments are best achieved by letting the review providers focus on the architectural and implementation areas that are commonly known to have gaps or deficiencies in the scenario under review.
 
+Lastly, all source code that is reviewed must, in addition to a manual review, be reviewed using a suitable AI tool. The detailed requirements for this can be found on the [AI scanning page](./ai_scanning.md).
+
 ## High-level review areas
 
 This section describes at a high level the areas that should be in scope for any security audit performed under this framework.
