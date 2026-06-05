@@ -6,7 +6,7 @@ In addition to a regular human review, review providers are expected to use AI (
 *   Gemini Pro
 *   OpenAI GPT codex
 
-This list will be regularly updated.
+This list will be regularly updated. Models are included from a perspective of minimizing the gap between attacker and tester capability. These are considered to be the most capable models available to attackers today.
 
 The review must be performed by a suitable harness for orchestration. Without an appropriate harness a review often goes off-track and does not look at all files. For now, the review provider may choose something they consider suitable, including their own tools. We can recommend [Arm Metis](https://github.com/arm/metis). We expect that over time more tools will be publicized and we will update this recommendation.
 
