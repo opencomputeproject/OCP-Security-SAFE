@@ -1,0 +1,19 @@
+{
+  "review_framework_version": "1.1",
+  "device": {
+    "vendor": "Microsoft Corporation",
+    "product": "Maia 200 - Accelerator Firmware",
+    "fw_version": "1.20.0.9",
+    "fw_hash_sha2_384": "90bca299aa45013445ebfe614fd20a355038fa2e47394844e1d374dfe2540efacb7f259eecde255dfed67c0ba1fae50f",
+    "fw_hash_sha2_512": "788f7ae4f70331a11f22896cc4f968ec053272533587bba477d54554a758241693a10496b021624bba7014c70e3ce40d32d0f4978d67f536e1f45e85ffd62526"
+  },
+  "audit": {
+    "srp": "Keysight Riscure",
+    "methodology": "whitebox",
+    "completion_date": "2026-06-15",
+    "report_version": "1.0",
+    "scope_number": 1.0,
+    "cvss_version": "3.1",
+    "issues": []
+  }
+}
