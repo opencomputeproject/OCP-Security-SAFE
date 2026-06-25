@@ -1,0 +1,19 @@
+{
+  "review_framework_version": "1.1",
+  "device": {
+    "vendor": "Microsoft Corporation",
+    "product": "Maia 200 - Accelerator Driver (Windows)",
+    "fw_version": "2.3.3445.340",
+    "fw_hash_sha2_384": "84ec804662ceaec66b0ac93c0dfea555f488d854d71ccb8ebb41166f44588058a9141d337ec03ad3fcaef171a5f4bea2",
+    "fw_hash_sha2_512": "118f1b190ecc9d84d186ef3d11e3244189b8aad3b7c2e7367b0723a6a4548eaa82cae8a025992d6bf7aad9c0c383716b3b506559743d9f35bae261eb1e662b6d"
+  },
+  "audit": {
+    "srp": "Keysight Riscure",
+    "methodology": "whitebox",
+    "completion_date": "2026-06-17",
+    "report_version": "1.0",
+    "scope_number": 1.0,
+    "cvss_version": "3.1",
+    "issues": []
+  }
+}

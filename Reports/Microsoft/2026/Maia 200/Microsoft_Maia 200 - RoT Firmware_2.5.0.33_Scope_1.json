@@ -1,0 +1,19 @@
+{
+  "review_framework_version": "1.1",
+  "device": {
+    "vendor": "Microsoft Corporation",
+    "product": "Maia 200 - RoT Firmware",
+    "fw_version": "2.5.0.33",
+    "fw_hash_sha2_384": "7e87eed0c7e6a35fc427d43899669ea406841e06d0834a8eb42f88dbcd97ca12c5657a125856aaa23d139929073d408e",
+    "fw_hash_sha2_512": "e8450989bce29f9530c0c0c89526ceae73d4184e53a6585cd23b4df737217bfaf3ee201df819e3371c4b3a1233809713f8a6ec7ad916b13567fa6ab69ac1260b"
+  },
+  "audit": {
+    "srp": "Keysight Riscure",
+    "methodology": "whitebox",
+    "completion_date": "2026-06-15",
+    "report_version": "1.0",
+    "scope_number": 1.0,
+    "cvss_version": "3.1",
+    "issues": []
+  }
+}

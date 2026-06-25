@@ -1,0 +1,19 @@
+{
+  "review_framework_version": "1.1",
+  "device": {
+    "vendor": "Microsoft Corporation",
+    "product": "Maia 200 - Accelerator Agent (Windows)",
+    "fw_version": "2.0.0.80",
+    "fw_hash_sha2_384": "f6d5bd1fb97e1bd3094d767dafcaaf1ed73ec570f85860e55e6f24e302c7d626bb4515360f34c897bb66d809f7a00854",
+    "fw_hash_sha2_512": "aefe05ad27a5941a254ee5bc9e2399c6e206b89c74a39bda1bcb20a565963479c061527929ce2f40e67ab372beaf77ae02d9d9cbb4c5c5911051cf1d646aa4ac"
+  },
+  "audit": {
+    "srp": "Keysight Riscure",
+    "methodology": "whitebox",
+    "completion_date": "2026-06-15",
+    "report_version": "1.0",
+    "scope_number": 1.0,
+    "cvss_version": "3.1",
+    "issues": []
+  }
+}
