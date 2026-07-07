@@ -1,0 +1,96 @@
+{
+    "review_framework_version": "2.1",
+    "device": {
+        "vendor": "Rohde & Schwarz Cybersecurity GmbH",
+        "product": "PBA component of Trusted Disk application",
+        "category": "UEFI pre-boot authentication for partition decryption",
+        "repo_tag": "TrustedDisk-3.9.0",
+        "fw_version": "3.9.0",
+        "fw_hash_sha2_384": "4ba48a4578154981f331e7ea6db04f76364464966bb3635421f67138929de0d449b4c928b1353295e64e304080a1260d",
+        "fw_hash_sha2_512": "ea3cdcdaef73ce4f860fafc9671ec099e6b9c57844768815fa433778678716d8420c1e027096c3909172ac1bc014f1f985fb00aba6d9eb43222915164aa6b4e1",
+        "manifest": [
+            {
+                "file_name": "efi/EhciDxe.efi",
+                "file_hash": "4e28a0a90f2294eac0b0fbd92b2ef95c1190d624e5ee0dbacf04238a592c688727a0ae6b70727ccc1c9ef547c17568e23df6f3b65de079cfd34d2600f8a6f174"
+            },
+            {
+                "file_name": "efi/Fat.efi",
+                "file_hash": "21c3676436b4d7bcce5fb2a721a6e40cd061d18e15a7d46bcb4ff5294e790919c0901067e43595eda1b1138180b81428647fc43b73a1ea36659d1a1df0fab2c9"
+            },
+            {
+                "file_name": "efi/InstallSBM.efi",
+                "file_hash": "d75fe061a755bee251300e756a30793b58fe5a6c9af28b3bdee3491f7efd485bc51ce4d36896e0bc30e081fcd56a739eae821c7958a9857c8516b3ed9bcd28b8"
+            },
+            {
+                "file_name": "efi/RSCSBoot.efi",
+                "file_hash": "510ca7dee91a288dfec7cb8522c394acc4326c2f7da2f5d128ac067a56da3aa4aef31687a0ba1f5ecdb2c3baad3d15a64dd2a082742145398799397f942beb9b"
+            },
+            {
+                "file_name": "efi/RSCSGui.efi",
+                "file_hash": "23e01a02c33d043cd30560618c2137528c5ea0898819f60c1abc64e6994facf0dbbcc7f7f5d1e2387a8ed0fed0331faef7847f3912b269ab1634d55de1dda31a"
+            },
+            {
+                "file_name": "efi/SmartcardReader.efi",
+                "file_hash": "b5b8e6c7135cd6580ba0a6eef38438b8070f634d5a8dcf64bb1907f620d4ca94aa7f5f83c96ffda9493fc57f2ee195ef46ad6f5ef177bfea4c15e569e281fbe6"
+            },
+            {
+                "file_name": "efi/UefiTokenDriver.efi",
+                "file_hash": "a1e067a1cf8fb7dfa21b4379996cd050514f53de3ca8db88d60cee3de08c0f9d85bad338303d64e2ec0f3f7914816c1673c70669440e898323360dab221851c0"
+            },
+            {
+                "file_name": "efi/UefiTrustedDiskDriver.efi",
+                "file_hash": "4c586022066ca7f65689ee2246a143380c6c5c830a3e827066dad24cc5ad4add22d309186d6d56cb39fc9a13207a23fcbc0c9e077266a4c6c6b83048e2c354a9"
+            },
+            {
+                "file_name": "efi/UsbBusDxe.efi",
+                "file_hash": "ccd8b325909aa64bac81dc832c7c92c3bbc1e0ad078ec229e1f43980c6f71d0a12fe1daa1bfdffbd9a0acd9da00ccac5839d1d7a8760eb3af39d75e23d20ae3a"
+            },
+            {
+                "file_name": "efi/UsbKbDxe.efi",
+                "file_hash": "6b017c6b068bdcd49696165061c6cc9df16138a0386125c0f267b784d989b4805687ef88ade2aec2bbd52c9c9bb7c669757cabf9d912ad83377846ef513034bd"
+            },
+            {
+                "file_name": "efi/UsbMassStorageDxe.efi",
+                "file_hash": "346cf47a987aa4e4eec4be49af015391c21ff5520587f6aed0daedef96efb4794c40c1d10b28f781f747a4f165ab05a0af01ebc16eb04389fc2e490e934d64d8"
+            },
+            {
+                "file_name": "efi/UsbMouseAbsolutePointerDxe.efi",
+                "file_hash": "02b77ac8b11e4bf1c10a8d8382a948a1ead3a698818fbe6a320e858e69eb6e1b5d62a3428866619e604c54421c94243661ad6901f9ec836baacd4595769ec401"
+            },
+            {
+                "file_name": "efi/UsbMouseDxe.efi",
+                "file_hash": "b4206f0b22803ca26a2d1922a0c9523455105df28e6ab43a513291297b866790893371e612f8a66a60ca7e29ed1909335690873f69bfac9d0fb6ae826b32072f"
+            },
+            {
+                "file_name": "efi/XhciDxe.efi",
+                "file_hash": "e0e69860b5e373d1ade99e7bf31bbffdd05dbf6e84e2bd423fe76d6b53b1f4ca4414442704a239c597314dcef5386fe5e3f2190acd29b561dc787dda9e93202c"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "SGS Brightsight B.V.",
+        "methodology": "whitebox",
+        "completion_date": "2026-07-03",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": [
+            {
+                "title": "PIN Value Exposure via Eye Button Display Feature",
+                "cvss_score": "2.1",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:R/S:U/C:L/I:N/A:N",
+                "cwe": "CWE-204",
+                "description": "There is an eye button for temporary showing the input PIN value during the pressing of the button. The PIN value can be exposed and observed by external person. The PIN value is masked if the button is not pressed.",
+                "cve": null
+            },
+            {
+                "title": "PIN Sequence Observation via Fixed On-Screen Keyboard Layout",
+                "cvss_score": "2.1",
+                "cvss_vector": "AV:L/AC:L/PR:L/UI:N/S:U/C:L/I:N/A:N",
+                "cwe": "CWE-204",
+                "description": "The on-screen keyboard can be seen by an external person and the PIN number sequence can be observed. The PIN value is masked on screen by default.",
+                "cve": null
+            }
+        ]
+    }
+}
