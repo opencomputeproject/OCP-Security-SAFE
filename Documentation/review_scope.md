@@ -40,7 +40,7 @@ the framework, it is required for every production version of device firmware to
 
 The SAFE program defines 3 security review scopes. These scopes increase with complexity of attacks in the threat model.
 It is expected that devices will have reviews done with different review scopes. For example, a CPU may have a scope 3
-review of the root of trust due to the need for glitch protection when using a long-term device private key. This CPU
+review of the root of trust due to the need for glitch protection when using a persistent secret. This CPU
 may use a scope 2 review for the application cores.
 
 * **Scope 1 Code and Architecture Assessment**
@@ -82,9 +82,40 @@ may use a scope 2 review for the application cores.
     * Handling of trust boundaries
     * Attestation and non-repudiation across boundaries
     * Authenticated and encrypted IO, e.g., PCIe-IDE, TDISP, or vendor proprietary
-* **Scope 3 - Resilience to physical attacks**
-    * Critical components and operations are designed to securely handle glitch attacks in a documented way
-    * Crypto blocks are designed to be resistant to side channel analysis.
+* **Scope 3 - Resilience to physical attacks:** Scope 3 focuses on physical attacks against persistent secrets and the
+  controls that protect or use them. Persistent secrets are secret values that remain available across power cycles or
+  from which such values can be derived. Shared class secrets require particular attention because their compromise may
+  affect every device that uses them.
+    * **Threat model:** The SRP should identify each persistent secret, its security purpose, how it is generated or
+      provisioned, and the lifecycle phases in which a physical attacker can access it. The physical attack window for a
+      secret begins when that secret is generated or provisioned.
+    * **Manufacturing and supply chain:** After secret generation or provisioning and before entry into a trusted data
+      center, the threat model should allow for prolonged physical possession and access to laboratory equipment. Relevant
+      attacks may include exposed debug interfaces, PCB probing or modification, interposers, bus sniffing or injection,
+      voltage or clock fault injection, and power or electromagnetic side-channel analysis.
+    * **Data center:** The threat model should allow for repeated physical-access windows of up to 30 minutes. Reviews
+      should focus on attacks that can be performed or installed during those windows, such as exposed debug interfaces,
+      PCB or bus access, interposers, and modchips. Attacks that require prolonged use of laboratory equipment in the data
+      center are out of scope.
+    * **RMA:** A device outside the trusted data center for repair should be treated as being under unrestricted physical
+      control. The manufacturing and supply-chain threats apply, together with an assessment of sanitization before
+      release and whether a tampered device can return to service while still being treated as trusted.
+    * **Class secrets:** A secret shared across devices should not directly protect critical assets when compromise of one
+      device would compromise other devices. A shared value may be used for obfuscation or defense in depth if its
+      disclosure does not by itself compromise a protected asset.
+    * **Invasive attacks on class secrets:** Invasive and in-package attacks are out of scope by default for device-unique
+      secrets. When a class secret directly protects critical assets across multiple devices, its extraction through an
+      invasive or in-package attack is in scope for threat modeling and design review because a single compromise may
+      affect the entire device class. This does not require invasive physical testing unless it is included in the agreed
+      review scope.
+    * **Finding rating:** Scope 3 physical-attack findings must be rated using
+      [JIL Application of Attack Potential to Smartcards and Similar Devices, version 3.2.1](https://sogis.eu/documents/cc/domains/sc/JIL-Application-of-Attack-Potential-to-Smartcards-v3.2.1.pdf).
+      CVSS is not the primary rating for these findings.
+    * **Review activities:** The review should examine the threat model, persistent-secret hierarchy, provisioning and
+      lifecycle design, hardware design and RTL, relevant firmware and software, debug controls, sanitization, and
+      physical-attack countermeasures. The SRP must test fault-injection and side-channel-analysis countermeasures in
+      simulation and document the methods, coverage, assumptions, and results. Scope 3 does not require physical testing
+      unless it is included in the review scope agreed by the device vendor and SRP.
 
 ## Concrete review areas
 
