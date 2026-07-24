@@ -192,8 +192,9 @@ has concluded:
 * **Short-Form Report** \
   The SRP must produce a cryptographically signed machine-readable short-form report. Only the final results are to be
   in the signed SFR (after remediation and retesting). This document will summarize the audit scope, and uniquely identify
-  the vendor, device and firmware version by means of a firmware hash. This report will enumerate all vulnerabilities
-  with a CVSS score and a brief summary. The short-form report specification can be found in
+  the vendor, device and firmware version by means of a firmware hash. This report will include a list of all vulnerabilities
+  with a non-zero CVSS, or JIL for Scope 3 hardware findings, along with the CVSS, CWE, CVE (if applicable), and a brief
+  summary for each. The short-form report specification can be found
   [here](./corim_profile/ocp-safe-sfr-profile.cddl). To claim OCP SAFE endorsement for a
   product-firmware combination this report must be published to the OCP GitHub repository. This signed SFR is delivered
   to the DV for publication.
@@ -235,6 +236,19 @@ use the findings in the report to improve design, engineering, build, and test p
     * Analysis and critique section for the relevant review areas, and of the threat model and scope
 
 Several SRP sample reports can be found in [Appendix A](#appendix-a-example-reports).
+
+
+
+### Short-Form Report Guidance
+
+* **Issue detail level:** The SFR should describe risks for CSPs and encourage the DV to improve security. Include enough detail to explain impact, but avoid exploit-enabling specifics. Protect IP by omitting code identifiers (variable, module, or function names).
+    * Example phrasing: “Integer overflow in secure boot could lead to arbitrary code execution in ROM”; “Insecure protection configuration allows loading unsigned code.”
+    * Avoid: “external_parser.c:195 parse_xml(xml_string) has a stack overflow when xml_string exceeds 1024 bytes, leading to arbitrary code execution.”
+* **Quantitative Risk Ratings:** The SFR uses CVSS for quantitative risk ratings. The CVSS score is the primary factor determining whether a finding should be included in the SFR. As such, any finding with a non-zero CVSS score **must** be included in the SFR if it is within the defined security review scope. Findings with a CVSS score of zero, by definition pose no risk to the CSP and must be excluded.
+* **Configuration-dependent findings:** Findings may exist that depend on configuration.
+    * If a finding depends on the CSPs deployment configuration and the secure configuration plus associated risks are clearly documented in DV-providedd integration guidelines, it should be excluded from the SFR. If integration guidelines are missing and insecure configurations are plausible, include the finding in the SFR.
+    * If a finding depends on DV-provided configuration (such as factory fuse configuration) in a way that allows a configuration change to undermine the security of the target without altering the firmware hash recorded in the SFR, then the finding should be included in the SFR.
+
 
 # Appendix A: Example Reports
 
