@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "KIOXIA Corporation",
+        "product": "LD2-L",
+        "category": "Storage",
+        "repo_tag": "",
+        "fw_version": "1LMSS122",
+        "fw_hash_sha2_384": "1561c7429cfe6612b5f12f6f832f859f75c04943cf2e89509adf1da70ad68716868e9abcae60ccd2a0cab6a17a9deb7b",
+        "fw_hash_sha2_512": "ffe5fa4f6f62aba2cb558514d958813f018cf814e3566beac6eab2db990e08eb4639e7079ac0c41854595cc702ff9315a6d4bd84ae0d41026f2cb09266fa538e"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2026-04-21",
+        "report_version": "1.2",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
