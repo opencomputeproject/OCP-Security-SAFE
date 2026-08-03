@@ -246,7 +246,7 @@ Several SRP sample reports can be found in [Appendix A](#appendix-a-example-repo
     * Avoid: “external_parser.c:195 parse_xml(xml_string) has a stack overflow when xml_string exceeds 1024 bytes, leading to arbitrary code execution.”
 * **Quantitative Risk Ratings:** The SFR uses CVSS for quantitative risk ratings. The CVSS score is the primary factor determining whether a finding should be included in the SFR. As such, any finding with a non-zero CVSS score **must** be included in the SFR if it is within the defined security review scope. Findings with a CVSS score of zero, by definition pose no risk to the CSP and must be excluded.
 * **Configuration-dependent findings:** Findings may exist that depend on configuration.
-    * If a finding depends on the CSPs deployment configuration and the secure configuration plus associated risks are clearly documented in DV-providedd integration guidelines, it should be excluded from the SFR. If integration guidelines are missing and insecure configurations are plausible, include the finding in the SFR.
+    * A finding that depends on deployment configuration may be excluded from the SFR only where the secure configuration is a reasonable expectation for a product used in production — not merely documented as an option. Documentation is a necessary, but not sufficient, condition for exclusion. If integration guidelines are missing and insecure configurations are plausible, include the finding in the SFR.
     * If a finding depends on DV-provided configuration (such as factory fuse configuration) in a way that allows a configuration change to undermine the security of the target without altering the firmware hash recorded in the SFR, then the finding should be included in the SFR.
 
 
