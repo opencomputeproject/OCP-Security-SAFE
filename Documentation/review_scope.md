@@ -90,7 +90,7 @@ may use a scope 2 review for the application cores.
       provisioned, and the lifecycle phases in which a physical attacker can access it. The physical attack window for a
       secret begins when that secret is generated or provisioned.
     * **Manufacturing and supply chain:** After secret generation or provisioning and before entry into a trusted data
-      center, the threat model should allow for prolonged physical possession and access to laboratory equipment. Relevant
+      center, the threat model should assume an attacker has prolonged physical possession and access to laboratory equipment sufficient to develop reliable attacks. Relevant
       attacks may include exposed debug interfaces, PCB probing or modification, interposers, bus sniffing or injection,
       voltage or clock fault injection, and power or electromagnetic side-channel analysis.
     * **Data center:** The threat model should allow for repeated physical-access windows of up to 30 minutes. Reviews
