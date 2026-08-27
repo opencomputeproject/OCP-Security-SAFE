@@ -93,7 +93,7 @@ may use a scope 2 review for the application cores.
       center, the threat model should assume an attacker has prolonged physical possession and access to laboratory equipment sufficient to develop reliable attacks. Relevant
       attacks may include exposed debug interfaces, PCB probing or modification, interposers, bus sniffing or injection,
       voltage or clock fault injection, and power or electromagnetic side-channel analysis.
-    * **Data center:** The threat model should allow for repeated physical-access windows of up to 30 minutes. Reviews
+    * **Data center:** The threat model should allow for repeated physical-access windows of up to 30 minutes, enough time only to execute a pre-developed attack. Reviews
       should focus on attacks that can be performed or installed during those windows, such as exposed debug interfaces,
       PCB or bus access, interposers, and modchips. Attacks that require prolonged use of laboratory equipment in the data
       center are out of scope.
