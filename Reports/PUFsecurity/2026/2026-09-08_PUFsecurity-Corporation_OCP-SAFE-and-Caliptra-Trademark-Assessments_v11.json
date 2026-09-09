@@ -1,1 +1,39 @@
-
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "PUFsecurity Corporation",
+        "product": "PUFrt",
+        "category": "Hardware IP",
+        "repo_tag": "PM30C2",
+        "fw_version": "8",
+        "fw_hash_sha2_384": "",
+        "fw_hash_sha2_512": ""
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "White-Box Review",
+        "completion_date": "2026-07-29",
+        "report_version": "1.0",
+        "scope_number": 3,
+        "cvss_version": "4.0",
+        "issues": [
+            {
+                "title": "(LOW) Fault Injection to Bypass Post-Masking",
+                "cvss_score": "1.0",
+                "cvss_vector": "CVSS:4.0/AV:P/AC:H/AT:N/PR:N/UI:N/VC:N/VI:L/VA:L/SC:N/SI:N/SA:N",
+                "cwe": "CWE-1247: Improper Protection Against Voltage and Clock Glitches",
+                "description": "Advanced fault injection targeting the flip-flops which store the post-masking configuration can cause the these bits to be changed, allowing access to masked bits. Furthermore, OTP and PUF bits can be permanently changed in a small percentage of fault injection attempts. Such an attack requires significant time and expertise to perform and was discovered in a test environment that isolated this IP block. The rating and associated difficulty of exploitation is expected to be increased when integrated into an SoC.",
+                "cve": ""
+            },
+            {
+                "title": "(LOW) Fault Injection to Reduce Entropy of TRNG",
+                "cvss_score": "1.0",
+                "cvss_vector": "CVSS:4.0/AV:P/AC:H/AT:N/PR:N/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+                "cwe": "CWE-1247: Improper Protection Against Voltage and Clock Glitches",
+                "description": "Advanced fault injection can bypass detection mechanisms and impact the ring oscillators that are the source of the TRNG, potentially resulting in the TRNG producing repeated non-random values. Such an attack requires significant time and expertise to perform and was discovered in a test environment that isolated this IP block. The rating and associated difficulty of exploitation is expected to be increased when integrated into an SoC.",
+                "cve": ""
+            }
+        ]
+    },
+    "iat": 1788898412
+}
