@@ -87,7 +87,7 @@ may use a scope 2 review for the application cores.
   from which such values can be derived. Shared class secrets require particular attention because their compromise may
   affect every device that uses them.
     * **Threat model:** The SRP should identify each persistent secret, its security purpose, how it is generated or
-      provisioned, and the lifecycle phases in which a physical attacker can access it. The physical attack window for a
+      provisioned, and the lifecycle phases in which a physical attacker can access or use it. The physical attack window for a
       secret begins when that secret is generated or provisioned.
     * **Manufacturing and supply chain:** After secret generation or provisioning and before entry into a trusted data
       center, the threat model should assume an attacker has prolonged physical possession and access to laboratory equipment sufficient to develop reliable attacks. Relevant
