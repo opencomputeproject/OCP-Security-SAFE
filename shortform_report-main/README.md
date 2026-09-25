@@ -194,7 +194,7 @@ A collection of fields that describe the vendor, device, and firmware version th
 * `fw_version`: The version of the firmware image that is attested by the signed short-form report. In most cases this will be the firmware version compiled by the vendor after the security audit completes, which contains fixes for all vulnerabilities that were found during the audit.
 * `fw_hash_sha2_384`: A hex-encoded string containing the SHA2-384 hash of the firmware image. If the `manifest` field is present, it is a hash of that field instead.
 * `fw_hash_sha2_512`: ... ditto, but using SHA2-512.
-* `manifest`: A JSON list of filename and file hash pairs. This field is optional.
+* `manifest`: A JSON list of filename and file SHA2-512 hash pairs. This field is optional.
 
 ### `audit` fields
 
