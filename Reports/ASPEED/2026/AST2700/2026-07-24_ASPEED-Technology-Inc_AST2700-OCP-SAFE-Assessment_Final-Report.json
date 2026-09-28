@@ -1,0 +1,30 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "ASPEED Technology Inc.",
+        "product": "AST27x0 series",
+        "category": "BMC BootMCU ROM",
+        "repo_tag": "a070c7df4d68e4b66c2a081e25b55e06d75ae476",
+        "fw_version": "0x3976",
+        "fw_hash_sha2_384": "c9a170b8fb5594aad0d1c65a214a1250b15676a33356f5f5debd6ab9b08d42019a4bf9bcd61cbe4de6329aef4e02f6e1",
+        "fw_hash_sha2_512": "5de39eed4b5c82520823bfe6f51359e6799e822c960e79f731d6c0c88c7c48dfcfa19679e6e059fefe23a1fa36be408a529d1dc2c38290693d07c4c811ec0f27"
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "White-Box Review",
+        "completion_date": "2026-06-18",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "4.0",
+        "issues": [
+            {
+                "title": "Recovery Mode is Possible when Disabled by OTP",
+                "cvss_score": "1.0",
+                "cvss_vector": "CVSS:4.0/AV:P/AC:L/AT:P/PR:H/UI:N/VC:N/VI:L/VA:N/SC:N/SI:N/SA:N",
+                "cwe": "CWE-755: Improper Handling of Exceptional Conditions",
+                "description": "Recovery mode is possible even when explicitly disabled by OTP settings. This applies when the device is configured to boot from either eMMC or UFS and SLI is unavailable at the time of boot device initialization. Image validation and measured boot functionality is still respected, though this issue defeats recovery policy and the ability to reduce the ROM's attack surface.",
+                "cve": ""
+            }
+        ]
+    }
+}

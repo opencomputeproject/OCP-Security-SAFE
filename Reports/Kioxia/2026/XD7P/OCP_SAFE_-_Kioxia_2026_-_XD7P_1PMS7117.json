@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "KIOXIA Corporation",
+        "product": "XD7P",
+        "category": "Storage",
+        "repo_tag": "",
+        "fw_version": "1PMS7117",
+        "fw_hash_sha2_384": "9b6a1193df4dd8f5deed806cc89ea6fd4552afa76f52bd4d2d191fe768b929c789bac95d3d1a65f2c0d1b7eea2dc6ce6",
+        "fw_hash_sha2_512": "14df6f9405b8639bba04fac8209cd241b4f2b258e9b12a067ebdae8348e74b47eaaf3679a1920f593b0cc70a7aff97da1581d7d462c8e61a94421778dc8faf82"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2026-03-05",
+        "report_version": "1.1",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
