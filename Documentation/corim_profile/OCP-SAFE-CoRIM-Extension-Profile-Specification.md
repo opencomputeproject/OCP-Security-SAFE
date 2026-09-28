@@ -27,6 +27,9 @@
 - Table 2: Firmware Identifier Components
 - Table 3: Issue Entry Structure
 - Table 4: CVSS Structure
+- Table 5: JIL Structure
+- Table 6: JIL Factor Scores Structure
+- Table 7: Qualitative Rating Structure
 
 ## Acknowledgements
 
@@ -203,11 +206,34 @@ issue-entry = {
 }
 
 $assessment /= cvss
+$assessment /= jil
+$assessment /= qualitative-rating
 
 cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
+}
+
+jil = {
+  &(jil-rating: 0) => tstr
+  ? &(jil-identification: 1) => jil-factor-scores
+  ? &(jil-exploitation: 2) => jil-factor-scores
+  ? &(jil-version: 3) => tstr
+}
+
+jil-factor-scores = {
+  &(elapsed-time: 0) => uint
+  &(expertise: 1) => uint
+  &(knowledge-of-toe: 2) => uint
+  &(window-of-opportunity: 3) => uint
+  &(equipment: 4) => uint
+}
+
+qualitative-rating = {
+  &(classification: 0) => &classification-level
+  ? &(likelihood: 1) => &likelihood-impact-level
+  ? &(impact: 2) => &likelihood-impact-level
 }
 ```
 
@@ -217,13 +243,17 @@ cvss = {
 |-------|-----|------|----------|-------------|
 | title | 0 | tstr | Yes | Brief title describing the security issue |
 | description | 1 | tstr | Yes | Detailed description of the security issue |
-| assessment | 2 | $assessment | Yes | Assessment used (e.g., CVSS) |
+| assessment | 2 | $assessment | Yes | Assessment used (CVSS, JIL, or a qualitative rating) |
 | cwe | 3 | tstr | No | Common Weakness Enumeration identifier |
 | cve | 4 | tstr | No | CVE identifier if assigned |
 
 ### Assessments
 
-The specification supports various assessments for vulnerability scoring. Currently, CVSS is the primary supported assesment:
+The specification supports three assessments for vulnerability scoring: `cvss`, `jil`, and `qualitative-rating`. CVSS
+is the primary assessment and should be used wherever a score can be meaningfully assigned. For Scope 3
+physical-attack findings where CVSS does not apply, `jil` is used for findings confirmed via physical testing on
+silicon, and `qualitative-rating` is used for findings established only through simulation, not yet confirmed on
+silicon (see [Review Scope](../review_scope.md) for when each applies).
 
 **Table 4: CVSS Structure**
 
@@ -232,6 +262,49 @@ The specification supports various assessments for vulnerability scoring. Curren
 | cvss-score | 0 | tstr | Yes | CVSS numerical score (e.g., "7.9") |
 | cvss-vector | 1 | tstr | Yes | CVSS vector string |
 | cvss-version | 2 | tstr | No | CVSS version used for scoring (default: "3.1") |
+
+**Table 5: JIL Structure**
+
+JIL attack potential scoring follows the Joint Interpretation Library "Application of Attack Potential to Smartcards
+and Similar Devices" methodology used in Common Criteria hardware evaluations.
+
+| Field | Key | Type | Required | Description |
+|-------|-----|------|----------|-------------|
+| jil-rating | 0 | tstr | Yes | Resulting attack potential rating (e.g., "Basic", "Enhanced-Basic", "Moderate", "High", "Beyond High") |
+| jil-identification | 1 | jil-factor-scores | No | Per-factor points under the identification-phase table |
+| jil-exploitation | 2 | jil-factor-scores | No | Per-factor points under the exploitation-phase table |
+| jil-version | 3 | tstr | No | JIL attack potential methodology version used (e.g., "3.2.1") |
+
+**Table 6: JIL Factor Scores Structure**
+
+Both `jil-identification` and `jil-exploitation` use the same `jil-factor-scores` structure, holding the points
+assigned to each of the five JIL attack potential factors for that phase.
+
+| Field | Key | Type | Required | Description |
+|-------|-----|------|----------|-------------|
+| elapsed-time | 0 | uint | Yes | Points for elapsed time needed to identify or exploit |
+| expertise | 1 | uint | Yes | Points for attacker expertise required |
+| knowledge-of-toe | 2 | uint | Yes | Points for knowledge of the target of evaluation required |
+| window-of-opportunity | 3 | uint | Yes | Points for the window of opportunity available to the attacker |
+| equipment | 4 | uint | Yes | Points for equipment required |
+
+**Table 7: Qualitative Rating Structure**
+
+| Field | Key | Type | Required | Description |
+|-------|-----|------|----------|-------------|
+| classification | 0 | uint (enum) | Yes | Overall classification: none (0), low (1), medium (2), high (3), critical (4) |
+| likelihood | 1 | uint (enum) | No | Likelihood the attack can be mounted and succeeds: low (0), medium (1), high (2) |
+| impact | 2 | uint (enum) | No | Confidentiality/integrity/availability consequence of success: low (0), medium (1), high (2) |
+
+Note on extensibility: the three `$assessment` alternatives are disambiguated structurally rather than via an
+explicit type tag. `cvss` requires both `cvss-score` and `cvss-vector` (both tstr); `jil` requires only `jil-rating`
+(tstr), so a map with only `jil-rating` can never satisfy `cvss` (missing its second required key), and a full `jil`
+map with `jil-identification`/`jil-exploitation` present can never satisfy `cvss` either, since those keys hold a map
+(`jil-factor-scores`), not the tstr `cvss-vector` expects. `qualitative-rating` requires only `classification`
+(uint), a different CBOR major type than the tstr required by both `cvss` and `jil`, so it can never be confused with
+either. This keeps existing CVSS-encoded data valid and unambiguous under the enlarged `$assessment` choice. Future
+assessment types added to `$assessment` MUST preserve this property: their required fields must not be
+simultaneously satisfiable by any existing alternative.
 
 ### Source Manifest Support
 

@@ -25,13 +25,75 @@ issue-entry = {
   * $$ocp-safe-issue-entry-ext
 }
 
+; The three $assessment alternatives are disambiguated structurally, not via
+; an explicit type tag, so their required fields must never be simultaneously
+; satisfiable by another alternative:
+;   - cvss requires both cvss-score and cvss-vector (both tstr).
+;   - jil requires only jil-rating (tstr). A map with only jil-rating can never
+;     also satisfy cvss, which is missing its second required key. A full jil
+;     map with jil-identification/jil-exploitation present can never satisfy
+;     cvss either, since those keys hold a map (jil-factor-scores), not the
+;     tstr cvss-vector expects.
+;   - qualitative-rating requires only classification (uint), a different CBOR
+;     major type than the tstr required by both cvss and jil, so it can never
+;     be confused with either.
+; Future assessment types added to $assessment MUST preserve this property.
 $assessment /= cvss
+$assessment /= jil
+$assessment /= qualitative-rating
 
 cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
 }
+
+; JIL attack potential scoring (per the Joint Interpretation Library "Application
+; of Attack Potential to Smartcards and Similar Devices" methodology used in
+; Common Criteria hardware evaluations). Used for Scope 3 physical-attack
+; findings confirmed via physical testing on silicon; see review_scope.md's
+; Finding rating guidance for when JIL applies versus qualitative-rating.
+jil = {
+  &(jil-rating: 0) => tstr ; e.g. "Basic", "Enhanced-Basic", "Moderate", "High", "Beyond High"
+  ? &(jil-identification: 1) => jil-factor-scores
+  ? &(jil-exploitation: 2) => jil-factor-scores
+  ? &(jil-version: 3) => tstr ; JIL attack potential methodology version, e.g. "3.2.1"
+}
+
+; Each of the five JIL attack potential factors is scored separately under the
+; identification-phase and exploitation-phase point tables of the methodology.
+jil-factor-scores = {
+  &(elapsed-time: 0) => uint
+  &(expertise: 1) => uint
+  &(knowledge-of-toe: 2) => uint
+  &(window-of-opportunity: 3) => uint
+  &(equipment: 4) => uint
+}
+
+; Used for Scope 3 physical-attack findings established only through
+; simulation (pre-silicon evidence), where JIL's attack-potential factors
+; cannot be meaningfully measured. classification is the only required field;
+; it can never also satisfy cvss's or jil's required keys (see disambiguation
+; note above).
+qualitative-rating = {
+  &(classification: 0) => &classification-level
+  ? &(likelihood: 1) => &likelihood-impact-level
+  ? &(impact: 2) => &likelihood-impact-level
+}
+
+classification-level = &(
+  none: 0,
+  low: 1,
+  medium: 2,
+  high: 3,
+  critical: 4
+)
+
+likelihood-impact-level = &(
+  low: 0,
+  medium: 1,
+  high: 2
+)
 
 fw-identifier = non-empty<{
   ? &(fw-version: 0) => version-map

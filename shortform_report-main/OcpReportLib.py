@@ -75,6 +75,31 @@ COMID_TAG = 506
 # DER encoded OID bytes
 OCP_SAFE_SFR_PROFILE_OID = bytes.fromhex("060A2B0601040182F4170101")
 
+# Enum values for the qualitative-rating $assessment alternative, per the
+# ocp-safe-sfr-profile.cddl classification-level and likelihood-impact-level.
+QUALITATIVE_CLASSIFICATION_LEVELS = {
+    "none": 0,
+    "low": 1,
+    "medium": 2,
+    "high": 3,
+    "critical": 4,
+}
+QUALITATIVE_LIKELIHOOD_IMPACT_LEVELS = {
+    "low": 0,
+    "medium": 1,
+    "high": 2,
+}
+
+# Maps the JIL attack potential factor names used in add_issue()'s
+# jil_identification/jil_exploitation dicts to their jil-factor-scores CDDL keys.
+JIL_FACTOR_CBOR_KEYS = {
+    "elapsed_time": 0,
+    "expertise": 1,
+    "knowledge_of_toe": 2,
+    "window_of_opportunity": 3,
+    "equipment": 4,
+}
+
 
 # Define the custom pretty-print function for CBORTag
 @prettyprinter.register_pretty(cbor2.CBORTag)
@@ -236,30 +261,98 @@ class ShortFormReport(object):
         cwe: str,
         description: str,
         cve=None,
+        classification: str = None,
+        likelihood: str = None,
+        impact: str = None,
+        jil_rating: str = None,
+        jil_identification: Dict[str, int] = None,
+        jil_exploitation: Dict[str, int] = None,
+        jil_version: str = None,
     ) -> None:
         """Add one issue to the list of issues. This list should only contain
         unfixed issues. That is, any vulnerabilities discovered during the
         audit that were fixed before the 'fw_version' (listed above) should not
         be included.
 
+        Exactly one of the following assessment inputs must be provided:
+        cvss_score/cvss_vec, classification, or jil_rating.
+
         title:       A brief summary of the issue. Usually taken directly from
                        the SRP's audit report.
         cvss_score:  The CVSS base score, represented as a string, such as "7.1".
+                       Pass an empty string if the issue is rated using
+                       'classification' or 'jil_rating' instead of CVSS.
         cvss_vec:    The CVSS base vector. Temporal and environmental metrics are
-                       not used or tracked.
+                       not used or tracked. Pass an empty string if the issue is
+                       rated using 'classification' or 'jil_rating' instead of CVSS.
         cwe:         The CWE identifier for the vulnerability, for example "CWE-123".
         description: A one or two sentence description of the issue. All vendor
                        sensitive information should be redacted.
         cve:         This field is optional, as not all reported issues will be
                        assigned a CVE number.
+        classification: Overall rating for Scope 3 physical-attack findings
+                       established only through simulation, not yet confirmed via
+                       physical testing on silicon, where CVSS and JIL do not fit.
+                       One of "None", "Low", "Medium", "High", "Critical".
+        likelihood:  Optional supporting rationale for 'classification': how
+                       likely the attack is to be mounted and succeed. One of
+                       "Low", "Medium", "High".
+        impact:      Optional supporting rationale for 'classification': the
+                       confidentiality/integrity/availability consequence of a
+                       successful attack. One of "Low", "Medium", "High".
+        jil_rating:  The resulting JIL attack potential rating, e.g. "Basic",
+                       "Enhanced-Basic", "Moderate", "High", "Beyond High". Used
+                       instead of cvss_score/cvss_vec/classification for Scope 3
+                       physical-attack findings confirmed via physical testing on
+                       silicon, assessed under the Joint Interpretation Library
+                       methodology.
+        jil_identification: Optional dict of per-factor points under the
+                       identification-phase table. Keys: "elapsed_time",
+                       "expertise", "knowledge_of_toe", "window_of_opportunity",
+                       "equipment". All five must be present if provided.
+        jil_exploitation: Same shape as jil_identification, but for the
+                       exploitation-phase table.
+        jil_version: The JIL attack potential methodology version used, e.g. "3.2.1".
         """
+        has_cvss = bool(f"{cvss_score}".strip()) and bool(f"{cvss_vec}".strip())
+        has_classification = classification is not None and bool(
+            f"{classification}".strip()
+        )
+        has_jil = jil_rating is not None and bool(f"{jil_rating}".strip())
+
+        if sum([has_cvss, has_classification, has_jil]) != 1:
+            raise ValueError(
+                "add_issue requires exactly one of: cvss_score/cvss_vec, "
+                "classification, or jil_rating to be set"
+            )
+
         new_issue = {
             "title": f"{title}".strip(),
-            "cvss_score": f"{cvss_score}".strip(),
-            "cvss_vector": f"{cvss_vec}".strip(),
             "cwe": f"{cwe}".strip(),
             "description": f"{description}".strip(),
         }
+
+        if has_cvss:
+            new_issue["cvss_score"] = f"{cvss_score}".strip()
+            new_issue["cvss_vector"] = f"{cvss_vec}".strip()
+        elif has_classification:
+            new_issue["classification"] = f"{classification}".strip()
+            if likelihood is not None and f"{likelihood}".strip():
+                new_issue["likelihood"] = f"{likelihood}".strip()
+            if impact is not None and f"{impact}".strip():
+                new_issue["impact"] = f"{impact}".strip()
+        else:
+            new_issue["jil_rating"] = f"{jil_rating}".strip()
+            if jil_identification is not None:
+                new_issue["jil_identification"] = self._validate_jil_factor_scores(
+                    jil_identification, "jil_identification"
+                )
+            if jil_exploitation is not None:
+                new_issue["jil_exploitation"] = self._validate_jil_factor_scores(
+                    jil_exploitation, "jil_exploitation"
+                )
+            if jil_version is not None and f"{jil_version}".strip():
+                new_issue["jil_version"] = f"{jil_version}".strip()
 
         if cve is None:
             new_issue["cve"] = None
@@ -267,6 +360,21 @@ class ShortFormReport(object):
             new_issue["cve"] = f"{cve}".strip()
 
         self.report["audit"]["issues"].append(new_issue)
+
+    def _validate_jil_factor_scores(
+        self, factors: Dict[str, int], field_name: str
+    ) -> Dict[str, int]:
+        """Validate that a JIL factor score dict covers all five attack potential factors."""
+        missing = [k for k in JIL_FACTOR_CBOR_KEYS if k not in factors]
+        if missing:
+            raise ValueError(
+                f"{field_name} is missing required JIL factor(s): {', '.join(missing)}"
+            )
+        return {k: factors[k] for k in JIL_FACTOR_CBOR_KEYS}
+
+    def _build_jil_factor_scores(self, factors: Dict[str, int]) -> Dict[int, int]:
+        """Convert a validated JIL factor score dict to its jil-factor-scores CBOR keys."""
+        return {JIL_FACTOR_CBOR_KEYS[name]: value for name, value in factors.items()}
 
     ###########################################################################
     # APIs for getting and printing the JSON report
@@ -351,21 +459,50 @@ class ShortFormReport(object):
         # Convert issues
         corim_issues = []
         for issue in self.report["audit"]["issues"]:
-            # Build nested cvss structure
-            cvss = {
-                0: issue["cvss_score"],   # cvss-score
-                1: issue["cvss_vector"],  # cvss-vector
-            }
-
-            # Add optional cvss-version
-            if "cvss_version" in self.report["audit"]:
-                cvss[2] = self.report["audit"]["cvss_version"]  # cvss-version
+            # Build nested assessment structure: cvss, jil, or
+            # qualitative-rating, depending on which fields add_issue() set.
+            if "cvss_score" in issue:
+                assessment = {
+                    0: issue["cvss_score"],   # cvss-score
+                    1: issue["cvss_vector"],  # cvss-vector
+                }
+                # Add optional cvss-version
+                if "cvss_version" in self.report["audit"]:
+                    assessment[2] = self.report["audit"]["cvss_version"]  # cvss-version
+            elif "jil_rating" in issue:
+                assessment = {
+                    0: issue["jil_rating"],  # jil-rating
+                }
+                if "jil_identification" in issue:
+                    assessment[1] = self._build_jil_factor_scores(
+                        issue["jil_identification"]
+                    )  # jil-identification
+                if "jil_exploitation" in issue:
+                    assessment[2] = self._build_jil_factor_scores(
+                        issue["jil_exploitation"]
+                    )  # jil-exploitation
+                if "jil_version" in issue:
+                    assessment[3] = issue["jil_version"]  # jil-version
+            else:
+                assessment = {
+                    0: QUALITATIVE_CLASSIFICATION_LEVELS[
+                        issue["classification"].lower()
+                    ],  # classification
+                }
+                if "likelihood" in issue:
+                    assessment[1] = QUALITATIVE_LIKELIHOOD_IMPACT_LEVELS[
+                        issue["likelihood"].lower()
+                    ]  # likelihood
+                if "impact" in issue:
+                    assessment[2] = QUALITATIVE_LIKELIHOOD_IMPACT_LEVELS[
+                        issue["impact"].lower()
+                    ]  # impact
 
             # Build issue-entry with nested assessment
             corim_issue = {
                 0: issue["title"],        # title
                 1: issue["description"],  # description
-                2: cvss,                  # assessment (nested cvss)
+                2: assessment,            # assessment (nested cvss, jil, or qualitative-rating)
                 3: issue["cwe"],          # cwe
             }
 
