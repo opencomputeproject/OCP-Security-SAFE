@@ -231,9 +231,9 @@ jil-factor-scores = {
 }
 
 qualitative-rating = {
-  &(classification: 0) => &classification-level
-  ? &(likelihood: 1) => &likelihood-impact-level
-  ? &(impact: 2) => &likelihood-impact-level
+  &(classification: 0) => classification-level
+  ? &(likelihood: 1) => likelihood-impact-level
+  ? &(impact: 2) => likelihood-impact-level
 }
 ```
 
