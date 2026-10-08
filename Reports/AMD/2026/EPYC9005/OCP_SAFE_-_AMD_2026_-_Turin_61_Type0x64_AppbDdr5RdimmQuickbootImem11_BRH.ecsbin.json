@@ -1,0 +1,21 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "Advanced Micro Devices",
+        "product": "Turin 61 Processor (EMCR)",
+        "category": "",
+        "repo_tag": "EC17",
+        "fw_version": "E.C.1.7",
+        "fw_hash_sha2_384": "f9fee31619320c355b9ad0f8217af3ca913d69019b09175538de6ca6ed083a5fe2934cfb1df9fced45d6ccabb549e4a9",
+        "fw_hash_sha2_512": "89a821114224e6da1528577a3314e95368003126af5f2517f16b2b10d190e9006fe4477bfa7437c8d2f1e5daf79c389753f1d0310fcc669c193c90c184936a32"
+    },
+    "audit": {
+        "srp": "NCC Group",
+        "methodology": "whitebox",
+        "completion_date": "2026-05-05",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
