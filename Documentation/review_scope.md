@@ -40,7 +40,7 @@ the framework, it is required for every production version of device firmware to
 
 The SAFE program defines 3 security review scopes. These scopes increase with complexity of attacks in the threat model.
 It is expected that devices will have reviews done with different review scopes. For example, a CPU may have a scope 3
-review of the root of trust due to the need for glitch protection when using a long-term device private key. This CPU
+review of the root of trust due to the need for glitch protection when using a persistent secret. This CPU
 may use a scope 2 review for the application cores.
 
 * **Scope 1 Code and Architecture Assessment**
@@ -82,9 +82,68 @@ may use a scope 2 review for the application cores.
     * Handling of trust boundaries
     * Attestation and non-repudiation across boundaries
     * Authenticated and encrypted IO, e.g., PCIe-IDE, TDISP, or vendor proprietary
-* **Scope 3 - Resilience to physical attacks**
-    * Critical components and operations are designed to securely handle glitch attacks in a documented way
-    * Crypto blocks are designed to be resistant to side channel analysis.
+* **Scope 3 - Resilience to physical attacks:** Scope 3 focuses on physical attacks against persistent secrets and the
+  controls that protect or use them. Persistent secrets are secret values that remain available across power cycles or
+  from which such values can be derived. Shared class secrets require particular attention because their compromise may
+  affect every device that uses them. Fault-injection attacks that target control flow rather than a persistent secret,
+  for example glitching a secure-boot check, are not yet in scope; broadening Scope 3 to cover control-flow fault
+  injection across a full SoC is being considered for a future revision of this document.
+    * **Threat model:** The SRP should identify each persistent secret, its security purpose, how it is generated or
+      provisioned, and the lifecycle phases in which a physical attacker can access or use it. The physical attack window for a
+      secret begins when that secret is generated or provisioned.
+    * **Manufacturing and supply chain:** After secret generation or provisioning and before entry into a trusted data
+      center, the threat model should assume an attacker has prolonged physical possession and access to laboratory equipment sufficient to develop reliable attacks. Relevant
+      attacks may include exposed debug interfaces, PCB probing or modification, interposers, bus sniffing or injection,
+      voltage or clock fault injection, and power or electromagnetic side-channel analysis.
+    * **Data center:** The threat model should allow for repeated physical-access windows of up to 30 minutes, enough time only to execute a pre-developed attack. Reviews
+      should focus on attacks that can be performed or installed during those windows, such as exposed debug interfaces,
+      PCB or bus access, interposers, and modchips. Attacks that require prolonged use of laboratory equipment in the data
+      center are out of scope.
+    * **RMA:** A device outside the trusted data center for repair should be treated as being under unrestricted physical
+      control. The manufacturing and supply-chain threats apply, together with an assessment of sanitization before
+      release and whether a tampered device can return to service while still being treated as trusted.
+    * **Class secrets:** A secret shared across devices should not directly protect critical assets when compromise of one
+      device would compromise other devices. A shared value may be used for obfuscation or defense in depth if its
+      disclosure does not by itself compromise a protected asset.
+    * **Invasive attacks on class secrets:** Invasive and in-package attacks are out of scope by default for device-unique
+      secrets. When a class secret directly protects critical assets across multiple devices, its extraction through an
+      invasive or in-package attack is in scope for threat modeling and design review because a single compromise may
+      affect the entire device class. This does not require invasive physical testing unless it is included in the agreed
+      review scope.
+    * **Finding rating:** Scope 3 physical-attack findings should be rated using CVSS where a score can be
+      meaningfully assigned, consistent with the rest of this framework. Where no CVSS score is assigned, use JIL or a
+      qualitative Likelihood x Impact classification depending on which kind of evidence backs the finding:
+        * Findings confirmed via physical testing on silicon (post-silicon evidence) should be rated using
+          [JIL Application of Attack Potential to Smartcards and Similar Devices, version 3.2.1](https://sogis.eu/documents/cc/domains/sc/JIL-Application-of-Attack-Potential-to-Smartcards-v3.2.1.pdf).
+          JIL's methodology scores real, measured attack-potential factors (elapsed time, expertise, knowledge of the
+          TOE, access, and equipment), which only actual physical testing can establish.
+        * Findings established only through simulation, and not yet confirmed via physical testing on silicon
+          (pre-silicon evidence only), should instead be rated directly from likelihood and impact, since JIL's
+          factors cannot be meaningfully measured from simulation alone:
+            * *Likelihood* is how likely a realistic attacker is to mount and succeed at the attack, folding together
+              difficulty, required equipment and expertise, and observed success rate rather than treating any one
+              factor as decisive on its own. As a starting point, attacks falling in the Manufacturing and supply
+              chain, Data center, or RMA tiers above, all of which require physical possession of or access to the
+              device, should generally be rated *Low* likelihood. Attacks that can be triggered remotely or from
+              software, without requiring physical access to the device, for example fault injection via software
+              control of a clock or voltage rail feeding the target, should generally be rated *High* likelihood.
+              Attacks that fall between these, such as ones needing only a one-time physical implant that is later
+              triggered or harvested without further physical presence, should generally be rated *Medium*
+              likelihood.
+            * *Impact* is the confidentiality, integrity, and availability consequences of a successful attack,
+              assessed on what compromise of the specific persistent secret directly yields, not on the most valuable
+              asset further down a derivation chain from it. A secret whose compromise directly exposes a protected
+              asset is *High* impact; a secret that is only one input to a later derivation, unusable without
+              additional secrets the attacker has not obtained, is rated on what it yields on its own, typically
+              *Low* or *Medium*.
+            * Likelihood and impact combine into an overall classification (e.g. CRITICAL/HIGH/MEDIUM/LOW/NONE).
+    * **Review activities:** The review should examine the threat model, persistent-secret hierarchy, provisioning and
+      lifecycle design, hardware design and RTL, relevant firmware and software, debug controls, sanitization, and
+      physical-attack countermeasures. The SRP must evaluate fault-injection and side-channel-analysis countermeasures
+      by running simulation (pre-silicon evidence) or by physical testing on silicon (post-silicon evidence), and must
+      document the methods, coverage, assumptions, and results. The SRP may use the device vendor's simulation
+      infrastructure for pre-silicon analysis, but review of the vendor's simulation evidence alone, without the SRP running the
+      simulation, does not satisfy this requirement. 
 
 ## Concrete review areas
 
