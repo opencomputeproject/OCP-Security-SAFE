@@ -16,6 +16,7 @@ import traceback
 # Add parent directory to path to import OcpReportLib
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from OcpReportLib import ShortFormReport
+from test_mldsa87 import test_mldsa87_signing
 
 def test_basic_functionality():
     """Test basic report generation in both formats."""
@@ -289,7 +290,8 @@ def main():
         test_basic_functionality,
         test_schema_compliance,
         test_error_handling,
-        test_backward_compatibility
+        test_backward_compatibility,
+        test_mldsa87_signing
     ]
     
     passed = 0

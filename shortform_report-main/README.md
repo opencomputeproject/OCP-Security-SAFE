@@ -237,15 +237,29 @@ Firmware images will be hashed using multiple algorithms to offer greater flexib
 
 ## Signing the Short Form Report
 
-When signing a short-form report, only the following JSON Web Algorithms ([RFC-7518](https://www.rfc-editor.org/rfc/rfc7518)) are allowed:
+When signing a short-form report, only the following JSON Web Algorithms ([RFC-7518](https://www.rfc-editor.org/rfc/rfc7518), [RFC-9964](https://www.rfc-editor.org/rfc/rfc9964)) are allowed:
 
 * PS384 - RSASSA-PSS using SHA-384 and MGF1 with SHA-384
 * PS512 - RSASSA-PSS using SHA-512 and MGF1 with SHA-512
 * ES384 - ECDSA using P-384 and SHA-384 (secp384r1: NIST/SECG curve over a 384 bit prime field)
 * ES512 - ECDSA using P-521 and SHA-512 (secp521r1: NIST/SECG curve over a 521 bit prime field)
+* ML-DSA-87 - ML-DSA (FIPS 204) with the ML-DSA-87 parameter set, a post-quantum signature algorithm
+
+In the CoRIM format, ML-DSA-87 is COSE algorithm -50 ([RFC-9964](https://www.rfc-editor.org/rfc/rfc9964)), so verify such a report with `verify_signed_corim_report(..., algo=-50)`.
 
 Note above that the RSA-PSS algorithms "PS384" and "PS512" are named after the hash-size, not the key-size. Although the JWA specification encourages key sizes of [2048 bits or larger](https://www.rfc-editor.org/rfc/rfc7518#section-3.5), we take a stricter stance, and allow only the following key-sizes:
 
 * 3072 bits (384 bytes)
 * 4096 bits (512 bytes)
+
+ML-DSA-87 needs `cryptography` 48.0.0 or later. Every other algorithm still works with older versions. OpenSSL 3.5 or later can generate the key pair, but `cryptography` cannot load OpenSSL's default private key format. Use the seed-only format instead:
+
+```sh
+openssl genpkey -algorithm ML-DSA-87 -provparam ml-dsa.output_formats=seed-only -out mldsa87_priv.pem
+openssl pkey -in mldsa87_priv.pem -pubout -out mldsa87_pub.pem
+```
+
+An ML-DSA-87 signature is 4,627 bytes (per [FIPS 204](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.204.pdf), Table 2), against 132 bytes for ES512. A signed report is therefore about 6 KB larger as JWS and about 4.5 KB larger as CoRIM.
+
+`samples/example_mldsa87.jws` is the report from `example_gen_sign_verify.py` signed with ML-DSA-87, and `samples/testkey_mldsa87.pub` is its public key.
 

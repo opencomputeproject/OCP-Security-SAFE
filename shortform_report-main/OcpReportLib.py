@@ -43,6 +43,20 @@ from cryptography.hazmat.primitives.asymmetric.ec import (
     EllipticCurvePublicNumbers,
     SECP521R1,
 )
+try:
+    from cryptography.hazmat.primitives.asymmetric.mldsa import (
+        MLDSA87PrivateKey,
+        MLDSA87PublicKey,
+    )
+except ImportError:
+    # ML-DSA-87 needs cryptography 48.0.0 or later. On older versions every
+    # other algorithm still works, and these stand-ins match no key.
+    class MLDSA87PrivateKey:
+        pass
+
+    class MLDSA87PublicKey:
+        pass
+from cryptography.exceptions import InvalidSignature
 
 from azure.identity import DefaultAzureCredential
 from azure.keyvault.keys import KeyClient
@@ -58,7 +72,15 @@ ALLOWED_JWA_ECDSA_ALGOS = (
     "ES384",  # ECDSA using P-384 and SHA-384
     "ES512",  # ECDSA using P-521 and SHA-512
 )
-ALLOWED_JWA_ALGOS = ALLOWED_JWA_RSA_ALGOS + ALLOWED_JWA_ECDSA_ALGOS
+ALLOWED_JWA_MLDSA_ALGOS = (
+    "ML-DSA-87",  # ML-DSA-87 (FIPS 204), registered for JOSE by RFC 9964
+)
+ALLOWED_JWA_ALGOS = (
+    ALLOWED_JWA_RSA_ALGOS + ALLOWED_JWA_ECDSA_ALGOS + ALLOWED_JWA_MLDSA_ALGOS
+)
+
+# COSE algorithm identifier for ML-DSA-87, registered by RFC 9964.
+COSE_ALG_MLDSA87 = -50
 
 # Only the following RSA key sizes (in bits) will be accepted by this script for
 # signing a short-form report.
@@ -91,6 +113,42 @@ def pretty_cbor_tag(value, ctx):
     else:
         c = value.value
     return prettyprinter.pretty_call(ctx, cbor2.CBORTag, (value.tag, c))
+
+
+class MLDSA87Algorithm(jwt.algorithms.Algorithm):
+    """ML-DSA-87 for PyJWT, which does not ship it yet."""
+
+    def prepare_key(self, key):
+        if not isinstance(key, (MLDSA87PrivateKey, MLDSA87PublicKey)):
+            key = key if isinstance(key, bytes) else key.encode("utf-8")
+            try:
+                key = serialization.load_pem_private_key(key, None)
+            except ValueError:
+                key = serialization.load_pem_public_key(key)
+        if not isinstance(key, (MLDSA87PrivateKey, MLDSA87PublicKey)):
+            raise jwt.InvalidKeyError("Expected an ML-DSA-87 key")
+        return key
+
+    def sign(self, msg, key):
+        return key.sign(msg)
+
+    def verify(self, msg, key, sig):
+        try:
+            key.verify(sig, msg)
+            return True
+        except InvalidSignature:
+            return False
+
+    def to_jwk(self, key_obj, as_dict=False):
+        raise NotImplementedError
+
+    def from_jwk(self, jwk):
+        raise NotImplementedError
+
+
+# A private PyJWS instance, so that PyJWT's module-level state is unchanged.
+_MLDSA_JWS = jwt.PyJWS(algorithms=[])
+_MLDSA_JWS.register_algorithm("ML-DSA-87", MLDSA87Algorithm())
 
 
 class AzureKeyVaultSigner(cwt.Signer):
@@ -554,10 +612,17 @@ class ShortFormReport(object):
         )
 
         # Ensure the correct private key types are passed
-        if not isinstance(pem, (RSAPrivateKey, EllipticCurvePrivateKey)):
+        if not isinstance(
+            pem, (RSAPrivateKey, EllipticCurvePrivateKey, MLDSA87PrivateKey)
+        ):
             print(
-                "Expected 'priv_key' to be a 'RSAPrivateKey' or 'EllipticCurvePrivateKey'"
+                "Expected 'priv_key' to be a 'RSAPrivateKey', 'EllipticCurvePrivateKey' or 'MLDSA87PrivateKey'"
             )
+            return False
+
+        # An ML-DSA-87 key signs only as ML-DSA-87, and ML-DSA-87 needs that key.
+        if (algo in ALLOWED_JWA_MLDSA_ALGOS) != isinstance(pem, MLDSA87PrivateKey):
+            print(f"Mismatch between algo={algo} and key type: {type(pem).__name__}")
             return False
 
         # Sanity check which curve is in use:
@@ -590,6 +655,12 @@ class ShortFormReport(object):
         jws_headers = {"kid": f"{kid}"}
 
         # Finally, we can sign the short-form report.
+        if algo in ALLOWED_JWA_MLDSA_ALGOS:
+            payload = json.dumps(self.get_report_as_dict(), separators=(",", ":"))
+            self.signed_json_report = _MLDSA_JWS.encode(
+                payload.encode("utf-8"), key=pem, algorithm=algo, headers=jws_headers
+            )
+            return True
         self.signed_json_report = jwt.encode(
             self.get_report_as_dict(), key=priv_key, algorithm=algo, headers=jws_headers
         )
@@ -678,15 +749,35 @@ class ShortFormReport(object):
         Uses cwt.COSE to produce a proper COSE_Sign1 envelope.
 
         priv_key: PEM-encoded private key bytes.
-        algo:     Algorithm name (ES384, ES512, PS384, PS512).
+        algo:     Algorithm name (ES384, ES512, PS384, PS512, ML-DSA-87).
         kid:      Key identifier string for the unprotected header.
         """
         try:
-            algo_map = {"ES384": -35, "ES512": -36, "PS384": -37, "PS512": -38}
+            algo_map = {
+                "ES384": -35,
+                "ES512": -36,
+                "PS384": -37,
+                "PS512": -38,
+                "ML-DSA-87": COSE_ALG_MLDSA87,
+            }
             cose_alg = algo_map.get(algo)
             if cose_alg is None:
                 print(f"Unsupported algorithm: {algo}")
                 return False
+
+            # cwt has no ML-DSA, so the COSE_Sign1 is built here (RFC 9052 4.4).
+            if cose_alg == COSE_ALG_MLDSA87:
+                key = serialization.load_pem_private_key(priv_key, None)
+                if not isinstance(key, MLDSA87PrivateKey):
+                    print(f"Expected an ML-DSA-87 key, got: {type(key).__name__}")
+                    return False
+                payload = self.get_report_as_corim_cbor()
+                protected = cbor2.dumps({1: cose_alg})
+                to_sign = cbor2.dumps(["Signature1", protected, b"", payload])
+                self.signed_corim_report = cbor2.dumps(cbor2.CBORTag(18, [
+                    protected, {4: kid.encode("utf-8")}, payload, key.sign(to_sign)
+                ]))
+                return True
 
             cose_key = cwt.COSEKey.from_pem(priv_key, alg=cose_alg, kid=kid)
             return self._sign_corim_report_internal(cose_key)
@@ -757,7 +848,17 @@ class ShortFormReport(object):
         Returns a dictionary containing the decoded JSON short-form report
         payload.
         """
-        decoded = jwt.decode(signed_json_report, pub_key, algorithms=ALLOWED_JWA_ALGOS)
+        # The unverified 'alg' only picks the path. Each path still enforces its
+        # own algorithm list and key type. The ML-DSA-87 path decodes the JWS
+        # directly, so PyJWT's registered-claim checks (exp, nbf, iat) are not
+        # applied, which loses nothing because short-form reports carry none.
+        alg = jwt.get_unverified_header(signed_json_report).get("alg")
+        if alg in ALLOWED_JWA_MLDSA_ALGOS:
+            decoded = json.loads(_MLDSA_JWS.decode(
+                signed_json_report, pub_key, algorithms=ALLOWED_JWA_MLDSA_ALGOS
+            ))
+        else:
+            decoded = jwt.decode(signed_json_report, pub_key, algorithms=ALLOWED_JWA_ALGOS)
 
         # verify additional contents of the report
         if self.verify_json_report_contents(decoded) is not True:
@@ -776,11 +877,26 @@ class ShortFormReport(object):
         kid:                 Key identifier string.
         algo:                COSE algorithm identifier
                              (default: -36 / ES512 for backward compatibility;
-                              use -35 for ES384).
+                              use -35 for ES384, -50 for ML-DSA-87).
 
         Returns True on success, raises Exception on failure.
         """
         try:
+            if algo == COSE_ALG_MLDSA87:
+                msg = cbor2.loads(signed_corim_report)
+                if not isinstance(msg, cbor2.CBORTag) or msg.tag != 18:
+                    raise ValueError("not a COSE_Sign1 (tag 18) message")
+                protected, unprotected, payload, signature = msg.value
+                if cbor2.loads(protected).get(1) != COSE_ALG_MLDSA87:
+                    raise ValueError("protected header alg is not -50")
+                if unprotected.get(4) != kid.encode("utf-8"):
+                    raise ValueError("kid does not match")
+                key = serialization.load_pem_public_key(pub_key)
+                if not isinstance(key, MLDSA87PublicKey):
+                    raise ValueError(f"not an ML-DSA-87 key: {type(key).__name__}")
+                key.verify(signature, cbor2.dumps(["Signature1", protected, b"", payload]))
+                return True
+
             cose_key = cwt.COSEKey.from_pem(pub_key, alg=algo, kid=kid)
             cose = cwt.COSE()
             cose.decode(signed_corim_report, cose_key)
