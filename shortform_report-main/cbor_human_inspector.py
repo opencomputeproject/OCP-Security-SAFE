@@ -846,16 +846,46 @@ def inspect_sfr_data(sfr_data, indent=""):
                             if len(desc) > 100:
                                 desc = desc[:100] + "..."
                             print(f"{indent}         Description: {desc}")
-                        if 2 in issue:  # assessment (nested cvss)
+                        if 2 in issue:  # assessment (nested cvss, jil, or qualitative-rating)
                             assessment = issue[2]
                             if isinstance(assessment, dict):
-                                print(f"{indent}         Assessment: CVSS")
-                                if 0 in assessment:  # cvss-score
-                                    print(f"{indent}            CVSS Score: {assessment[0]}")
-                                if 1 in assessment:  # cvss-vector
-                                    print(f"{indent}            CVSS Vector: {assessment[1]}")
-                                if 2 in assessment:  # cvss-version
-                                    print(f"{indent}            CVSS Version: {assessment[2]}")
+                                # classification (key 0) is a uint, while
+                                # cvss-score and jil-rating (both key 0) are
+                                # tstr. Among the tstr cases, cvss always has
+                                # a tstr at key 1 (cvss-vector) while jil's
+                                # key 1, if present, is a map
+                                # (jil-identification); that tells them apart.
+                                if not isinstance(assessment.get(0), str):
+                                    classification_names = ["None", "Low", "Medium", "High", "Critical"]
+                                    level_names = ["Low", "Medium", "High"]
+                                    print(f"{indent}         Assessment: Qualitative Rating")
+                                    if 0 in assessment:  # classification
+                                        print(f"{indent}            Classification: {classification_names[assessment[0]]}")
+                                    if 1 in assessment:  # likelihood
+                                        print(f"{indent}            Likelihood: {level_names[assessment[1]]}")
+                                    if 2 in assessment:  # impact
+                                        print(f"{indent}            Impact: {level_names[assessment[2]]}")
+                                elif 1 not in assessment or isinstance(assessment.get(1), dict):
+                                    jil_factor_names = ["Elapsed Time", "Expertise", "Knowledge of TOE", "Window of Opportunity", "Equipment"]
+                                    print(f"{indent}         Assessment: JIL")
+                                    if 0 in assessment:  # jil-rating
+                                        print(f"{indent}            JIL Rating: {assessment[0]}")
+                                    for key, label in ((1, "Identification"), (2, "Exploitation")):
+                                        if key in assessment:
+                                            print(f"{indent}            JIL {label} Factors:")
+                                            for factor_key, factor_value in assessment[key].items():
+                                                name = jil_factor_names[factor_key] if factor_key < len(jil_factor_names) else f"Factor {factor_key}"
+                                                print(f"{indent}               {name}: {factor_value}")
+                                    if 3 in assessment:  # jil-version
+                                        print(f"{indent}            JIL Version: {assessment[3]}")
+                                else:
+                                    print(f"{indent}         Assessment: CVSS")
+                                    if 0 in assessment:  # cvss-score
+                                        print(f"{indent}            CVSS Score: {assessment[0]}")
+                                    if 1 in assessment:  # cvss-vector
+                                        print(f"{indent}            CVSS Vector: {assessment[1]}")
+                                    if 2 in assessment:  # cvss-version
+                                        print(f"{indent}            CVSS Version: {assessment[2]}")
                         if 3 in issue:  # cwe
                             print(f"{indent}         CWE: {issue[3]}")
                         if 4 in issue:  # cve
