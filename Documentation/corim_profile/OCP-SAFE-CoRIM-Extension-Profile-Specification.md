@@ -213,6 +213,7 @@ cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
+  ? &(assessment-type: 4) => 0 ; cvss; absent in legacy data
 }
 
 jil = {
@@ -220,6 +221,7 @@ jil = {
   ? &(jil-identification: 1) => jil-factor-scores
   ? &(jil-exploitation: 2) => jil-factor-scores
   ? &(jil-version: 3) => tstr
+  &(assessment-type: 4) => 1 ; jil
 }
 
 jil-factor-scores = {
@@ -234,7 +236,14 @@ qualitative-rating = {
   &(classification: 0) => classification-level
   ? &(likelihood: 1) => likelihood-impact-level
   ? &(impact: 2) => likelihood-impact-level
+  &(assessment-type: 4) => 2 ; qualitative-rating
 }
+
+assessment-type = &(
+  cvss: 0,
+  jil: 1,
+  qualitative-rating: 2
+)
 ```
 
 **Table 3: Issue Entry Structure**
@@ -262,6 +271,7 @@ silicon (see [Review Scope](../review_scope.md) for when each applies).
 | cvss-score | 0 | tstr | Yes | CVSS numerical score (e.g., "7.9") |
 | cvss-vector | 1 | tstr | Yes | CVSS vector string |
 | cvss-version | 2 | tstr | No | CVSS version used for scoring (default: "3.1") |
+| assessment-type | 4 | uint (enum) | No | Assessment type discriminator; if present MUST be cvss (0). Absence means legacy CVSS data predating this field |
 
 **Table 5: JIL Structure**
 
@@ -274,6 +284,7 @@ and Similar Devices" methodology used in Common Criteria hardware evaluations.
 | jil-identification | 1 | jil-factor-scores | No | Per-factor points under the identification-phase table |
 | jil-exploitation | 2 | jil-factor-scores | No | Per-factor points under the exploitation-phase table |
 | jil-version | 3 | tstr | No | JIL attack potential methodology version used (e.g., "3.2.1") |
+| assessment-type | 4 | uint (enum) | Yes | Assessment type discriminator; MUST be jil (1) |
 
 **Table 6: JIL Factor Scores Structure**
 
@@ -295,16 +306,15 @@ assigned to each of the five JIL attack potential factors for that phase.
 | classification | 0 | uint (enum) | Yes | Overall classification: none (0), low (1), medium (2), high (3), critical (4) |
 | likelihood | 1 | uint (enum) | No | Likelihood the attack can be mounted and succeeds: low (0), medium (1), high (2) |
 | impact | 2 | uint (enum) | No | Confidentiality/integrity/availability consequence of success: low (0), medium (1), high (2) |
+| assessment-type | 4 | uint (enum) | Yes | Assessment type discriminator; MUST be qualitative-rating (2) |
 
-Note on extensibility: the three `$assessment` alternatives are disambiguated structurally rather than via an
-explicit type tag. `cvss` requires both `cvss-score` and `cvss-vector` (both tstr); `jil` requires only `jil-rating`
-(tstr), so a map with only `jil-rating` can never satisfy `cvss` (missing its second required key), and a full `jil`
-map with `jil-identification`/`jil-exploitation` present can never satisfy `cvss` either, since those keys hold a map
-(`jil-factor-scores`), not the tstr `cvss-vector` expects. `qualitative-rating` requires only `classification`
-(uint), a different CBOR major type than the tstr required by both `cvss` and `jil`, so it can never be confused with
-either. This keeps existing CVSS-encoded data valid and unambiguous under the enlarged `$assessment` choice. Future
-assessment types added to `$assessment` MUST preserve this property: their required fields must not be
-simultaneously satisfiable by any existing alternative.
+Note on extensibility: the three `$assessment` alternatives are distinguished by an explicit `assessment-type`
+discriminator at key 4: cvss (0), jil (1), qualitative-rating (2). It is required on `jil` and `qualitative-rating`,
+which are new and have no legacy data. It is optional on `cvss` so that already-published SFRs that predate the field
+remain valid; a map with no `assessment-type` MUST be interpreted as legacy `cvss`. Consumers MUST select the
+assessment type from `assessment-type` when present and MUST NOT infer it from other fields except for this legacy
+`cvss` fallback. Future assessment types claim the next unused `assessment-type` integer at key 4 and need not prove
+that their required fields are disjoint from those of existing alternatives.
 
 ### Source Manifest Support
 

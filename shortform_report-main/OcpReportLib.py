@@ -469,6 +469,7 @@ class ShortFormReport(object):
                 # Add optional cvss-version
                 if "cvss_version" in self.report["audit"]:
                     assessment[2] = self.report["audit"]["cvss_version"]  # cvss-version
+                assessment[4] = 0  # assessment-type: cvss
             elif "jil_rating" in issue:
                 assessment = {
                     0: issue["jil_rating"],  # jil-rating
@@ -483,6 +484,7 @@ class ShortFormReport(object):
                     )  # jil-exploitation
                 if "jil_version" in issue:
                     assessment[3] = issue["jil_version"]  # jil-version
+                assessment[4] = 1  # assessment-type: jil
             else:
                 assessment = {
                     0: QUALITATIVE_CLASSIFICATION_LEVELS[
@@ -497,6 +499,7 @@ class ShortFormReport(object):
                     assessment[2] = QUALITATIVE_LIKELIHOOD_IMPACT_LEVELS[
                         issue["impact"].lower()
                     ]  # impact
+                assessment[4] = 2  # assessment-type: qualitative-rating
 
             # Build issue-entry with nested assessment
             corim_issue = {

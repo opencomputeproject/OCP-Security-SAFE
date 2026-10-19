@@ -25,19 +25,21 @@ issue-entry = {
   * $$ocp-safe-issue-entry-ext
 }
 
-; The three $assessment alternatives are disambiguated structurally, not via
-; an explicit type tag, so their required fields must never be simultaneously
-; satisfiable by another alternative:
-;   - cvss requires both cvss-score and cvss-vector (both tstr).
-;   - jil requires only jil-rating (tstr). A map with only jil-rating can never
-;     also satisfy cvss, which is missing its second required key. A full jil
-;     map with jil-identification/jil-exploitation present can never satisfy
-;     cvss either, since those keys hold a map (jil-factor-scores), not the
-;     tstr cvss-vector expects.
-;   - qualitative-rating requires only classification (uint), a different CBOR
-;     major type than the tstr required by both cvss and jil, so it can never
-;     be confused with either.
-; Future assessment types added to $assessment MUST preserve this property.
+; The three $assessment alternatives are distinguished by an explicit
+; assessment-type discriminator at key 4, so alternatives are never told apart
+; by which optional or required fields happen to be present:
+;   - jil and qualitative-rating MUST carry assessment-type (new alternatives,
+;     no legacy data).
+;   - cvss MAY omit it so already-published SFRs that predate the field still
+;     validate; absence means legacy cvss.
+; Future assessment types MUST claim the next unused assessment-type value and
+; use key 4 for it.
+assessment-type = &(
+  cvss: 0,
+  jil: 1,
+  qualitative-rating: 2
+)
+
 $assessment /= cvss
 $assessment /= jil
 $assessment /= qualitative-rating
@@ -46,6 +48,7 @@ cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
+  ? &(assessment-type: 4) => 0 ; cvss; absent in legacy data
 }
 
 ; JIL attack potential scoring (per the Joint Interpretation Library "Application
@@ -58,6 +61,7 @@ jil = {
   ? &(jil-identification: 1) => jil-factor-scores
   ? &(jil-exploitation: 2) => jil-factor-scores
   ? &(jil-version: 3) => tstr ; JIL attack potential methodology version, e.g. "3.2.1"
+  &(assessment-type: 4) => 1 ; jil
 }
 
 ; Each of the five JIL attack potential factors is scored separately under the
@@ -72,13 +76,13 @@ jil-factor-scores = {
 
 ; Used for Scope 3 physical-attack findings established only through
 ; simulation (pre-silicon evidence), where JIL's attack-potential factors
-; cannot be meaningfully measured. classification is the only required field;
-; it can never also satisfy cvss's or jil's required keys (see disambiguation
-; note above).
+; cannot be meaningfully measured. classification and assessment-type are the
+; only required fields.
 qualitative-rating = {
   &(classification: 0) => classification-level
   ? &(likelihood: 1) => likelihood-impact-level
   ? &(impact: 2) => likelihood-impact-level
+  &(assessment-type: 4) => 2 ; qualitative-rating
 }
 
 classification-level = &(

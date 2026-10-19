@@ -849,13 +849,12 @@ def inspect_sfr_data(sfr_data, indent=""):
                         if 2 in issue:  # assessment (nested cvss, jil, or qualitative-rating)
                             assessment = issue[2]
                             if isinstance(assessment, dict):
-                                # classification (key 0) is a uint, while
-                                # cvss-score and jil-rating (both key 0) are
-                                # tstr. Among the tstr cases, cvss always has
-                                # a tstr at key 1 (cvss-vector) while jil's
-                                # key 1, if present, is a map
-                                # (jil-identification); that tells them apart.
-                                if not isinstance(assessment.get(0), str):
+                                # assessment-type (key 4) selects the
+                                # assessment: 0 = cvss, 1 = jil,
+                                # 2 = qualitative-rating. Absent means legacy
+                                # cvss data that predates the field.
+                                assessment_type = assessment.get(4, 0)
+                                if assessment_type == 2:
                                     classification_names = ["None", "Low", "Medium", "High", "Critical"]
                                     level_names = ["Low", "Medium", "High"]
                                     print(f"{indent}         Assessment: Qualitative Rating")
@@ -865,7 +864,7 @@ def inspect_sfr_data(sfr_data, indent=""):
                                         print(f"{indent}            Likelihood: {level_names[assessment[1]]}")
                                     if 2 in assessment:  # impact
                                         print(f"{indent}            Impact: {level_names[assessment[2]]}")
-                                elif 1 not in assessment or isinstance(assessment.get(1), dict):
+                                elif assessment_type == 1:
                                     jil_factor_names = ["Elapsed Time", "Expertise", "Knowledge of TOE", "Window of Opportunity", "Equipment"]
                                     print(f"{indent}         Assessment: JIL")
                                     if 0 in assessment:  # jil-rating
