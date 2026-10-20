@@ -116,7 +116,7 @@ may use a scope 2 review for the application cores.
         * Findings confirmed via physical testing on silicon (post-silicon evidence) should be rated using
           [JIL Application of Attack Potential to Smartcards and Similar Devices, version 3.2.1](https://sogis.eu/documents/cc/domains/sc/JIL-Application-of-Attack-Potential-to-Smartcards-v3.2.1.pdf).
           JIL's methodology scores real, measured attack-potential factors (elapsed time, expertise, knowledge of the
-          TOE, access, and equipment), which only actual physical testing can establish.
+          TOE, access to the TOE, equipment, and open samples), which only actual physical testing can establish.
         * Findings established only through simulation, and not yet confirmed via physical testing on silicon
           (pre-silicon evidence only), should instead be rated directly from likelihood and impact, since JIL's
           factors cannot be meaningfully measured from simulation alone:

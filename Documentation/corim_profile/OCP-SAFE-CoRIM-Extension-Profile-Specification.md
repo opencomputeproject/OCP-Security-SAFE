@@ -28,7 +28,7 @@
 - Table 3: Issue Entry Structure
 - Table 4: CVSS Structure
 - Table 5: JIL Structure
-- Table 6: JIL Factor Scores Structure
+- Table 6: JIL Factors Structure
 - Table 7: Qualitative Rating Structure
 
 ## Acknowledgements
@@ -217,20 +217,96 @@ cvss = {
 }
 
 jil = {
-  &(jil-rating: 0) => tstr
-  ? &(jil-identification: 1) => jil-factor-scores
-  ? &(jil-exploitation: 2) => jil-factor-scores
-  ? &(jil-version: 3) => tstr
+  &(jil-rating: 0) => jil-rating-level
+  ? &(jil-identification: 1) => jil-identification-factors
+  ? &(jil-exploitation: 2) => jil-exploitation-factors
+  ? &(jil-version: 3) => tstr ; JIL attack potential methodology version, e.g. "3.2.1"
   &(assessment-type: 4) => 1 ; jil
 }
 
-jil-factor-scores = {
-  &(elapsed-time: 0) => uint
-  &(expertise: 1) => uint
-  &(knowledge-of-toe: 2) => uint
-  &(window-of-opportunity: 3) => uint
-  &(equipment: 4) => uint
+jil-rating-level = &(
+  no-rating: 0,
+  basic: 1,
+  enhanced-basic: 2,
+  moderate: 3,
+  high: 4
+)
+
+jil-identification-factors = {
+  &(elapsed-time: 0) => jil-elapsed-time
+  &(expertise: 1) => jil-expertise
+  &(knowledge: 2) => jil-knowledge
+  &(access: 3) => jil-access
+  &(equipment: 4) => jil-equipment
+  &(open-samples: 5) => jil-open-samples
+  ? &(package-removal: 6) => jil-package-removal
 }
+
+jil-exploitation-factors = {
+  &(elapsed-time: 0) => jil-elapsed-time
+  &(expertise: 1) => jil-expertise
+  &(knowledge: 2) => jil-knowledge
+  &(access: 3) => jil-access
+  &(equipment: 4) => jil-equipment
+  ? &(package-removal: 6) => jil-package-removal
+}
+
+jil-elapsed-time = &(
+  lt-1-hour: 0,
+  lt-1-day: 1,
+  lt-1-week: 2,
+  lt-1-month: 3,
+  gt-1-month: 4,
+  gt-4-months: 5,
+  not-practical: 6
+)
+
+jil-expertise = &(
+  layman: 0,
+  proficient: 1,
+  expert: 2,
+  multiple-expert: 3
+)
+
+jil-knowledge = &(
+  public: 0,
+  restricted: 1,
+  sensitive: 2,
+  critical: 3,
+  critical-plus: 4,
+  not-practical: 5
+)
+
+jil-access = &(
+  lt-10-samples: 0,
+  lt-30-samples: 1,
+  lt-100-samples: 2,
+  gt-100-samples: 3,
+  not-practical: 4
+)
+
+jil-equipment = &(
+  none: 0,
+  standard: 1,
+  specialized: 2,
+  multiple-specialized: 3,
+  bespoke: 4,
+  multiple-bespoke: 5
+)
+
+jil-open-samples = &(
+  public: 0,
+  restricted: 1,
+  sensitive: 2,
+  critical: 3,
+  not-practical: 4
+)
+
+jil-package-removal = &(
+  low: 0,
+  medium: 1,
+  high: 2
+)
 
 qualitative-rating = {
   &(classification: 0) => classification-level
@@ -280,24 +356,39 @@ and Similar Devices" methodology used in Common Criteria hardware evaluations.
 
 | Field | Key | Type | Required | Description |
 |-------|-----|------|----------|-------------|
-| jil-rating | 0 | tstr | Yes | Resulting attack potential rating (e.g., "Basic", "Enhanced-Basic", "Moderate", "High", "Beyond High") |
-| jil-identification | 1 | jil-factor-scores | No | Per-factor points under the identification-phase table |
-| jil-exploitation | 2 | jil-factor-scores | No | Per-factor points under the exploitation-phase table |
+| jil-rating | 0 | uint (enum) | Yes | Resulting attack potential rating (JIL Table 14): no-rating (0, total 0-15), basic (1, 16-20), enhanced-basic (2, 21-24), moderate (3, 25-30) or high (4, 31 and above) |
+| jil-identification | 1 | jil-identification-factors | No | Categories chosen for each factor in the identification phase |
+| jil-exploitation | 2 | jil-exploitation-factors | No | Categories chosen for each factor in the exploitation phase |
 | jil-version | 3 | tstr | No | JIL attack potential methodology version used (e.g., "3.2.1") |
 | assessment-type | 4 | uint (enum) | Yes | Assessment type discriminator; MUST be jil (1) |
 
-**Table 6: JIL Factor Scores Structure**
+**Table 6: JIL Factors Structure**
 
-Both `jil-identification` and `jil-exploitation` use the same `jil-factor-scores` structure, holding the points
-assigned to each of the five JIL attack potential factors for that phase.
+Each factor is recorded as the category chosen from JIL 3.2.1 Table 13, encoded as the enum value in the table
+below, rather than as a points value. The points follow from the category and the phase (identification or
+exploitation), so a consumer can recompute the total and check it against `jil-rating`. `jil-identification` and
+`jil-exploitation` use the same keys, except that `open-samples` applies to identification only and MUST NOT appear
+in `jil-exploitation`. Diagnostic-notation examples annotate keys and values with comments, for example
+`/ elapsed-time / 0: 2 / lt-1-week /`; the comments are not part of the encoding.
 
-| Field | Key | Type | Required | Description |
-|-------|-----|------|----------|-------------|
-| elapsed-time | 0 | uint | Yes | Points for elapsed time needed to identify or exploit |
-| expertise | 1 | uint | Yes | Points for attacker expertise required |
-| knowledge-of-toe | 2 | uint | Yes | Points for knowledge of the target of evaluation required |
-| window-of-opportunity | 3 | uint | Yes | Points for the window of opportunity available to the attacker |
-| equipment | 4 | uint | Yes | Points for equipment required |
+| Field | Key | Required | Category enum values (JIL points: identification / exploitation) |
+|-------|-----|----------|------------|
+| elapsed-time | 0 | Yes | lt-1-hour 0 (0/0), lt-1-day 1 (1/3), lt-1-week 2 (2/4), lt-1-month 3 (3/6), gt-1-month 4 (5/8), gt-4-months 5 (6/10), not-practical 6 (\*) |
+| expertise | 1 | Yes | layman 0 (0/0), proficient 1 (2/2), expert 2 (5/4), multiple-expert 3 (7/6) |
+| knowledge | 2 | Yes | public 0 (0/0), restricted 1 (2/2), sensitive 2 (4/3), critical 3 (6/5), critical-plus 4 (9/\*), not-practical 5 (\*) |
+| access | 3 | Yes | lt-10-samples 0 (0/0), lt-30-samples 1 (1/2), lt-100-samples 2 (2/4), gt-100-samples 3 (3/6), not-practical 4 (\*). Replaces the CEM "window of opportunity" factor. |
+| equipment | 4 | Yes | none 0 (0/0), standard 1 (1/2), specialized 2 (3/4), multiple-specialized 3 (4/5), bespoke 4 (5/6), multiple-bespoke 5 (7/8) |
+| open-samples | 5 | Identification only; required there | public 0 (0), restricted 1 (2), sensitive 2 (5), critical 3 (9), not-practical 4 (\*). Use public when no open samples or samples with known secrets were used. |
+| package-removal | 6 | No | Extra points added to access when the package is part of the TOE (JIL Table 7): low 0 (0/0), medium 1 (1/2), high 2 (2/4) |
+
+A `*` in JIL means the attack path is not exploitable in a useful manner; any factor with that value makes the
+overall rating `high`. Otherwise the total is the sum of the points of all factors in both phases, mapped to a rating
+by JIL Table 14. When both `jil-identification` and `jil-exploitation` are present, `jil-rating` MUST equal the rating
+derived from them.
+
+The conditions under which a category or factor may be used are defined by JIL 3.2.1 and are not restated here;
+SRPs MUST apply them when scoring. In particular, see §4.2 (including Table 1a) for elapsed time, §4.5.1 and Appendix
+A for access and package removal, and §4.7 for open samples and samples with known secrets.
 
 **Table 7: Qualitative Rating Structure**
 

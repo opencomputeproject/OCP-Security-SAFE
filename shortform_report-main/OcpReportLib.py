@@ -91,14 +91,74 @@ QUALITATIVE_LIKELIHOOD_IMPACT_LEVELS = {
 }
 
 # Maps the JIL attack potential factor names used in add_issue()'s
-# jil_identification/jil_exploitation dicts to their jil-factor-scores CDDL keys.
-JIL_FACTOR_CBOR_KEYS = {
+# jil_identification/jil_exploitation dicts to their CDDL keys.
+JIL_FACTOR_KEYS = {
     "elapsed_time": 0,
     "expertise": 1,
-    "knowledge_of_toe": 2,
-    "window_of_opportunity": 3,
+    "knowledge": 2,
+    "access": 3,
     "equipment": 4,
+    "open_samples": 5,
+    "package_removal": 6,
 }
+
+# JIL 3.2.1 Table 13 (and Table 7 for package_removal): for each factor, each
+# category's (CDDL enum value, identification points, exploitation points).
+# The enum values must match the jil-* enums in ocp-safe-sfr-profile.cddl.
+# None points is "*" (not practical); any "*" yields a "High" rating.
+JIL_FACTOR_CATEGORIES = {
+    "elapsed_time": {
+        "lt-1-hour": (0, 0, 0), "lt-1-day": (1, 1, 3), "lt-1-week": (2, 2, 4),
+        "lt-1-month": (3, 3, 6), "gt-1-month": (4, 5, 8), "gt-4-months": (5, 6, 10),
+        "not-practical": (6, None, None),
+    },
+    "expertise": {
+        "layman": (0, 0, 0), "proficient": (1, 2, 2), "expert": (2, 5, 4),
+        "multiple-expert": (3, 7, 6),
+    },
+    "knowledge": {
+        "public": (0, 0, 0), "restricted": (1, 2, 2), "sensitive": (2, 4, 3),
+        "critical": (3, 6, 5), "critical-plus": (4, 9, None),
+        "not-practical": (5, None, None),
+    },
+    "access": {
+        "lt-10-samples": (0, 0, 0), "lt-30-samples": (1, 1, 2),
+        "lt-100-samples": (2, 2, 4), "gt-100-samples": (3, 3, 6),
+        "not-practical": (4, None, None),
+    },
+    "equipment": {
+        "none": (0, 0, 0), "standard": (1, 1, 2), "specialized": (2, 3, 4),
+        "multiple-specialized": (3, 4, 5), "bespoke": (4, 5, 6),
+        "multiple-bespoke": (5, 7, 8),
+    },
+    "open_samples": {  # identification phase only
+        "public": (0, 0, 0), "restricted": (1, 2, 0), "sensitive": (2, 5, 0),
+        "critical": (3, 9, 0), "not-practical": (4, None, 0),
+    },
+    "package_removal": {  # extra points in the access factor
+        "low": (0, 0, 0), "medium": (1, 1, 2), "high": (2, 2, 4),
+    },
+}
+
+# Factors that must be present in each phase (package_removal is optional,
+# and open_samples applies to identification only).
+JIL_REQUIRED_FACTORS = {
+    "jil_identification": [
+        "elapsed_time", "expertise", "knowledge", "access", "equipment", "open_samples",
+    ],
+    "jil_exploitation": [
+        "elapsed_time", "expertise", "knowledge", "access", "equipment",
+    ],
+}
+
+# JIL 3.2.1 Table 14: jil-rating-level labels, their CDDL enum values, and the
+# lowest total for each rating (highest first).
+JIL_RATING_LEVELS = {
+    "No rating": 0, "Basic": 1, "Enhanced-Basic": 2, "Moderate": 3, "High": 4,
+}
+JIL_RATING_THRESHOLDS = [
+    (31, "High"), (25, "Moderate"), (21, "Enhanced-Basic"), (16, "Basic"), (0, "No rating"),
+]
 
 
 # Define the custom pretty-print function for CBORTag
@@ -265,8 +325,8 @@ class ShortFormReport(object):
         likelihood: str = None,
         impact: str = None,
         jil_rating: str = None,
-        jil_identification: Dict[str, int] = None,
-        jil_exploitation: Dict[str, int] = None,
+        jil_identification: Dict[str, str] = None,
+        jil_exploitation: Dict[str, str] = None,
         jil_version: str = None,
     ) -> None:
         """Add one issue to the list of issues. This list should only contain
@@ -300,18 +360,27 @@ class ShortFormReport(object):
         impact:      Optional supporting rationale for 'classification': the
                        confidentiality/integrity/availability consequence of a
                        successful attack. One of "Low", "Medium", "High".
-        jil_rating:  The resulting JIL attack potential rating, e.g. "Basic",
-                       "Enhanced-Basic", "Moderate", "High", "Beyond High". Used
-                       instead of cvss_score/cvss_vec/classification for Scope 3
-                       physical-attack findings confirmed via physical testing on
-                       silicon, assessed under the Joint Interpretation Library
-                       methodology.
-        jil_identification: Optional dict of per-factor points under the
-                       identification-phase table. Keys: "elapsed_time",
-                       "expertise", "knowledge_of_toe", "window_of_opportunity",
-                       "equipment". All five must be present if provided.
+        jil_rating:  The resulting JIL attack potential rating (Table 14): one of
+                       "No rating", "Basic", "Enhanced-Basic", "Moderate", "High".
+                       Used instead of cvss_score/cvss_vec/classification for
+                       Scope 3 physical-attack findings confirmed via physical
+                       testing on silicon, assessed under the Joint
+                       Interpretation Library methodology. If both
+                       jil_identification and jil_exploitation are given it must
+                       match the rating derived from them.
+        jil_identification: Optional dict of JIL Table 13 categories for the
+                       identification phase. Required keys: "elapsed_time"
+                       ("lt-1-hour" ... "gt-4-months"), "expertise" ("layman",
+                       "proficient", "expert", "multiple-expert"), "knowledge"
+                       ("public" ... "critical-plus"), "access" ("lt-10-samples"
+                       ... "gt-100-samples"), "equipment" ("none" ...
+                       "multiple-bespoke") and "open_samples" ("public" ...
+                       "critical"). Any factor may be "not-practical" (JIL's
+                       "*"). Optional: "package_removal" ("low", "medium",
+                       "high"), extra Access points when the package is part
+                       of the TOE.
         jil_exploitation: Same shape as jil_identification, but for the
-                       exploitation-phase table.
+                       exploitation phase; "open_samples" does not apply.
         jil_version: The JIL attack potential methodology version used, e.g. "3.2.1".
         """
         has_cvss = bool(f"{cvss_score}".strip()) and bool(f"{cvss_vec}".strip())
@@ -342,7 +411,13 @@ class ShortFormReport(object):
             if impact is not None and f"{impact}".strip():
                 new_issue["impact"] = f"{impact}".strip()
         else:
-            new_issue["jil_rating"] = f"{jil_rating}".strip()
+            jil_rating = f"{jil_rating}".strip()
+            if jil_rating not in JIL_RATING_LEVELS:
+                raise ValueError(
+                    f"invalid jil_rating {jil_rating!r}; expected one of: "
+                    f"{', '.join(JIL_RATING_LEVELS)}"
+                )
+            new_issue["jil_rating"] = jil_rating
             if jil_identification is not None:
                 new_issue["jil_identification"] = self._validate_jil_factor_scores(
                     jil_identification, "jil_identification"
@@ -351,6 +426,15 @@ class ShortFormReport(object):
                 new_issue["jil_exploitation"] = self._validate_jil_factor_scores(
                     jil_exploitation, "jil_exploitation"
                 )
+            if jil_identification is not None and jil_exploitation is not None:
+                derived = self.jil_rating_from_factors(
+                    new_issue["jil_identification"], new_issue["jil_exploitation"]
+                )
+                if derived != new_issue["jil_rating"]:
+                    raise ValueError(
+                        f"jil_rating {new_issue['jil_rating']!r} does not match "
+                        f"the rating {derived!r} derived from the JIL factors"
+                    )
             if jil_version is not None and f"{jil_version}".strip():
                 new_issue["jil_version"] = f"{jil_version}".strip()
 
@@ -362,19 +446,54 @@ class ShortFormReport(object):
         self.report["audit"]["issues"].append(new_issue)
 
     def _validate_jil_factor_scores(
-        self, factors: Dict[str, int], field_name: str
-    ) -> Dict[str, int]:
-        """Validate that a JIL factor score dict covers all five attack potential factors."""
-        missing = [k for k in JIL_FACTOR_CBOR_KEYS if k not in factors]
+        self, factors: Dict[str, str], field_name: str
+    ) -> Dict[str, str]:
+        """Validate a JIL phase dict: all required factors present, no unknown
+        or inapplicable factors, and every category a valid JIL Table 13 label."""
+        required = JIL_REQUIRED_FACTORS[field_name]
+        allowed = required + ["package_removal"]
+        missing = [k for k in required if k not in factors]
         if missing:
             raise ValueError(
                 f"{field_name} is missing required JIL factor(s): {', '.join(missing)}"
             )
-        return {k: factors[k] for k in JIL_FACTOR_CBOR_KEYS}
+        unknown = [k for k in factors if k not in allowed]
+        if unknown:
+            raise ValueError(
+                f"{field_name} has unknown or inapplicable JIL factor(s): {', '.join(unknown)}"
+            )
+        for name, category in factors.items():
+            if category not in JIL_FACTOR_CATEGORIES[name]:
+                raise ValueError(
+                    f"{field_name}: invalid category {category!r} for {name}; "
+                    f"expected one of: {', '.join(JIL_FACTOR_CATEGORIES[name])}"
+                )
+        return {k: factors[k] for k in JIL_FACTOR_KEYS if k in factors}
 
-    def _build_jil_factor_scores(self, factors: Dict[str, int]) -> Dict[int, int]:
-        """Convert a validated JIL factor score dict to its jil-factor-scores CBOR keys."""
-        return {JIL_FACTOR_CBOR_KEYS[name]: value for name, value in factors.items()}
+    @staticmethod
+    def jil_rating_from_factors(
+        identification: Dict[str, str], exploitation: Dict[str, str]
+    ) -> str:
+        """Derive the JIL rating (Table 14) from validated factor categories.
+
+        Any "not-practical" (JIL's "*") yields "High"; otherwise the points of
+        both phases are summed, with package_removal adding to access.
+        """
+        total = 0
+        for phase, factors in enumerate((identification, exploitation)):
+            for name, category in factors.items():
+                points = JIL_FACTOR_CATEGORIES[name][category][phase + 1]
+                if points is None:
+                    return "High"
+                total += points
+        return next(label for floor, label in JIL_RATING_THRESHOLDS if total >= floor)
+
+    def _build_jil_factor_scores(self, factors: Dict[str, str]) -> Dict[int, int]:
+        """Convert a validated JIL factor dict to its CBOR keys and enum values."""
+        return {
+            JIL_FACTOR_KEYS[name]: JIL_FACTOR_CATEGORIES[name][category][0]
+            for name, category in factors.items()
+        }
 
     ###########################################################################
     # APIs for getting and printing the JSON report
@@ -472,7 +591,7 @@ class ShortFormReport(object):
                 assessment[4] = 0  # assessment-type: cvss
             elif "jil_rating" in issue:
                 assessment = {
-                    0: issue["jil_rating"],  # jil-rating
+                    0: JIL_RATING_LEVELS[issue["jil_rating"]],  # jil-rating
                 }
                 if "jil_identification" in issue:
                     assessment[1] = self._build_jil_factor_scores(

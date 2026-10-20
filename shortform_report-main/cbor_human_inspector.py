@@ -865,16 +865,29 @@ def inspect_sfr_data(sfr_data, indent=""):
                                     if 2 in assessment:  # impact
                                         print(f"{indent}            Impact: {level_names[assessment[2]]}")
                                 elif assessment_type == 1:
-                                    jil_factor_names = ["Elapsed Time", "Expertise", "Knowledge of TOE", "Window of Opportunity", "Equipment"]
+                                    # Factor key -> (display name, category labels indexed by
+                                    # CDDL enum value); see ocp-safe-sfr-profile.cddl jil-*.
+                                    jil_factors = {
+                                        0: ("Elapsed Time", ["< 1 hour", "< 1 day", "< 1 week", "< 1 month", "> 1 month", "> 4 months", "Not practical"]),
+                                        1: ("Expertise", ["Layman", "Proficient", "Expert", "Multiple expert"]),
+                                        2: ("Knowledge of TOE", ["Public", "Restricted", "Sensitive", "Critical", "Critical+", "Not practical"]),
+                                        3: ("Access to TOE", ["< 10 samples", "< 30 samples", "< 100 samples", "> 100 samples", "Not practical"]),
+                                        4: ("Equipment", ["None", "Standard", "Specialized", "Multiple specialized", "Bespoke", "Multiple bespoke"]),
+                                        5: ("Open Samples", ["Public", "Restricted", "Sensitive", "Critical", "Not practical"]),
+                                        6: ("Package Removal", ["Low", "Medium", "High"]),
+                                    }
+                                    jil_rating_names = ["No rating", "Basic", "Enhanced-Basic", "Moderate", "High"]
                                     print(f"{indent}         Assessment: JIL")
                                     if 0 in assessment:  # jil-rating
-                                        print(f"{indent}            JIL Rating: {assessment[0]}")
+                                        rating = assessment[0]
+                                        print(f"{indent}            JIL Rating: {jil_rating_names[rating] if rating < len(jil_rating_names) else rating}")
                                     for key, label in ((1, "Identification"), (2, "Exploitation")):
                                         if key in assessment:
                                             print(f"{indent}            JIL {label} Factors:")
                                             for factor_key, factor_value in assessment[key].items():
-                                                name = jil_factor_names[factor_key] if factor_key < len(jil_factor_names) else f"Factor {factor_key}"
-                                                print(f"{indent}               {name}: {factor_value}")
+                                                name, categories = jil_factors.get(factor_key, (f"Factor {factor_key}", []))
+                                                category = categories[factor_value] if factor_value < len(categories) else factor_value
+                                                print(f"{indent}               {name}: {category}")
                                     if 3 in assessment:  # jil-version
                                         print(f"{indent}            JIL Version: {assessment[3]}")
                                 else:

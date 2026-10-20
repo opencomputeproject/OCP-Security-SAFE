@@ -17,6 +17,13 @@ This directory contains testing and validation scripts for the OCP SAFE SFR CoRI
   - Outputs diagnostic information for debugging
   - Tests CoRIM signing functionality
 
+- **`test_assessment_types.py`** - Assessment-type discriminator tests against the CDDL profile
+  - Validates `issue-entry` fragments from `Documentation/corim_profile/examples/assessment-types/`
+  - `valid/` fixtures must be accepted (including `cvss` both with and without `assessment-type`)
+  - `invalid/` fixtures must be rejected (`jil` and `qualitative-rating` without the tag, or any wrong or unknown tag)
+  - Also checks that the integer enum values in `OcpReportLib.py` match the JIL enums in the CDDL
+  - Requires the Ruby tools `cddlc`, `cddl` and `diag2cbor.rb` (`gem install cddl cddlc cbor-diag`)
+
 ### Analysis and Debugging Tools
 
 - **`cbor_structure_analyzer.py`** - CBOR structure analysis tool
@@ -46,6 +53,9 @@ python tests/test_corim_generation.py
 
 # Run CDDL validation test
 python tests/test_cddl_validation.py
+
+# Run assessment-type CDDL accept/reject tests (needs the Ruby CDDL tools)
+python tests/test_assessment_types.py
 
 # Run final validation summary
 python tests/final_validation_summary.py

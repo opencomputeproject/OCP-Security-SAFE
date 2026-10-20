@@ -1,0 +1,26 @@
+/ issue-entry fragment used by the assessment-type CDDL test (test_assessment_types.py) /
+{
+  / 0: title /       0: "Example finding",
+  / 1: description / 1: "Example finding used to test assessment-type handling.",
+  / 2: assessment /  2: {
+    / jil-rating / 0: 4 / high /,
+    / jil-identification / 1: {
+      / elapsed-time / 0: 5 / gt-4-months /,
+      / expertise / 1: 3 / multiple-expert /,
+      / knowledge / 2: 4 / critical-plus /,
+      / access / 3: 3 / gt-100-samples /,
+      / equipment / 4: 3 / multiple-specialized /,
+      / open-samples / 5: 3 / critical /,
+      / package-removal / 6: 2 / high /
+    },
+    / jil-exploitation / 2: {
+      / elapsed-time / 0: 5 / gt-4-months /,
+      / expertise / 1: 3 / multiple-expert /,
+      / knowledge / 2: 3 / critical /,
+      / access / 3: 3 / gt-100-samples /,
+      / equipment / 4: 5 / multiple-bespoke /,
+      / package-removal / 6: 1 / medium /
+    },
+    / assessment-type / 4: 1 / jil /
+  }
+}
