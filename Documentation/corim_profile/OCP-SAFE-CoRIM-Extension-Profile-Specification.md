@@ -213,7 +213,7 @@ cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
-  ? &(assessment-type: 4) => 0 ; cvss; absent in legacy data
+  ? &(assessment-type: 4) => 0 .default 0 ; cvss; absent in legacy data means cvss
 }
 
 jil = {
@@ -402,7 +402,9 @@ A for access and package removal, and §4.7 for open samples and samples with kn
 Note on extensibility: the three `$assessment` alternatives are distinguished by an explicit `assessment-type`
 discriminator at key 4: cvss (0), jil (1), qualitative-rating (2). It is required on `jil` and `qualitative-rating`,
 which are new and have no legacy data. It is optional on `cvss` so that already-published SFRs that predate the field
-remain valid; a map with no `assessment-type` MUST be interpreted as legacy `cvss`. Consumers MUST select the
+remain valid; a map with no `assessment-type` MUST be interpreted as legacy `cvss`. The CDDL states this with the `.default 0`
+control operator (RFC 9165), which is informational: validators do not insert the value, so consumers apply this rule
+themselves. Consumers MUST select the
 assessment type from `assessment-type` when present and MUST NOT infer it from other fields except for this legacy
 `cvss` fallback. Future assessment types claim the next unused `assessment-type` integer at key 4 and need not prove
 that their required fields are disjoint from those of existing alternatives.

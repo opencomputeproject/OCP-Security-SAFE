@@ -48,7 +48,7 @@ cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
-  ? &(assessment-type: 4) => 0 ; cvss; absent in legacy data
+  ? &(assessment-type: 4) => 0 .default 0 ; cvss; absent in legacy data means cvss
 }
 
 ; JIL attack potential scoring (per the Joint Interpretation Library "Application
