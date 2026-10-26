@@ -1,0 +1,31 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "Guardify Limitada",
+        "product": "Guardify Boot Modules",
+        "category": "Boot Modules",
+        "repo_tag": "2026.10.13.45136+431GF2B.prod",
+        "fw_version": "2026.10.13.45136",
+        "fw_hash_sha2_384": "c3310f204a5f53ae3cd4bf87909c8fdf848d0c3945169e2a10c41c8aa136f4d701c84c2d53979217bfb775b0cb21d098",
+        "fw_hash_sha2_512": "e12d440242db00d23f789251937ba46cb63541acaa000522b15aa60598b703d07cfbed5c8c49092ada4fe586ffbf51d3ab85637b8e87ab818633b1e782e1b29a",
+        "manifest": [
+            {
+                "file_name": "gdf-bootstrap.exe",
+                "file_hash": "b3999e969ab785ba8d4fc747b43e587b14727891863950618bdc0bc4fa3950d14f18717bcc62e0a89ceb08e04f3ca5d436de150ad421ac081c401210548331b1"
+            },
+            {
+                "file_name": "guardify-stub.exe",
+                "file_hash": "6e545dfc26d4b61ed8b6132fa4a41ee708c86d07ae31b87dcc4984630979d2d8d17fea8a53b1b6a18582f0d01e76bb8f5cfdd000cece4e971b3f5a2fe7c9c268"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "Anvil Secure",
+        "methodology": "whitebox",
+        "completion_date": "2026-10-15",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
