@@ -89,7 +89,43 @@
                                 },
                                 / 3: cwe /                3: "CWE-222",
                                 / 4: cve /                4: "CVE-2014-10000"
-                            }                            
+                            },
+                              / issue-entry / {
+                                / 0: title /              0: "Key recovery via electromagnetic side channel",
+                                / 1: description /        1: "An attacker with brief physical access can recover the firmware decryption key by measuring electromagnetic emissions during key use.",
+                                / 2: assessment /  2: {
+                                  / 0: jil-rating /       0: 3 / moderate /,
+                                  / 1: jil-identification / 1: {
+                                    / elapsed-time /   0: 2 / lt-1-week /,
+                                    / expertise /      1: 2 / expert /,
+                                    / knowledge /      2: 1 / restricted /,
+                                    / access /         3: 0 / lt-10-samples /,
+                                    / equipment /      4: 2 / specialized /,
+                                    / open-samples /   5: 0 / public /
+                                  },
+                                  / 2: jil-exploitation / 2: {
+                                    / elapsed-time /   0: 2 / lt-1-week /,
+                                    / expertise /      1: 2 / expert /,
+                                    / knowledge /      2: 1 / restricted /,
+                                    / access /         3: 0 / lt-10-samples /,
+                                    / equipment /      4: 2 / specialized /
+                                  },
+                                  / 3: jil-version /      3: "3.2.1",
+                                  / 4: assessment-type /  4: 1 / jil /
+                                },
+                                / 3: cwe /                3: "CWE-1300"
+                            },
+                              / issue-entry / {
+                                / 0: title /              0: "Voltage glitch may bypass secure boot signature check",
+                                / 1: description /        1: "Simulation indicates a fault injected during signature verification may skip the check; not yet confirmed on silicon.",
+                                / 2: assessment /  2: {
+                                  / 0: classification /   0: 3, / high /
+                                  / 1: likelihood /       1: 1, / medium /
+                                  / 2: impact /           2: 2, / high /
+                                  / 4: assessment-type /  4: 2 / qualitative-rating /
+                                },
+                                / 3: cwe /                3: "CWE-1247"
+                            }
                           ],
                           / 6: solid-version /            6: "1.0",
                         }                        

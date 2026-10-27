@@ -107,6 +107,9 @@ jobs:
           # Run CDDL validation test
           python tests/test_cddl_validation.py
           
+          # Run assessment-type discriminator accept/reject tests against the CDDL
+          python tests/test_assessment_types.py --corim-cddl ../corim-base-upstream.cddl
+
           echo "✅ CoRIM generation tests completed"
 
   validate-cddl-schema:
