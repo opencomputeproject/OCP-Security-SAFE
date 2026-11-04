@@ -1,0 +1,26 @@
+{
+    "review_framework_version": "2.1",
+    "device": {
+        "vendor": "SK hynix",
+        "product": "PEB210 M.2 2280 Enterprise SSD",
+        "repo_tag": "",
+        "fw_version": "71184A50",
+        "fw_hash_sha2_384": "e6441b26f5899809c259d63bf395092dc95a5922a12356ade476518ddb08b93b494d250b256d7c022899579a690df1a8",
+        "fw_hash_sha2_512": "0a5d9e17cad9a5d7dd8da1cb9320bbfe10de4017388d07d3ae9be26bbb2e69ba7378483abc3040875676fbb23d7a0897ea45b6bca0c652df2fd5c6e19522bdb5",
+        "manifest": [
+            {
+                "file_name": "PEB210_71184A50.zip",
+                "file_hash": "A570A0E16DB0475E8A1D5156B974FC01EF74C8142B1CA3E2C337B190FCF9DF43F2751397C91BF5B5F165226E4F9BF1FD686879C73D5E13910C78A69FE9A8ACBC"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "Keysight Riscure",
+        "methodology": "whitebox",
+        "completion_date": "2026-10-08",
+        "report_version": "1.0",
+        "scope_number": 1.0,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
