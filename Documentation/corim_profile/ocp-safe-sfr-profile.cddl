@@ -25,13 +25,175 @@ issue-entry = {
   * $$ocp-safe-issue-entry-ext
 }
 
+; The three $assessment alternatives are distinguished by an explicit
+; assessment-type discriminator at key 4, so alternatives are never told apart
+; by which optional or required fields happen to be present:
+;   - jil and qualitative-rating MUST carry assessment-type (new alternatives,
+;     no legacy data).
+;   - cvss MAY omit it so already-published SFRs that predate the field still
+;     validate; absence means legacy cvss.
+; Future assessment types MUST claim the next unused assessment-type value and
+; use key 4 for it.
+assessment-type = &(
+  cvss: 0,
+  jil: 1,
+  qualitative-rating: 2
+)
+
 $assessment /= cvss
+$assessment /= jil
+$assessment /= qualitative-rating
 
 cvss = {
   &(cvss-score: 0) => tstr
   &(cvss-vector: 1) => tstr
   ? &(cvss-version: 2) => tstr
+  ? &(assessment-type: 4) => 0 .default 0 ; cvss; absent in legacy data means cvss
 }
+
+; JIL attack potential scoring (per the Joint Interpretation Library "Application
+; of Attack Potential to Smartcards and Similar Devices" methodology, version
+; 3.2.1, used in Common Criteria hardware evaluations). Used for Scope 3
+; physical-attack findings confirmed via physical testing on silicon; see
+; review_scope.md's Finding rating guidance for when JIL applies versus
+; qualitative-rating.
+;
+; Each factor is recorded as the category chosen from JIL Table 13 (an enum
+; value, not a points value); the points follow from the category and the
+; phase. The overall rating follows from the sum of the identification and
+; exploitation points (JIL Table 14), so jil-rating MUST be consistent with the
+; factors when both phases are present. Any factor with the category
+; not-practical (JIL's "*") makes the rating "High".
+jil = {
+  &(jil-rating: 0) => jil-rating-level
+  ? &(jil-identification: 1) => jil-identification-factors
+  ? &(jil-exploitation: 2) => jil-exploitation-factors
+  ? &(jil-version: 3) => tstr ; JIL attack potential methodology version, e.g. "3.2.1"
+  &(assessment-type: 4) => 1 ; jil
+}
+
+; JIL Table 14. no-rating means the total is below the Basic range (0-15);
+; basic is 16-20, enhanced-basic 21-24, moderate 25-30, high 31 and above.
+jil-rating-level = &(
+  no-rating: 0,
+  basic: 1,
+  enhanced-basic: 2,
+  moderate: 3,
+  high: 4
+)
+
+; Factors scored in the identification phase (JIL Table 13, Identification
+; column). The first six are required; use public for open-samples when none
+; were used.
+jil-identification-factors = {
+  &(elapsed-time: 0) => jil-elapsed-time
+  &(expertise: 1) => jil-expertise
+  &(knowledge: 2) => jil-knowledge
+  &(access: 3) => jil-access
+  &(equipment: 4) => jil-equipment
+  &(open-samples: 5) => jil-open-samples
+  ? &(package-removal: 6) => jil-package-removal
+}
+
+; Factors scored in the exploitation phase (JIL Table 13, Exploitation column).
+; Open samples do not apply to exploitation.
+jil-exploitation-factors = {
+  &(elapsed-time: 0) => jil-elapsed-time
+  &(expertise: 1) => jil-expertise
+  &(knowledge: 2) => jil-knowledge
+  &(access: 3) => jil-access
+  &(equipment: 4) => jil-equipment
+  ? &(package-removal: 6) => jil-package-removal
+}
+
+jil-elapsed-time = &(
+  lt-1-hour: 0,
+  lt-1-day: 1,
+  lt-1-week: 2,
+  lt-1-month: 3,
+  gt-1-month: 4,
+  gt-4-months: 5,
+  not-practical: 6
+)
+
+jil-expertise = &(
+  layman: 0,
+  proficient: 1,
+  expert: 2,
+  multiple-expert: 3
+)
+
+; critical-plus scores 9 in identification and "*" (not practical) in
+; exploitation.
+jil-knowledge = &(
+  public: 0,
+  restricted: 1,
+  sensitive: 2,
+  critical: 3,
+  critical-plus: 4,
+  not-practical: 5
+)
+
+; Access to TOE, counted in samples (replaces the CEM "window of opportunity").
+jil-access = &(
+  lt-10-samples: 0,
+  lt-30-samples: 1,
+  lt-100-samples: 2,
+  gt-100-samples: 3,
+  not-practical: 4
+)
+
+; multiple-specialized is specialized equipment of several similar kinds
+; (JIL Table 13 note 2, one extra point over specialized).
+jil-equipment = &(
+  none: 0,
+  standard: 1,
+  specialized: 2,
+  multiple-specialized: 3,
+  bespoke: 4,
+  multiple-bespoke: 5
+)
+
+; Open samples / samples with known secrets.
+jil-open-samples = &(
+  public: 0,
+  restricted: 1,
+  sensitive: 2,
+  critical: 3,
+  not-practical: 4
+)
+
+; Extra Access points when the package is part of the TOE (JIL Table 7).
+jil-package-removal = &(
+  low: 0,
+  medium: 1,
+  high: 2
+)
+
+; Used for Scope 3 physical-attack findings established only through
+; simulation (pre-silicon evidence), where JIL's attack-potential factors
+; cannot be meaningfully measured. classification and assessment-type are the
+; only required fields.
+qualitative-rating = {
+  &(classification: 0) => classification-level
+  ? &(likelihood: 1) => likelihood-impact-level
+  ? &(impact: 2) => likelihood-impact-level
+  &(assessment-type: 4) => 2 ; qualitative-rating
+}
+
+classification-level = &(
+  none: 0,
+  low: 1,
+  medium: 2,
+  high: 3,
+  critical: 4
+)
+
+likelihood-impact-level = &(
+  low: 0,
+  medium: 1,
+  high: 2
+)
 
 fw-identifier = non-empty<{
   ? &(fw-version: 0) => version-map
