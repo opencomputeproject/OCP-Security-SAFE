@@ -1,0 +1,22 @@
+{
+    "review_framework_version": "1.1",
+    "device": {
+        "vendor": "Micron Technology, Inc.",
+        "product": "Micron 6600 Enterprise SSD",
+        "category": "storage",
+        "repo_tag": "",
+        "fw_version": "G2GG006",
+        "fw_hash_sha2_384": "2b12259ab0e72d183f2915efe83a173ed6c46d535e3d0052fe4903f14d7b35c0c9e9c0e48a644b1c6ed9af12c074643d",
+        "fw_hash_sha2_512": "1de7e6fc3205caaf546f463293a27ed336631dc9b54e327e5829016271377f53d912c49d57c1803900a8e3d99b088d9dea4db69c81365dec54bfd7a2d45e8d35"
+    },
+    "audit": {
+        "srp": "IOActive, Incorporated",
+        "methodology": "whitebox",
+        "completion_date": "2025-08-06",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "solid_ver": "1.0",
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
