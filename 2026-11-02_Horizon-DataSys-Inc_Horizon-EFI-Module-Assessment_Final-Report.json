@@ -1,0 +1,30 @@
+{
+    "review_framework_version": "2.0",
+    "device": {
+        "vendor": "Horizon DataSys Inc.",
+        "product": "Horizon EFI Module Assessment",
+        "category": "EFI Module",
+        "repo_tag": "13.3",
+        "fw_version": "13.3",
+        "fw_hash_sha2_384": "d1a367290199a212662e65d2465875ab2c082aa68b3c9f8f2aa9aa30c32fb2c95da727963077f8f641d983ef18ceeec1",
+        "fw_hash_sha2_512": "524dca36ce8e66cb3a2e1def07c54a924756f5f1d751a34a23e4938e5ddbf0e30620c6913c6bd0e58b64937a45a674c49ce9c51a14a953048aebd4f00f99f97b"
+    },
+    "audit": {
+        "srp": "Tetrel Security Inc.",
+        "methodology": "White-Box Review",
+        "completion_date": "2026-10-13",
+        "report_version": "1.0",
+        "scope_number": 1,
+        "cvss_version": "4.0",
+        "issues": [
+            {
+                "title": "User Password Handling and Hashing Issues",
+                "cvss_score": "5.2",
+                "cvss_vector": "CVSS:4.0/AV:P/AC:L/AT:N/PR:L/UI:N/VC:L/VI:L/VA:H/SC:N/SI:N/SA:N",
+                "cwe": "CWE-916: Use of Password Hash With Insufficient Computational Effort",
+                "description": "User passwords are insecurely hashed and verified only using two rounds of MD5. An attacker who gains access to the stored hashes, may recover these passwords more easily.",
+                "cve": ""
+            }
+        ]
+    }
+}
