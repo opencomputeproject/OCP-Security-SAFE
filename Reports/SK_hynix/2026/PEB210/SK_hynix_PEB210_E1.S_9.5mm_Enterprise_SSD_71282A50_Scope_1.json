@@ -1,0 +1,26 @@
+{
+    "review_framework_version": "2.1",
+    "device": {
+        "vendor": "SK hynix",
+        "product": "PEB210 E1.S 9.5mm Enterprise SSD",
+        "repo_tag": "",
+        "fw_version": "71282A50",
+        "fw_hash_sha2_384": "09e07b25efd20d9321f97a9df48d5f2f0008edf1660faa064d3add70808c6d02c53fab22759b0d9a354afaf7376cfed9",
+        "fw_hash_sha2_512": "4b1fa89be55fea081f60fe6ffad4a39106dd15da775fb41ffa9caec3946e7943f1985b4bfa906d8e9430a4c0647c504bfa0e0349e1ff1c9cf16d739213b776e7",
+        "manifest": [
+            {
+                "file_name": "PEB210_71282A50.zip",
+                "file_hash": "DFD1453147133BA536F1480E7155585427B94CFCA1D45EE1342991CD08D05CCD2A3E92093A571A6EF47493DF0B07D052D9716DA966D4AA3E91B8CC5A733D9F8B"
+            }
+        ]
+    },
+    "audit": {
+        "srp": "Keysight Riscure",
+        "methodology": "whitebox",
+        "completion_date": "2026-10-08",
+        "report_version": "1.0",
+        "scope_number": 1.0,
+        "cvss_version": "3.1",
+        "issues": []
+    }
+}
