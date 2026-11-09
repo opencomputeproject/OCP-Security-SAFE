@@ -1,14 +1,8 @@
 # AI scanning requirement
 
-In addition to a regular human review, review providers are expected to use AI (an LLM) to perform a security review with the issues triaged by the review provider. The review must be performed using the latest version (at the time the review starts) of one of the following models:
+In addition to a regular human review, review providers are expected to use AI (an LLM) to perform a security review with the issues triaged by the review provider. The review must be performed using recent models that represent the most capable functionality that typical attackers have access to. Model capabilities and guardrail limitations change rapidly, so SRP judgement on model and harness effectiveness is expected. It is important to minimize the gap between attacker and tester capability.
 
-*   Anthropic Opus
-*   Gemini Pro
-*   OpenAI GPT codex
-
-This list will be regularly updated. Models are included from a perspective of minimizing the gap between attacker and tester capability. These are considered to be the most capable models available to attackers today.
-
-The review must be performed by a suitable harness for orchestration. Without an appropriate harness a review often goes off-track and does not look at all files. For now, the review provider may choose something they consider suitable, including their own tools. We can recommend [Arm Metis](https://github.com/arm/metis). We expect that over time more tools will be publicized and we will update this recommendation.
+The review must be performed by a suitable harness for orchestration. Without an appropriate harness a review often goes off-track and does not look at all files. For now, the review provider may choose something they consider suitable, including their own tools. We can recommend [Arm Metis](https://github.com/arm/metis). We expect that over time more tools will be publicized and we will update this recommendation. Use of AI assistance must be guided by the SRP applying their security knowledge, and is not a simple one-shot scan.
 
 Using the review provider's AI subscription or the vendor giving the review provider access to their subscription for the project are both acceptable. IP can be protected by setting up a subscription with suitable terms that exclude the data from being used for training. Even if the vendor's access is used, the review provider must still run the actual AI tool themselves, it is not sufficient for the vendor to hand them the output.
 
