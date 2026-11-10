@@ -846,16 +846,58 @@ def inspect_sfr_data(sfr_data, indent=""):
                             if len(desc) > 100:
                                 desc = desc[:100] + "..."
                             print(f"{indent}         Description: {desc}")
-                        if 2 in issue:  # assessment (nested cvss)
+                        if 2 in issue:  # assessment (nested cvss, jil, or qualitative-rating)
                             assessment = issue[2]
                             if isinstance(assessment, dict):
-                                print(f"{indent}         Assessment: CVSS")
-                                if 0 in assessment:  # cvss-score
-                                    print(f"{indent}            CVSS Score: {assessment[0]}")
-                                if 1 in assessment:  # cvss-vector
-                                    print(f"{indent}            CVSS Vector: {assessment[1]}")
-                                if 2 in assessment:  # cvss-version
-                                    print(f"{indent}            CVSS Version: {assessment[2]}")
+                                # assessment-type (key 4) selects the
+                                # assessment: 0 = cvss, 1 = jil,
+                                # 2 = qualitative-rating. Absent means legacy
+                                # cvss data that predates the field.
+                                assessment_type = assessment.get(4, 0)
+                                if assessment_type == 2:
+                                    classification_names = ["None", "Low", "Medium", "High", "Critical"]
+                                    level_names = ["Low", "Medium", "High"]
+                                    print(f"{indent}         Assessment: Qualitative Rating")
+                                    if 0 in assessment:  # classification
+                                        print(f"{indent}            Classification: {classification_names[assessment[0]]}")
+                                    if 1 in assessment:  # likelihood
+                                        print(f"{indent}            Likelihood: {level_names[assessment[1]]}")
+                                    if 2 in assessment:  # impact
+                                        print(f"{indent}            Impact: {level_names[assessment[2]]}")
+                                elif assessment_type == 1:
+                                    # Factor key -> (display name, category labels indexed by
+                                    # CDDL enum value); see ocp-safe-sfr-profile.cddl jil-*.
+                                    jil_factors = {
+                                        0: ("Elapsed Time", ["< 1 hour", "< 1 day", "< 1 week", "< 1 month", "> 1 month", "> 4 months", "Not practical"]),
+                                        1: ("Expertise", ["Layman", "Proficient", "Expert", "Multiple expert"]),
+                                        2: ("Knowledge of TOE", ["Public", "Restricted", "Sensitive", "Critical", "Critical+", "Not practical"]),
+                                        3: ("Access to TOE", ["< 10 samples", "< 30 samples", "< 100 samples", "> 100 samples", "Not practical"]),
+                                        4: ("Equipment", ["None", "Standard", "Specialized", "Multiple specialized", "Bespoke", "Multiple bespoke"]),
+                                        5: ("Open Samples", ["Public", "Restricted", "Sensitive", "Critical", "Not practical"]),
+                                        6: ("Package Removal", ["Low", "Medium", "High"]),
+                                    }
+                                    jil_rating_names = ["No rating", "Basic", "Enhanced-Basic", "Moderate", "High"]
+                                    print(f"{indent}         Assessment: JIL")
+                                    if 0 in assessment:  # jil-rating
+                                        rating = assessment[0]
+                                        print(f"{indent}            JIL Rating: {jil_rating_names[rating] if rating < len(jil_rating_names) else rating}")
+                                    for key, label in ((1, "Identification"), (2, "Exploitation")):
+                                        if key in assessment:
+                                            print(f"{indent}            JIL {label} Factors:")
+                                            for factor_key, factor_value in assessment[key].items():
+                                                name, categories = jil_factors.get(factor_key, (f"Factor {factor_key}", []))
+                                                category = categories[factor_value] if factor_value < len(categories) else factor_value
+                                                print(f"{indent}               {name}: {category}")
+                                    if 3 in assessment:  # jil-version
+                                        print(f"{indent}            JIL Version: {assessment[3]}")
+                                else:
+                                    print(f"{indent}         Assessment: CVSS")
+                                    if 0 in assessment:  # cvss-score
+                                        print(f"{indent}            CVSS Score: {assessment[0]}")
+                                    if 1 in assessment:  # cvss-vector
+                                        print(f"{indent}            CVSS Vector: {assessment[1]}")
+                                    if 2 in assessment:  # cvss-version
+                                        print(f"{indent}            CVSS Version: {assessment[2]}")
                         if 3 in issue:  # cwe
                             print(f"{indent}         CWE: {issue[3]}")
                         if 4 in issue:  # cve

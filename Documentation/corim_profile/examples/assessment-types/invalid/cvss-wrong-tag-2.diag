@@ -1,0 +1,6 @@
+/ issue-entry fragment used by the assessment-type CDDL test (test_assessment_types.py) /
+{
+  / 0: title /       0: "Example finding",
+  / 1: description / 1: "Example finding used to test assessment-type handling.",
+  / 2: assessment /  2: { 0: "7.9", 1: "AV:L/AC:L/PR:L/UI:N/S:C/C:L/I:H/A:L", / assessment-type / 4: 2 }
+}
